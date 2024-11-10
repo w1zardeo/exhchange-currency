@@ -1,9 +1,19 @@
 <resources>
-
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="android:editTextBackground">@drawable/rn_edit_text_material</item>
+    <!-- Стиль для SplashScreen -->
+    <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Фонове зображення Splash Screen -->
+        <item name="android:windowBackground">@drawable/screen</item>
+        <!-- Вимкнення попереднього перегляду (іконки) -->
+        <item name="android:windowDisablePreview">true</item>
+        <!-- Вимкнення заголовка вікна -->
+        <item name="android:windowNoTitle">true</item>
     </style>
 
+    <!-- Основна тема додатку -->
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <!-- Customize your theme here -->
+        <item name="android:editTextBackground">@drawable/screen</item>
+        <item name="android:windowDisablePreview">true</item>
+        <!-- <item name="android:windowIsTranslucent">true</item> -->
+    </style>
 </resources>
