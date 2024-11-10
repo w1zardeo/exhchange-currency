@@ -25,7 +25,16 @@ i18n
             completedLower: 'completed',
             addTask: 'Click + to add a task',
             markTask: 'Mark a task done to get it completed',
-            calendar: 'Calendar'
+            calendar: 'Calendar',
+            addNewTask: 'Add New Task',
+            finance: '💵Finance',
+            weeding: '💍Weeding',
+            freelance: '💼Freelance',
+            shoppingList: '🛒Shopping List',
+            enterTask: 'Enter Task',
+            addImages: 'Add Images',
+            addTaskUpper: 'Add Task',
+            close: 'Close'
           },
           monthDay: {
             jan: 'January',
@@ -72,7 +81,16 @@ i18n
             completedLower: 'виконаних',
             addTask: 'Натисніть +, щоб додати завдання',
             markTask: 'Позначте завдання, щоб виконати його',
-            calendar: 'Календар'
+            calendar: 'Календар',
+            addNewTask: 'Додати Нове Завдання',
+            finance: '💵Фінанси',
+            weeding: '💍Весілля',
+            freelance: '💼Фріланс',
+            shoppingList: '🛒Список покупок',
+            enterTask: 'Введіть завдання',
+            addImages: 'Додати зображення',
+            addTaskUpper: 'Додати Завдання',
+            close: 'Закрити'
           },
           monthDay: {
             jan: 'Січень',
@@ -119,7 +137,16 @@ i18n
             completedLower: 'realizado',
             addTask: 'Haga clic en + para agregar una tarea',
             markTask: 'Marcar una tarea como completada para completarla',
-            calendar: 'Calendario'
+            calendar: 'Calendario',
+            addNewTask: 'Agregar nueva tarea',
+            finance: '💵Finanzas',
+            weeding: '💍Deshierbe',
+            freelance: '💼Independiente',
+            shoppingList: '🛒Lista de compras',
+            enterTask: 'Ingresar tarea',
+            addImages: 'Yadd Imágenes',
+            addTaskUpper: 'Agregar Tarea',
+            close: 'Cerca'
           },
           monthDay: {
             jan: 'Enero',

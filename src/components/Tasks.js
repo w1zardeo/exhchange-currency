@@ -196,6 +196,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     marginBottom: 5,
     borderRadius: 8,
+    marginLeft: 40
   },
 });
 

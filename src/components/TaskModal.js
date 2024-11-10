@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { Modal, View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import DocumentPicker from 'react-native-document-picker';
+import { useTranslation } from 'react-i18next'; // Імпорт локалізації
 
 const TaskModal = ({ visible, onAddTask, onClose }) => {
   const [task, setTask] = useState('');
   const [category, setCategory] = useState('Finance');
   const [images, setImages] = useState([]); // Масив для зображень
+  const { t } = useTranslation(); // Використання локалізації
 
   const handleAdd = () => {
     if (task.trim()) {
@@ -37,13 +39,13 @@ const TaskModal = ({ visible, onAddTask, onClose }) => {
     <Modal visible={visible} transparent={true} animationType="slide">
       <View style={styles.modalBackdrop}>
         <View style={styles.modal}>
-          <Text style={styles.modalTitle}>Add New Task</Text>
+          <Text style={styles.modalTitle}>{t('text.addNewTask')}</Text>
 
           <TextInput
             style={styles.input}
             value={task}
             onChangeText={setTask}
-            placeholder="Enter task"
+            placeholder={t('text.enterTask')}
             placeholderTextColor="#B0B0B0"
           />
 
@@ -58,22 +60,22 @@ const TaskModal = ({ visible, onAddTask, onClose }) => {
             style={styles.picker}
             onValueChange={(itemValue) => setCategory(itemValue)}
           >
-            <Picker.Item label="💵 Finance" value="Finance" />
-            <Picker.Item label="💍 Weeding" value="Weeding" />
-            <Picker.Item label="💼 Freelance" value="Freelance" />
-            <Picker.Item label="🛒 Shopping List" value="Shopping List" />
+            <Picker.Item label={t('text.finance')} value="Finance" />
+            <Picker.Item label={t('text.weeding')} value="Weeding" />
+            <Picker.Item label={t('text.freelance')} value="Freelance" />
+            <Picker.Item label={t('text.shoppingList')} value="Shopping List" />
           </Picker>
 
           <TouchableOpacity style={styles.paperclipButton} onPress={openFileExplorer}>
-            <Text style={styles.buttonText}>📎 Add Images</Text>
+            <Text style={styles.buttonText}>📎 {t('text.addImages')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.button} onPress={handleAdd}>
-            <Text style={styles.buttonText}>Add Task</Text>
+            <Text style={styles.buttonText}>{t('text.addTaskUpper')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.button} onPress={onClose}>
-            <Text style={styles.buttonText}>Close</Text>
+            <Text style={styles.buttonText}>{t('text.close')}</Text>
           </TouchableOpacity>
         </View>
       </View>
