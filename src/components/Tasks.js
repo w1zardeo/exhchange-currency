@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, FlatList, StyleSheet, TextInput, Image, ScrollView  } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, FlatList, StyleSheet, TextInput, Image, ScrollView, TouchableOpacity, Modal, TouchableWithoutFeedback } from 'react-native';
 import Checkbox from './Checkbox';
 import ThemeStylesTasks from '../theme/ThemeStylesTasks';
 import { useTranslation } from 'react-i18next'; // Імпорт локалізації
@@ -22,6 +22,9 @@ const getCategoryEmoji = (category) => {
 const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) => {
   const themeStylesTasks = ThemeStylesTasks({ isDarkMode });
   const { t } = useTranslation(); // Використання локалізації
+  const [imageDoubleClick, setImageDoubleClick] = useState(null); // Стан для двократного натискання
+  const [isModalVisible, setIsModalVisible] = useState(false); // Стан для відображення модального вікна
+  const [selectedImage, setSelectedImage] = useState(null); // Стан для вибраного зображення
 
   const handleTextChange = (text, index, section) => {
     if (text === '') {
@@ -29,6 +32,27 @@ const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) =>
     } else {
       updateTaskText(index, section, text);
     }
+  };
+
+  const handleImageDelete = (index, section, imageIndex) => {
+    const updatedTasks = [...tasks[section]];
+    const task = updatedTasks[index];
+
+    // Перевіряємо, чи є у цього завдання зображення
+    if (task.images && task.images.length > imageIndex) {
+      task.images.splice(imageIndex, 1); // Видаляємо зображення
+      updateTaskText(index, section, task.text); // Оновлюємо завдання
+    }
+  };
+
+  const handleImageDoubleClick = (imageUri) => {
+    setSelectedImage(imageUri); // Зберігаємо URI зображення для модального вікна
+    setIsModalVisible(true); // Відкриваємо модальне вікно
+  };
+
+  const handleModalClose = () => {
+    setIsModalVisible(false); // Закриваємо модальне вікно
+    setSelectedImage(null); // Очищаємо вибране зображення
   };
 
   return (
@@ -66,9 +90,21 @@ const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) =>
                 }
               />
               {/* Зображення праворуч від тексту */}
-              <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.imagePreviewContainer}>
-                {item.images && item.images.map((image, index) => (
-                  <Image key={index} source={{ uri: image }} style={styles.imagePreview} />
+             <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.imagePreviewContainer}>
+                {item.images && item.images.map((image, imageIndex) => (
+                  <View key={imageIndex} style={styles.imageWrapper}>
+                    <Image
+                      source={{ uri: image }}
+                      style={styles.imagePreview}
+                      onTouchEnd={() => handleImageDoubleClick(image)} // Двократне натискання на зображення
+                    />
+                    <TouchableOpacity 
+                      style={styles.deleteIcon} 
+                      onPress={() => handleImageDelete(index, 'incomplete', imageIndex)}
+                    >
+                      <Text style={styles.deleteText}>❌</Text>
+                    </TouchableOpacity>
+                  </View>
                 ))}
               </ScrollView>
             </View>
@@ -103,13 +139,24 @@ const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) =>
                     >
                       {item.text}
                     </Text>
-                    {/* Не відображаємо категорію для виконаних завдань */}
                   </View>
                 }
               />
               {/* Зображення праворуч від тексту */}
               {item.file && item.file.uri && (
-                <Image source={{ uri: item.file.uri }} style={styles.imagePreview} />
+                <View style={styles.imageWrapper}>
+                  <Image
+                    source={{ uri: item.file.uri }}
+                    style={styles.imagePreview}
+                    onTouchEnd={() => handleImageDoubleClick(item.file.uri)} // Двократне натискання на зображення
+                  />
+                  <TouchableOpacity 
+                    style={styles.deleteIcon} 
+                    onPress={() => handleImageDelete(index, 'complete', 0)}
+                  >
+                    <Text style={styles.deleteText}>❌</Text>
+                  </TouchableOpacity>
+                </View>
               )}
             </View>
           )}
@@ -118,6 +165,17 @@ const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) =>
           scrollEnabled={false}
         />
       </View>
+      {/* Modal для перегляду зображення на весь екран */}
+      <Modal visible={isModalVisible} transparent={true} animationType="fade" onRequestClose={handleModalClose}>
+        <TouchableWithoutFeedback onPress={handleModalClose}>
+          <View style={styles.modalOverlay}>
+            <Image
+              source={{ uri: selectedImage }}
+              style={styles.modalImage}
+            />
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
     </View>
   );
 };
@@ -190,13 +248,39 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     marginVertical: 10,
   },
+  imageWrapper: {
+    position: 'relative', // для розміщення хрестика на зображенні
+    marginLeft: 10,
+  },
   imagePreview: {
     width: 80,
     height: 80,
     marginHorizontal: 5,
     marginBottom: 5,
     borderRadius: 8,
-    marginLeft: 40
+  },
+  deleteIcon: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    // backgroundColor: 'red',
+    borderRadius: 50,
+    padding: 5,
+  },
+  deleteText: {
+    color: 'red',
+    fontSize: 10,
+  },
+  modalOverlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.8)',
+  },
+  modalImage: {
+    width: '90%',
+    height: '90%',
+    resizeMode: 'contain',
   },
 });
 
