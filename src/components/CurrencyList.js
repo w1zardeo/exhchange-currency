@@ -1,4 +1,4 @@
-import React, {useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -7,36 +7,20 @@ import {
   TextInput,
   Image,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import ConverterHeader from './ConverterHeader';
 import BottomSheet from './BottomSheet';
-import {useCurrency} from '../redux/CurrencyContext'; // Import the useCurrency hook
-// import Animated, {
-//   useCode,
-//   cond,
-//   eq,
-//   set,
-//   call,
-//   Value,
-// } from 'react-native-reanimated';
+import { useCurrency } from '../redux/CurrencyContext'; 
 import Icon from 'react-native-vector-icons/Ionicons';
-import {PanGestureHandler} from 'react-native-gesture-handler';
-// import DraggableFlatList from 'react-native-draggable-flatlist';
 import { useDispatch, useSelector } from 'react-redux';
 import ThemeStylesCurrency from '../theme/ThemeStylesCurrecny';
 import { toggleTheme, setTheme } from '../redux/ThemeSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useTranslation } from 'react-i18next'; // Імпорт локалізації
-import i18n  from '../util/i18n';
+import { useTranslation } from 'react-i18next';
 
-const CurrencyItem = ({
-  item,
-  baseAmount,
-  onAmountChange,
-  isEditing,
-  onDrag,
-}) => {
-  const { t } = useTranslation(); // Використання локалізації
+const CurrencyItem = ({ item, baseAmount, onAmountChange, isEditing, onDrag }) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const isDarkMode = useSelector((state) => state.theme.isDarkMode);
   const decimalPlaces = useSelector((state) => state.settings.decimalPlaces);
@@ -72,10 +56,8 @@ const CurrencyItem = ({
         console.log('Failed to load theme.', e);
       }
     };
-
     loadTheme();
   }, [dispatch]);
-
 
   return (
     <View style={[styles.itemContainer, themeStylesCurrency.stylesLine]}>
@@ -104,9 +86,7 @@ const CurrencyItem = ({
           </View>
         )}
         {!isEditing && (
-          <Text style={[styles.rateText, themeStylesCurrency.rateText]}>{`1 UAH = ${item.rate.toFixed(decimalPlaces)} ${
-            item.currency
-          }`}</Text>
+          <Text style={[styles.rateText, themeStylesCurrency.rateText]}>{`1 UAH = ${item.rate.toFixed(decimalPlaces)} ${item.currency}`}</Text>
         )}
       </View>
     </View>
@@ -120,15 +100,23 @@ const CurrencyList = () => {
   const [sheetOpen, setSheetOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   const isDarkMode = useSelector((state) => state.theme.isDarkMode);
   const themeStylesCurrency = ThemeStylesCurrency({ isDarkMode });
   
-
   useEffect(() => {
-    // Ініціалізуємо локальний стан даними з контексту
-    const favoriteCurrencies = currencies.filter(currency => currency.isFavorite);
-    setData(favoriteCurrencies);
+    const loadCurrencies = async () => {
+      setLoading(true);
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      if (currencies.length > 0) {
+        const favoriteCurrencies = currencies.filter(currency => currency.isFavorite);
+        setData(favoriteCurrencies);
+        setLoading(false);
+      }
+    };
+  
+    loadCurrencies();
   }, [currencies]);
 
   const toggleBottomSheet = () => setSheetOpen(prev => !prev);
@@ -140,9 +128,8 @@ const CurrencyList = () => {
   };
 
   const handleDragEnd = ({ data }) => {
-    setData([...data]); // Оновлюємо локальний стан для відображення нового порядку
+    setData([...data]);
     if (!isEditing) {
-      // Зберігаємо новий порядок у контексті при завершенні редагування
       updateCurrenciesOrder(data);
     }
   };
@@ -160,22 +147,28 @@ const CurrencyList = () => {
         onEditToggle={onEditToggle}
         isEditing={isEditing}
       />
-      <FlatList
-        data={filteredFavoriteCurrencies}
-        renderItem={({ item, drag }) => (
-          <CurrencyItem
-            item={item}
-            baseAmount={baseAmount}
-            onAmountChange={handleAmountChange}
-            toggleFavorite={() => toggleFavorite(item.id)}
-            isEditing={isEditing}
-            onDrag={isEditing ? drag : undefined}
-          />
-        )}
-        keyExtractor={item => item.id}
-        onDragEnd={handleDragEnd}
-        contentContainerStyle={styles.listContainer}
-      />
+      {loading ? (
+        <View style={styles.loaderContainer}>
+          <ActivityIndicator size="large" color="#00ff00" />
+        </View>
+      ) : (
+        <FlatList
+          data={filteredFavoriteCurrencies}
+          renderItem={({ item, drag }) => (
+            <CurrencyItem
+              item={item}
+              baseAmount={baseAmount}
+              onAmountChange={handleAmountChange}
+              toggleFavorite={() => toggleFavorite(item.id)}
+              isEditing={isEditing}
+              onDrag={isEditing ? drag : undefined}
+            />
+          )}
+          keyExtractor={item => item.id}
+          onDragEnd={handleDragEnd}
+          contentContainerStyle={styles.listContainer}
+        />
+      )}
       <BottomSheet
         sheetOpen={sheetOpen}
         setSheetOpen={setSheetOpen}
@@ -189,10 +182,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'black',
-    paddingBottom: 50
+    paddingBottom: 50,
   },
   listContainer: {
     paddingBottom: 130,
+  },
+  loaderContainer: { // Лоадер буде відображатися поверх списку, а не на весь екран
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: [{ translateX: -25 }, { translateY: -25 }],
+    zIndex: 1,
   },
   itemContainer: {
     flexDirection: 'row',
@@ -200,7 +200,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 10,
     borderBottomWidth: 0.2,
-    // borderBottomColor: '#1a1a1a',
     marginLeft: 15,
   },
   flag: {
@@ -248,13 +247,11 @@ const styles = StyleSheet.create({
   },
   rateText: {
     fontSize: 13,
-    // color: '#666',
     marginRight: 10,
     marginTop: -10,
   },
   editIcon: {
-    // marginLeft: 10, // Зміщуємо вліво
-    padding: 10, // Додаємо падінг для зручності натискання
+    padding: 10,
   },
 });
 

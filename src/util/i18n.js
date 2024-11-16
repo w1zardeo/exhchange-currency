@@ -1,3 +1,4 @@
+import 'intl-pluralrules';
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
@@ -182,3 +183,28 @@ i18n
   });
 
 export default i18n;
+
+// import 'intl-pluralrules';
+// import Backend from 'i18next-http-backend';
+// import i18n from 'i18next';
+// import { initReactI18next } from 'react-i18next';
+
+// i18n
+//   .use(Backend)
+//   .use(initReactI18next)
+//   .init({
+//     lng: 'ua', // Мова за замовчуванням
+//     fallbackLng: 'en', // Якщо мова не знайдена
+//     backend: {
+//       loadPath: '../locales/ua/translation.json', // Шлях до файлів перекладів
+//     },
+//     interpolation: {
+//       escapeValue: false, // React вже захищає від XSS
+//     },
+//      react: {
+//       useSuspense: false, // Використовувати Suspense для завантаження перекладів
+//     },
+//   });
+
+// export default i18n;
+

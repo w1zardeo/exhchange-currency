@@ -77,7 +77,7 @@ const BottomSheet = ({ sheetOpen, setSheetOpen }) => {
           <View style={[styles.searchContainer, isSearching && styles.searchActive]}>
             <Icon name="search" size={18} color="#888" style={styles.searchIcon} />
             <TextInput
-              placeholder="Search"
+              placeholder={t('text.search')}
               placeholderTextColor="#888"
               style={styles.searchInput}
               value={searchQuery}

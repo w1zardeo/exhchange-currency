@@ -3,6 +3,7 @@ import { Modal, View, Text, TextInput, TouchableOpacity, StyleSheet, Image } fro
 import { Picker } from '@react-native-picker/picker';
 import DocumentPicker from 'react-native-document-picker';
 import { useTranslation } from 'react-i18next'; // Імпорт локалізації
+import { launchImageLibrary } from 'react-native-image-picker';
 
 const TaskModal = ({ visible, onAddTask, onClose }) => {
   const [task, setTask] = useState('');
@@ -10,29 +11,57 @@ const TaskModal = ({ visible, onAddTask, onClose }) => {
   const [images, setImages] = useState([]); // Масив для зображень
   const { t } = useTranslation(); // Використання локалізації
 
+  // const handleAdd = () => {
+  //   if (task.trim()) {
+  //     onAddTask({ text: task, category, completed: false, images });
+  //     setTask('');
+  //     setImages([]); // Очистити масив після додавання
+  //   }
+  // };
+
   const handleAdd = () => {
     if (task.trim()) {
+      console.log('Adding task:', task);
+      console.log('Images:', images);
       onAddTask({ text: task, category, completed: false, images });
       setTask('');
       setImages([]); // Очистити масив після додавання
     }
   };
+  
 
   // Функція для відкриття файлового провідника
-  const openFileExplorer = async () => {
-    try {
-      const res = await DocumentPicker.pick({
-        type: [DocumentPicker.types.images], // Обмежуємо вибір зображень
-        allowMultiSelection: true, // Дозволяємо вибір кількох файлів
-      });
-      setImages(res.map(file => file.uri)); // Додаємо вибрані зображення в масив
-    } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        console.log('User cancelled file picker');
-      } else {
-        console.error('DocumentPicker Error:', err);
+  // const openFileExplorer = async () => {
+  //   try {
+  //     const res = await DocumentPicker.pick({
+  //       type: [DocumentPicker.types.images], // Обмежуємо вибір зображень
+  //       allowMultiSelection: true, // Дозволяємо вибір кількох файлів
+  //     });
+  //     setImages(res.map(file => file.uri)); // Додаємо вибрані зображення в масив
+  //   } catch (err) {
+  //     if (DocumentPicker.isCancel(err)) {
+  //       console.log('User cancelled file picker');
+  //     } else {
+  //       console.error('DocumentPicker Error:', err);
+  //     }
+  //   }
+  // };
+
+  const pickImage = () => {
+    launchImageLibrary(
+      { mediaType: 'photo', includeBase64: false },
+      (response) => {
+        if (response.didCancel) {
+          console.log('User cancelled image picker');
+        } else if (response.error) {
+          console.error('ImagePicker Error:', response.error);
+        } else if (response.assets && response.assets.length > 0) {
+          const { uri } = response.assets[0];
+          setImages((prevImages) => [...prevImages, uri]); // Add the selected image to the array
+          console.log('Selected Image URI:', uri);
+        }
       }
-    }
+    );
   };
 
   return (
@@ -66,7 +95,7 @@ const TaskModal = ({ visible, onAddTask, onClose }) => {
             <Picker.Item label={t('text.shoppingList')} value="Shopping List" />
           </Picker>
 
-          <TouchableOpacity style={styles.paperclipButton} onPress={openFileExplorer}>
+          <TouchableOpacity style={styles.paperclipButton} onPress={pickImage}>
             <Text style={styles.buttonText}>📎 {t('text.addImages')}</Text>
           </TouchableOpacity>
 

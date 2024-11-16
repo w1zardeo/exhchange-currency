@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, TextInput, Image, ScrollView, TouchableOpacity, Modal, TouchableWithoutFeedback } from 'react-native';
 import Checkbox from './Checkbox';
 import ThemeStylesTasks from '../theme/ThemeStylesTasks';
 import { useTranslation } from 'react-i18next'; // Імпорт локалізації
+import AsyncStorage from '@react-native-async-storage/async-storage'; // Імпорт AsyncStorage
 
 const getCategoryEmoji = (category) => {
   switch (category) {
@@ -26,6 +27,39 @@ const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) =>
   const [isModalVisible, setIsModalVisible] = useState(false); // Стан для відображення модального вікна
   const [selectedImage, setSelectedImage] = useState(null); // Стан для вибраного зображення
 
+  // useEffect(() => {
+  //   loadImagesFromStorage(); // Завантаження зображень при запуску
+  //   console.log(1);
+    
+  // }, []);
+
+    // Функція для збереження зображень у AsyncStorage
+    // const saveImagesToStorage = async (updatedTasks) => {
+    //   try {
+    //     await AsyncStorage.setItem('tasksImages', JSON.stringify(updatedTasks));
+    //   } catch (error) {
+    //     console.error('Error saving images:', error);
+    //   }
+    // };
+
+    //   // Функція для завантаження зображень із AsyncStorage
+    //   const loadImagesFromStorage = async () => {
+    //     try {
+    //       const savedImages = await AsyncStorage.getItem('tasksImages');
+    //       console.log("Raw savedImages:", savedImages);
+    //       if (savedImages) {
+    //         const parsedImages = JSON.parse(savedImages);
+    //         if (parsedImages.incomplete && Array.isArray(parsedImages.incomplete)) {
+    //           parsedImages.incomplete.forEach((task, index) => {
+    //             updateTaskText(index, 'incomplete', task.text);
+    //           });
+    //         }
+    //       }
+    //     } catch (error) {
+    //       console.error('Error loading images:', error.message); // Logs the specific error message
+    //     }
+    //   };
+
   const handleTextChange = (text, index, section) => {
     if (text === '') {
       deleteTask(index, section);
@@ -37,11 +71,10 @@ const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) =>
   const handleImageDelete = (index, section, imageIndex) => {
     const updatedTasks = [...tasks[section]];
     const task = updatedTasks[index];
-
-    // Перевіряємо, чи є у цього завдання зображення
     if (task.images && task.images.length > imageIndex) {
-      task.images.splice(imageIndex, 1); // Видаляємо зображення
-      updateTaskText(index, section, task.text); // Оновлюємо завдання
+      task.images.splice(imageIndex, 1);
+      updateTaskText(index, section, task.text);
+      // saveImagesToStorage(tasks); // Зберігаємо оновлені зображення після видалення
     }
   };
 

@@ -1,0 +1,54 @@
+{
+  "settings": {
+    "title": "Settings",
+    "toggleTheme": "Toggle theme",
+    "numberOfFractionDigits": "Number of fraction digits",
+    "selectLanguage": "Select Language"
+  },
+  "text": {
+    "header": "Converter",
+    "edit": "Edit",
+    "done": "Done",
+    "addCurrencies": "Add Currencies",
+    "search": "Search",
+    "incompleteLower": "incomplete",
+    "incompleteUpper": "Incomplete",
+    "completedUpper": "Completed",
+    "completedLower": "completed",
+    "addTask": "Click + to add a task",
+    "markTask": "Mark a task done to get it completed",
+    "calendar": "Calendar",
+    "addNewTask": "Add New Task",
+    "finance": "💵Finance",
+    "weeding": "💍Weeding",
+    "freelance": "💼Freelance",
+    "shoppingList": "🛒Shopping List",
+    "enterTask": "Enter Task",
+    "addImages": "Add Images",
+    "addTaskUpper": "Add Task",
+    "close": "Close"
+  },
+  "monthDay": {
+    "jan": "January",
+    "feb": "February",
+    "mar": "March",
+    "apr": "April",
+    "may": "May",
+    "jun": "June",
+    "jul": "July",
+    "aug": "August",
+    "sep": "September",
+    "oct": "October",
+    "nov": "November",
+    "dec": "December"
+  },
+  "weekDay": {
+    "mon": "Mon",
+    "tue": "Tue",
+    "wed": "Wed",
+    "thu": "Thu",
+    "fri": "Fri",
+    "sat": "Sat",
+    "sun": "Sun"
+  }
+}

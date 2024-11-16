@@ -1,11 +1,21 @@
 import { View, Text, Image } from 'react-native';
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 import CalendarScreen from '../screens/CalendarScreen';
 import ExchangeCurrencyScreen from '../screens/ExchangeCurrencyScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import DayToDoScreen from '../screens/DayToDoScreen'; // Імпорт екрану
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
+
+const CalendarStack = () => (
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="CalendarScreen" component={CalendarScreen} />
+    <Stack.Screen name="DayToDoScreen" component={DayToDoScreen} />
+  </Stack.Navigator>
+);
 
 const BottomNavigation = () => {
   return (
@@ -26,7 +36,7 @@ const BottomNavigation = () => {
     >
       <Tab.Screen
         name="Calendar"
-        component={CalendarScreen}
+        component={CalendarStack}
         options={{
           tabBarIcon: ({ focused }) => (
             <Image

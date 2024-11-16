@@ -19,6 +19,21 @@ const DayToDoScreen = ({ route, navigation }) => {
   // });
 
   useEffect(() => {
+    // При відкритті екрану приховуємо нижнє меню
+    navigation.setOptions({
+      tabBarStyle: { display: 'none' },
+    });
+
+    return () => {
+      // Повертаємо нижнє меню при виході з екрану
+      navigation.setOptions({
+        tabBarStyle: { display: 'flex' },
+      });
+    };
+  }, [navigation]);
+
+
+  useEffect(() => {
     const loadTasks = async () => {
       try {
         const storedTasks = await AsyncStorage.getItem('tasksByDate');

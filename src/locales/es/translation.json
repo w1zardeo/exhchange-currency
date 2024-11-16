@@ -1,0 +1,54 @@
+{
+  "settings": {
+    "title": "Ajustes",
+    "toggleTheme": "Cambiar tema",
+    "numberOfFractionDigits": "Número de dígitos decimales",
+    "selectLanguage": "Seleccionar idioma"
+  },
+  "text": {
+    "header": "Convertidor",
+    "edit": "Editar",
+    "done": "Hecho",
+    "addCurrencies": "Añadir monedas",
+    "search": "Buscar",
+    "incompleteLower": "incompleto",
+    "incompleteUpper": "Incompleto",
+    "completedUpper": "Realizado",
+    "completedLower": "realizado",
+    "addTask": "Haga clic en + para agregar una tarea",
+    "markTask": "Marcar una tarea como completada para completarla",
+    "calendar": "Calendario",
+    "addNewTask": "Agregar nueva tarea",
+    "finance": "💵Finanzas",
+    "weeding": "💍Deshierbe",
+    "freelance": "💼Independiente",
+    "shoppingList": "🛒Lista de compras",
+    "enterTask": "Ingresar tarea",
+    "addImages": "Add Imágenes",  
+    "addTaskUpper": "Agregar Tarea",
+    "close": "Cerca"
+  },
+  "monthDay": {
+    "jan": "Enero",
+    "feb": "Febrero",
+    "mar": "Marzo",
+    "apr": "Abril",
+    "may": "Mayo",
+    "jun": "Junio",
+    "jul": "Julio",
+    "aug": "Agosto",
+    "sep": "Septiembre",
+    "oct": "Octubre",
+    "nov": "Noviembre",
+    "dec": "Diciembre"
+  },
+  "weekDay": {
+    "mon": "Lun",
+    "tue": "Mar",
+    "wed": "Mié",
+    "thu": "Jue",
+    "fri": "Vie",
+    "sat": "Sáb",
+    "sun": "Dom"
+  }
+}
