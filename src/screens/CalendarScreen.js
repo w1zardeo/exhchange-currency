@@ -23,21 +23,37 @@ const CalendarScreen = ({ navigation }) => {
   const isDarkMode = useSelector((state) => state.theme.isDarkMode);
   const today = new Date();
   const themeStylesCalendar = ThemeStylesCalendar({ isDarkMode });
+  const { i18n } = useTranslation();
 
-  const daysInMonth = {
-    [t('monthDay.jan')]: 31,
-    [t('monthDay.feb')]: 28,
-    [t('monthDay.mar')]: 31,
-    [t('monthDay.apr')]: 30,
-    [t('monthDay.may')]: 31,
-    [t('monthDay.jun')]: 30,
-    [t('monthDay.jul')]: 31,
-    [t('monthDay.aug')]: 31,
-    [t('monthDay.sep')]: 30,
-    [t('monthDay.oct')]: 31,
-    [t('monthDay.nov')]: 30,
-    [t('monthDay.dec')]: 31,
-  };
+const daysInMonth = {
+  January: 31,
+  February: 28,
+  March: 31,
+  April: 30,
+  May: 31,
+  June: 30,
+  July: 31,
+  August: 31,
+  September: 30,
+  October: 31,
+  November: 30,
+  December: 31,
+};
+
+const translatedDaysInMonth = {
+  January: t('monthDay.jan'),
+  February: t('monthDay.feb'),
+  March: t('monthDay.mar'),
+  April: t('monthDay.apr'),
+  May: t('monthDay.may'),
+  June: t('monthDay.jun'),
+  July: t('monthDay.jul'),
+  August: t('monthDay.aug'),
+  September: t('monthDay.sep'),
+  October: t('monthDay.oct'),
+  November: t('monthDay.nov'),
+  December: t('monthDay.dec'),
+}
 
   const daysOfWeek = [t('weekDay.mon'), t('weekDay.tue'), t('weekDay.wed'), t('weekDay.thu'), t('weekDay.fri'), t('weekDay.sat'), t('weekDay.sun')];
 
@@ -87,6 +103,30 @@ const CalendarScreen = ({ navigation }) => {
     return currentMonth === month && today.getDate() === day;
   };
 
+// const getDateKey = (month, day) => {
+//   const currentYear = new Date().getFullYear();
+//   const monthIndex = Object.keys(daysInMonth).indexOf(month);
+//   const date = new Date(currentYear, monthIndex, day);
+//   const monthName = date.toLocaleString(i18n.language, { month: 'long' });
+
+//   return `${monthName} ${day}, ${currentYear}`;
+// };
+
+// const getDateKey = (month, day) => {
+//   // Генеруємо ключ у форматі YYYY-MM-DD
+//   const year = 2024;
+//   const monthIndex = Object.keys(daysInMonth).indexOf(month);
+//   return new Date(year, monthIndex, day).toISOString().split('T')[0]; // Виводимо дату в форматі "YYYY-MM-DD"
+// };
+
+const getDateKey = (month, day) => {
+  // Генеруємо ключ у форматі YYYY-MM-DD з оригінальних назв місяців
+  const year = 2024;
+  const monthIndex = Object.keys(daysInMonth).indexOf(month); // Визначаємо індекс місяця
+  return new Date(year, monthIndex, day).toISOString().split('T')[0];
+};
+
+  
   const getCircleStyle = (hasIncompleteTasks, hasCompleteTasks) => {
     if (hasIncompleteTasks) {
       return { backgroundColor: "red" };
@@ -96,11 +136,11 @@ const CalendarScreen = ({ navigation }) => {
     }
     return { backgroundColor: "transparent" };
   };
-
+  
   const renderMonth = (month) => (
     <View key={month} style={styles.monthContainer}>
       <Text style={[styles.monthText, themeStylesCalendar.textStyle]}>
-        {2024} {month}
+        {2024} {translatedDaysInMonth[month]}
       </Text>
       <View style={styles.daysGrid}>
         {daysOfWeek.map((dayOfWeek) => (
@@ -109,50 +149,30 @@ const CalendarScreen = ({ navigation }) => {
           </View>
         ))}
         {generateMonthDays(month).map((day, index) => {
-          const date = new Date(
-            Date.UTC(2024, Object.keys(daysInMonth).indexOf(month), day)
-          ); // Зміна на Date.UTC
-
-          const dayOfWeekIndex = date.getUTCDay(); // Використовуйте getUTCDay для правильної обробки
-          // console.log(date); // Це повинно вивести правильну дату
-          // console.log(dayOfWeekIndex); // Це повинно вивести індекс дня тижня (0 - неділя, 1 - понеділок, ...)
-
-          const isWeekend = dayOfWeekIndex === 0 || dayOfWeekIndex === 6;
-          if (isWeekend === true) {
-            // console.log(isWeekend); // Це повинно вивести true для вихідних
-          }
-
-          const tasks = tasksByDate[`${month} ${day}, 2024`] || {
-            incomplete: [],
-            complete: [],
-          };
+          const dateKey = getDateKey(month, day); // Отримуємо універсальний ключ для дати
+          const tasks = tasksByDate[dateKey] || { incomplete: [], complete: [] };
           const hasIncompleteTasks = tasks.incomplete.length > 0;
           const hasCompleteTasks = tasks.complete.length > 0;
-
-          const isCurrentDay = isToday(month, day);
-
+  
+          const isWeekend = new Date(2024, Object.keys(daysInMonth).indexOf(month), day).getDay() === 0 || new Date(2024, Object.keys(daysInMonth).indexOf(month), day).getDay() === 6;
+  
           return (
             <View key={index} style={styles.dayContainer}>
               <View
-                style={[
-                  styles.circleStyle,
-                  getCircleStyle(hasIncompleteTasks, hasCompleteTasks), 
-                ]}
+                style={[styles.circleStyle, getCircleStyle(hasIncompleteTasks, hasCompleteTasks)]}
               >
                 <Text
                   onPress={() =>
                     navigation.navigate("DayToDoScreen", {
-                      selectedDate: `${month} ${day}, 2024`,
+                      selectedDate: `${translatedDaysInMonth[month]} ${day}, 2024`, // Формат "Місяць число, рік" із перекладом// Використовуємо універсальний формат дати
+                      dateKey: getDateKey(month, day), 
                       updateTasksState: loadTasks,
                       isDarkMode,
                     })
                   }
                   style={[
                     styles.dayText,
-                    isWeekend
-                      ? themeStylesCalendar.weekendText
-                      : themeStylesCalendar.textStyle,
-                      isToday(month, day) && { color: 'cyan' },
+                    isWeekend ? themeStylesCalendar.weekendText : themeStylesCalendar.textStyle,
                   ]}
                 >
                   {day}
@@ -160,7 +180,7 @@ const CalendarScreen = ({ navigation }) => {
               </View>
               {isToday(month, day) && (
                 <View style={styles.todayContainer}>
-                    <Text style={styles.todayText}>Today</Text>
+                  <Text style={styles.todayText}>Today</Text>
                 </View>
               )}
             </View>
@@ -169,6 +189,79 @@ const CalendarScreen = ({ navigation }) => {
       </View>
     </View>
   );
+
+  // const renderMonth = (month) => (
+  //   <View key={month} style={styles.monthContainer}>
+  //     <Text style={[styles.monthText, themeStylesCalendar.textStyle]}>
+  //       {2024} {month}
+  //     </Text>
+  //     <View style={styles.daysGrid}>
+  //       {daysOfWeek.map((dayOfWeek) => (
+  //         <View key={dayOfWeek} style={styles.weekDayContainer}>
+  //           <Text style={styles.weekDayText}>{dayOfWeek}</Text>
+  //         </View>
+  //       ))}
+  //       {generateMonthDays(month).map((day, index) => {
+  //         const date = new Date(
+  //           Date.UTC(2024, Object.keys(daysInMonth).indexOf(month), day)
+  //         ); // Зміна на Date.UTC
+
+  //         const dayOfWeekIndex = date.getUTCDay(); // Використовуйте getUTCDay для правильної обробки
+  //         // console.log(date); // Це повинно вивести правильну дату
+  //         // console.log(dayOfWeekIndex); // Це повинно вивести індекс дня тижня (0 - неділя, 1 - понеділок, ...)
+
+  //         const isWeekend = dayOfWeekIndex === 0 || dayOfWeekIndex === 6;
+  //         if (isWeekend === true) {
+  //           // console.log(isWeekend); // Це повинно вивести true для вихідних
+  //         }
+
+  //         const tasks = tasksByDate[`${month} ${day}, 2024`] || {
+  //           incomplete: [],
+  //           complete: [],
+  //         };
+  //         const hasIncompleteTasks = tasks.incomplete.length > 0;
+  //         const hasCompleteTasks = tasks.complete.length > 0;
+
+  //         const isCurrentDay = isToday(month, day);
+
+  //         return (
+  //           <View key={index} style={styles.dayContainer}>
+  //             <View
+  //               style={[
+  //                 styles.circleStyle,
+  //                 getCircleStyle(hasIncompleteTasks, hasCompleteTasks), 
+  //               ]}
+  //             >
+  //               <Text
+  //                 onPress={() =>
+  //                   navigation.navigate("DayToDoScreen", {
+  //                     selectedDate: `${month} ${day}, 2024`,
+  //                     updateTasksState: loadTasks,
+  //                     isDarkMode,
+  //                   })
+  //                 }
+  //                 style={[
+  //                   styles.dayText,
+  //                   isWeekend
+  //                     ? themeStylesCalendar.weekendText
+  //                     : themeStylesCalendar.textStyle,
+  //                     isToday(month, day) && { color: 'cyan' },
+  //                 ]}
+  //               >
+  //                 {day}
+  //               </Text>
+  //             </View>
+  //             {isToday(month, day) && (
+  //               <View style={styles.todayContainer}>
+  //                   <Text style={styles.todayText}>Today</Text>
+  //               </View>
+  //             )}
+  //           </View>
+  //         );
+  //       })}
+  //     </View>
+  //   </View>
+  // );
 
   const handleToggleTheme = () => {
     const newTheme = !isDarkMode; // Define the new theme value

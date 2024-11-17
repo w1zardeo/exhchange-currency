@@ -9,14 +9,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import ThemeStylesDay from '../theme/themeStylesDay';
 
 const DayToDoScreen = ({ route, navigation }) => {
-  const { selectedDate, updateTasksState, isDarkMode } = route.params; // Отримання вибраної дати та функції оновлення
-  const [tasksByDate, setTasksByDate] = useState({});
+  const { selectedDate, updateTasksState, isDarkMode } = route.params; 
+  const [tasksByDate, setTasksByDate] = useState({}); // Завдання для кожної дати
   const [showModal, setShowModal] = useState(false);
-  const themeStylesDay = ThemeStylesDay({ isDarkMode }); // Використовуємо компонент для стилів
-
-  // const [fontsLoaded] = useFonts({
-  //   'inter': require('../assets/fonts/Inter.ttf'),
-  // });
+  const themeStylesDay = ThemeStylesDay({ isDarkMode });
 
   useEffect(() => {
     // При відкритті екрану приховуємо нижнє меню
@@ -32,8 +28,8 @@ const DayToDoScreen = ({ route, navigation }) => {
     };
   }, [navigation]);
 
-
   useEffect(() => {
+    // Завантаження завдань із AsyncStorage при ініціалізації
     const loadTasks = async () => {
       try {
         const storedTasks = await AsyncStorage.getItem('tasksByDate');
@@ -48,6 +44,7 @@ const DayToDoScreen = ({ route, navigation }) => {
   }, []);
 
   useEffect(() => {
+    // Збереження завдань у AsyncStorage при їх оновленні
     const saveTasks = async () => {
       try {
         await AsyncStorage.setItem('tasksByDate', JSON.stringify(tasksByDate));
@@ -75,7 +72,7 @@ const DayToDoScreen = ({ route, navigation }) => {
     }));
     setShowModal(false);
   };
-  
+
   const toggleTask = (index, type) => {
     const updatedTasks = { ...tasks };
     if (type === 'incomplete') {
@@ -108,10 +105,6 @@ const DayToDoScreen = ({ route, navigation }) => {
       [selectedDate]: updatedTasks,
     }));
   };
-
-  // if (!fontsLoaded) {
-  //   return <ActivityIndicator size="large" color="#007BFF" style={{ flex: 1, justifyContent: 'center' }} />;
-  // }
 
   return (
     <View style={[styles.container, themeStylesDay.containerStyle]}>
