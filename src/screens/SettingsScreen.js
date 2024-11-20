@@ -25,34 +25,34 @@ export default function SettingsScreen() {
   const themeStylesCurrency = ThemeStylesCurrency({ isDarkMode });
   const decimalPlaces = useSelector((state) => state.settings.decimalPlaces);
   
-  useEffect(() => {
-    const loadTheme = async () => {
-      try {
-        const savedTheme = await AsyncStorage.getItem('isDarkMode');
-        if (savedTheme !== null) {
-          dispatch(setTheme(JSON.parse(savedTheme)));
-        }
-      } catch (e) {
-        console.log('Failed to load theme.', e);
-      }
-    };
+  // useEffect(() => {
+  //   const loadTheme = async () => {
+  //     try {
+  //       const savedTheme = await AsyncStorage.getItem('isDarkMode');
+  //       if (savedTheme !== null) {
+  //         dispatch(setTheme(JSON.parse(savedTheme)));
+  //       }
+  //     } catch (e) {
+  //       console.log('Failed to load theme.', e);
+  //     }
+  //   };
 
-    loadTheme();
-  }, [dispatch]);
+  //   loadTheme();
+  // }, [dispatch]);
 
   const handleToggleTheme = () => {
-    const newTheme = !isDarkMode;
+    // const newTheme = !isDarkMode;
     dispatch(toggleTheme());
-    saveTheme(newTheme);
+    // saveTheme(newTheme);
   };
 
-  const saveTheme = async (theme) => {
-    try {
-      await AsyncStorage.setItem('isDarkMode', JSON.stringify(theme));
-    } catch (e) {
-      console.log('Failed to save theme.', e);
-    }
-  };
+  // const saveTheme = async (theme) => {
+  //   try {
+  //     await AsyncStorage.setItem('isDarkMode', JSON.stringify(theme));
+  //   } catch (e) {
+  //     console.log('Failed to save theme.', e);
+  //   }
+  // };
 
   const incrementDigits = () => {
     dispatch(setDecimalPlaces(decimalPlaces + 1));

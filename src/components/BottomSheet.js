@@ -1,21 +1,148 @@
+// import { Pressable, StyleSheet, Text, View, Animated, TextInput, FlatList, Image, TouchableOpacity } from 'react-native';
+// import React, { useState, useRef, useEffect } from 'react';
+// import Icon from 'react-native-vector-icons/Ionicons';
+// import AntDesign from 'react-native-vector-icons/AntDesign';
+// import { useCurrency } from '../redux/CurrencyContext';
+// import { useTranslation } from 'react-i18next'; // Імпорт локалізації
+
+// const BottomSheet = ({ sheetOpen, setSheetOpen }) => {
+//   const { currencies, toggleFavorite } = useCurrency();
+//   const [searchQuery, setSearchQuery] = useState('');
+//   const sheetAnimation = useRef(new Animated.Value(0)).current;
+//   const coverOpacityAnimation = useRef(new Animated.Value(0)).current;
+//   const [isSearching, setIsSearching] = useState(false);
+//   const { t } = useTranslation(); // Використання локалізації
+
+//   const handleCancel = () => {
+//     setSearchQuery(''); // Скидає пошуковий запит
+//     setIsSearching(false); // Приховує кнопку "Cancel"
+//   };
+
+//   const openSheet = () => {
+//     Animated.timing(sheetAnimation, {
+//       toValue: 1,
+//       duration: 300,
+//       useNativeDriver: false,
+//     }).start();
+//     Animated.timing(coverOpacityAnimation, {
+//       toValue: 1,
+//       duration: 300,
+//       useNativeDriver: false,
+//     }).start();
+//   };
+
+//   const closeSheet = () => {
+//     Animated.timing(sheetAnimation, {
+//       toValue: 0,
+//       duration: 300,
+//       useNativeDriver: false,
+//     }).start();
+//     Animated.timing(coverOpacityAnimation, {
+//       toValue: 0,
+//       duration: 300,
+//       useNativeDriver: false,
+//     }).start();
+//   };
+
+//   const sheetAnimationInterpolate = sheetAnimation.interpolate({
+//     inputRange: [0, 1],
+//     outputRange: ['-95%', '0%'],
+//   });
+
+//   const coverOpacityAnimationInterpolate = sheetAnimation.interpolate({
+//     inputRange: [0, 1],
+//     outputRange: [0, 1],
+//   });
+
+//   useEffect(() => {
+//     if (sheetOpen) {
+//       openSheet();
+//     } else {
+//       closeSheet();
+//     }
+//   }, [sheetOpen]);
+
+//   const filteredCurrencies = currencies.filter(currency =>
+//     currency.currency.toLowerCase().includes(searchQuery.toLowerCase())
+//   );
+
+//   return (
+//     <View style={styles.BottomSheet}>
+//       <Pressable onPress={() => { setSheetOpen(false) }} style={{ pointerEvents: sheetOpen ? 'auto' : 'none' }}>
+//         <Animated.View style={[styles.BottomSheetShadowCover, { opacity: coverOpacityAnimationInterpolate }]} />
+//       </Pressable>
+//       <Animated.View style={[styles.BottomSheetMainContainer, { bottom: sheetAnimationInterpolate }]}>
+//         <Text style={styles.addCurrencies}>{t('text.addCurrencies')}</Text>
+//         <View style={[styles.searchRow]}>
+//           <View style={[styles.searchContainer, isSearching && styles.searchActive]}>
+//             <Icon name="search" size={18} color="#888" style={styles.searchIcon} />
+//             <TextInput
+//               placeholder={t('text.search')}
+//               placeholderTextColor="#888"
+//               style={styles.searchInput}
+//               value={searchQuery}
+//               onChangeText={setSearchQuery}
+//               onFocus={() => setIsSearching(true)} // Активує пошук
+//             />
+//           </View>
+//           {isSearching && (
+//             <TouchableOpacity onPress={handleCancel} style={styles.cancelButton}>
+//               <Text style={styles.cancelText}>Cancel</Text>
+//             </TouchableOpacity>
+//           )}
+//         </View>
+//         <FlatList
+//           data={filteredCurrencies}
+//           renderItem={({ item }) => (
+//             <CurrencyItemInBotomSheet item={item} toggleFavorite={() => toggleFavorite(item.id)} />
+//           )}
+//           keyExtractor={(item) => item.id}
+//           contentContainerStyle={styles.listContainer}
+//         />
+//       </Animated.View>
+//     </View>
+//   );
+// };
+
+// const CurrencyItemInBotomSheet = ({ item, toggleFavorite }) => {
+//   return (
+//     <View style={styles.itemContainer}>
+//       <Image source={{ uri: item.flag }} style={styles.flag} />
+//       <View style={styles.currencyInfo}>
+//         <Text style={styles.currency}>{item.currency}</Text>
+//         <Text style={styles.label}>{item.label}</Text>
+//       </View>
+//       <Pressable onPress={toggleFavorite} style={styles.starContainer}>
+//         <AntDesign
+//           name={item.isFavorite ? "star" : "staro"}
+//           size={20}
+//           color={item.isFavorite ? "#0c86eb" : "#0c86eb"}
+//         />
+//       </Pressable>
+//     </View>
+//   );
+// };
+
 import { Pressable, StyleSheet, Text, View, Animated, TextInput, FlatList, Image, TouchableOpacity } from 'react-native';
 import React, { useState, useRef, useEffect } from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import { useCurrency } from '../redux/CurrencyContext';
-import { useTranslation } from 'react-i18next'; // Імпорт локалізації
+import { useSelector, useDispatch } from 'react-redux'; // Redux hooks
+import { toggleFavorite } from '../redux/currencySlice'; // Redux action
+import { useTranslation } from 'react-i18next'; // Localization
 
 const BottomSheet = ({ sheetOpen, setSheetOpen }) => {
-  const { currencies, toggleFavorite } = useCurrency();
+  const currencies = useSelector((state) => state.currency.currencies); // Get currencies from Redux store
+  const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState('');
   const sheetAnimation = useRef(new Animated.Value(0)).current;
   const coverOpacityAnimation = useRef(new Animated.Value(0)).current;
   const [isSearching, setIsSearching] = useState(false);
-  const { t } = useTranslation(); // Використання локалізації
+  const { t } = useTranslation();
 
   const handleCancel = () => {
-    setSearchQuery(''); // Скидає пошуковий запит
-    setIsSearching(false); // Приховує кнопку "Cancel"
+    setSearchQuery('');
+    setIsSearching(false);
   };
 
   const openSheet = () => {
@@ -62,13 +189,13 @@ const BottomSheet = ({ sheetOpen, setSheetOpen }) => {
     }
   }, [sheetOpen]);
 
-  const filteredCurrencies = currencies.filter(currency =>
+  const filteredCurrencies = currencies.filter((currency) =>
     currency.currency.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
     <View style={styles.BottomSheet}>
-      <Pressable onPress={() => { setSheetOpen(false) }} style={{ pointerEvents: sheetOpen ? 'auto' : 'none' }}>
+      <Pressable onPress={() => setSheetOpen(false)} style={{ pointerEvents: sheetOpen ? 'auto' : 'none' }}>
         <Animated.View style={[styles.BottomSheetShadowCover, { opacity: coverOpacityAnimationInterpolate }]} />
       </Pressable>
       <Animated.View style={[styles.BottomSheetMainContainer, { bottom: sheetAnimationInterpolate }]}>
@@ -82,7 +209,7 @@ const BottomSheet = ({ sheetOpen, setSheetOpen }) => {
               style={styles.searchInput}
               value={searchQuery}
               onChangeText={setSearchQuery}
-              onFocus={() => setIsSearching(true)} // Активує пошук
+              onFocus={() => setIsSearching(true)}
             />
           </View>
           {isSearching && (
@@ -94,7 +221,10 @@ const BottomSheet = ({ sheetOpen, setSheetOpen }) => {
         <FlatList
           data={filteredCurrencies}
           renderItem={({ item }) => (
-            <CurrencyItemInBotomSheet item={item} toggleFavorite={() => toggleFavorite(item.id)} />
+            <CurrencyItemInBotomSheet
+              item={item}
+              toggleFavorite={() => dispatch(toggleFavorite(item.id))} // Dispatch Redux action
+            />
           )}
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.listContainer}
@@ -114,9 +244,9 @@ const CurrencyItemInBotomSheet = ({ item, toggleFavorite }) => {
       </View>
       <Pressable onPress={toggleFavorite} style={styles.starContainer}>
         <AntDesign
-          name={item.isFavorite ? "star" : "staro"}
+          name={item.isFavorite ? 'star' : 'staro'}
           size={20}
-          color={item.isFavorite ? "#0c86eb" : "#0c86eb"}
+          color={item.isFavorite ? '#0c86eb' : '#0c86eb'}
         />
       </Pressable>
     </View>

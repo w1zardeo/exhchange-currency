@@ -1,27 +1,62 @@
+// import { View, StyleSheet, SafeAreaView } from 'react-native';
+// import ConverterHeader from '../components/ConverterHeader'; // Імпортуємо компонент Header
+// import CurrencyList from '../components/CurrencyList'; // Імпортуємо компонент CurrencyList
+// import BottomSheet from '../components/BottomSheet';
+// import { CurrencyProvider } from '../redux/CurrencyContext';
+
+// const CurrencyConverterApp = () => {
+//   return (
+//     <CurrencyProvider>
+//     <SafeAreaView style={styles.container}>
+//       {/* Компонент заголовка */}
+      
+//       {/* Компонент списку валют */}
+//       <CurrencyList />
+//       <BottomSheet/>
+//     </SafeAreaView>
+//     </CurrencyProvider>
+//   );
+// };
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: 'black', // Фон чорний для відповідності зображенню
+//   },
+// });
+
+// export default CurrencyConverterApp;
+
+import React from 'react';
 import { View, StyleSheet, SafeAreaView } from 'react-native';
+import { Provider } from 'react-redux';
+import { store } from '../redux/store'; // Імпортуємо створений Redux Store
 import ConverterHeader from '../components/ConverterHeader'; // Імпортуємо компонент Header
 import CurrencyList from '../components/CurrencyList'; // Імпортуємо компонент CurrencyList
-import BottomSheet from '../components/BottomSheet';
-import { CurrencyProvider } from '../redux/CurrencyContext';
+import BottomSheet from '../components/BottomSheet'; // Імпортуємо компонент BottomSheet
 
 const CurrencyConverterApp = () => {
   return (
-    <CurrencyProvider>
-    <SafeAreaView style={styles.container}>
-      {/* Компонент заголовка */}
-      
-      {/* Компонент списку валют */}
-      <CurrencyList />
-      <BottomSheet/>
-    </SafeAreaView>
-    </CurrencyProvider>
+    // Обгортаємо весь додаток у Provider для доступу до Redux Store
+    <Provider store={store}>
+      <SafeAreaView style={styles.container}>
+        {/* Компонент заголовка */}
+        {/* <ConverterHeader /> */}
+        
+        {/* Компонент списку валют */}
+        <CurrencyList />
+        
+        {/* Компонент для нижнього вікна */}
+        <BottomSheet />
+      </SafeAreaView>
+    </Provider>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'black', // Фон чорний для відповідності зображенню
+    backgroundColor: 'black', // Фон чорний для відповідності загальному дизайну
   },
 });
 
