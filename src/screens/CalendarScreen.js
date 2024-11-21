@@ -677,7 +677,9 @@ const CalendarScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const tasksByDate = useSelector(state => state.tasks);
   const isDarkMode = useSelector(state => state.theme.isDarkMode);
-  const themeStylesCalendar = ThemeStylesCalendar({ isDarkMode });
+  const colors = useSelector((state) => state.theme.colors); // Отримуємо стан теми
+  // const themeStylesCalendar = ThemeStylesCalendar({ isDarkMode });
+  const currentYear = new Date().getFullYear(); // Отримуємо поточний рік
 
   const daysInMonth = {
     [t('monthDay.jan')]: 31,
@@ -723,7 +725,7 @@ const CalendarScreen = ({ navigation }) => {
   }, [dispatch]);
 
   const getFirstDayOfMonth = month => {
-    const date = new Date(2024, Object.keys(daysInMonth).indexOf(month), 1);
+    const date = new Date(currentYear, Object.keys(daysInMonth).indexOf(month), 1);
     return date.getDay(); 
   };
 
@@ -743,7 +745,7 @@ const CalendarScreen = ({ navigation }) => {
 
   const renderMonth = month => (
     <View key={month} style={styles.monthContainer}>
-      <Text style={[styles.monthText, themeStylesCalendar.textStyle]}>
+      <Text style={[styles.monthText, { color: colors.text }]}>
         {2024} {month}
       </Text>
       <View style={styles.daysGrid}>
@@ -777,8 +779,8 @@ const CalendarScreen = ({ navigation }) => {
                     })
                   }
                   style={[
-                    styles.dayText,
-                    isWeekend ? themeStylesCalendar.weekendText : themeStylesCalendar.textStyle,
+                    styles.dayText, {color: colors.text},
+                    isWeekend ? colors.weekend : colors.text,
                     isToday(month, day) && { color: 'cyan' },
                   ]}
                 >
@@ -798,12 +800,11 @@ const CalendarScreen = ({ navigation }) => {
   );
 
   const handleToggleTheme = () => {
-    const newTheme = !isDarkMode;
     dispatch(toggleTheme());
   };
 
   return (
-    <View style={[styles.container, themeStylesCalendar.containerStyle]}>
+    <View style={[styles.container, {backgroundColor: colors.background}]}>
       <View style={styles.switchContainer}>
         <Switch
           value={isDarkMode}

@@ -23,12 +23,18 @@ import { createSlice } from '@reduxjs/toolkit';
 import DarkTheme from '../theme/DarkTheme';
 import DefaultTheme from '../theme/DefaultTheme';
 
+const initialState = {
+  isDarkMode: true, // Початковий стан
+  colors: DarkTheme, // Початкові кольор
+};
+
 const themeSlice = createSlice({
   name: 'theme',
-  initialState: {
-    isDarkMode: true, // Початковий стан
-    colors: DarkTheme, // Початкові кольори
-  },
+  initialState,
+  // initialState: {
+  //   // isDarkMode: true, // Початковий стан
+  //   // colors: DarkTheme, // Початкові кольори
+  // },
   reducers: {
     toggleTheme: (state) => {
       state.isDarkMode = !state.isDarkMode;

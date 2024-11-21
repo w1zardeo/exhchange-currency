@@ -22,7 +22,9 @@ export default function SettingsScreen() {
   const { t } = useTranslation(); // Використання локалізації
   const dispatch = useDispatch();
   // const isDarkMode = useSelector((state) => state.theme.isDarkMode);
-  const { isDarkMode, colors } = useSelector((state) => state.theme); // Отримуємо стан теми
+  const colors = useSelector((state) => state.theme.colors); // Отримуємо стан теми
+  const isDarkMode = useSelector((state) => state.theme.isDarkMode); // Отримуємо стан теми
+
   // const themeStylesCurrency = ThemeStylesCurrency({ isDarkMode });
   const decimalPlaces = useSelector((state) => state.settings.decimalPlaces);
   
@@ -100,18 +102,18 @@ export default function SettingsScreen() {
           </View>
 
           {/* Divider */}
-          <View style={[styles.divider, themeStylesCurrency.stylesDevider]} />
+          <View style={[styles.divider, { devider: colors.devider }]} />
 
           {/* Number of fraction digits section */}
           <View style={styles.option}>
-            <Text style={[styles.optionText, themeStylesCurrency.textStyle]}>
+            <Text style={[styles.optionText, { color: colors.text }]}>
               {t('settings.numberOfFractionDigits')}
             </Text>
             <View style={styles.counterGroup}>
-              <Text style={[styles.counterValue, themeStylesCurrency.textStyle]}>
+              <Text style={[styles.counterValue, { color: colors.text }]}>
                 {decimalPlaces} {/* Відображення кількості знаків після коми */}
               </Text>
-              <View style={[styles.iconContainer, themeStylesCurrency.stylesIconCantainer]}>
+              <View style={[styles.iconContainer, { icon: colors.iconBackground }]}>
                 <TouchableOpacity onPress={decrementDigits} style={styles.iconButton}>
                   <Icon name="remove-outline" size={20} color={isDarkMode ? '#fff' : '#000'} />
                 </TouchableOpacity>
@@ -123,11 +125,11 @@ export default function SettingsScreen() {
           </View>
 
           {/* Divider */}
-          <View style={[styles.divider, themeStylesCurrency.stylesDevider]} />
+          <View style={[styles.divider, { devider: colors.devider }]} />
 
           {/* Language selection section */}
           <View style={styles.option}>
-            <Text style={[styles.optionText, themeStylesCurrency.textStyle]}>
+            <Text style={[styles.optionText, { color: colors.text }]}>
               {t('settings.selectLanguage')}
             </Text>
             <View style={styles.languageContainer}>

@@ -4,6 +4,7 @@ import Checkbox from './Checkbox';
 import ThemeStylesTasks from '../theme/ThemeStylesTasks';
 import { useTranslation } from 'react-i18next'; // Імпорт локалізації
 import AsyncStorage from '@react-native-async-storage/async-storage'; // Імпорт AsyncStorage
+import { useDispatch, useSelector } from 'react-redux';
 
 const getCategoryEmoji = (category) => {
   switch (category) {
@@ -26,6 +27,23 @@ const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) =>
   const [imageDoubleClick, setImageDoubleClick] = useState(null); // Стан для двократного натискання
   const [isModalVisible, setIsModalVisible] = useState(false); // Стан для відображення модального вікна
   const [selectedImage, setSelectedImage] = useState(null); // Стан для вибраного зображення
+  const colors = useSelector((state) => state.theme.colors); // Отримуємо стан теми
+
+
+  const dynamicStyles = {
+    section: {
+      color: colors.section
+    },
+    textTask: {
+      color: colors.textTask
+    },
+    subtitle: {
+      color: colors.subtitle 
+    },
+    completedTask: {
+      color: colors.completedTask 
+    },
+  };
 
   // useEffect(() => {
   //   loadImagesFromStorage(); // Завантаження зображень при запуску
@@ -92,7 +110,7 @@ const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) =>
     <View style={styles.tasks}>
       {/* Incomplete Section */}
       <View style={styles.sectionContainer}>
-        <Text style={[styles.sectionTitle, themeStylesTasks.sectionStyle]}>{t('text.incompleteUpper')}</Text>
+        <Text style={[styles.sectionTitle, dynamicStyles.section]}>{t('text.incompleteUpper')}</Text>
         {tasks.incomplete.length === 0 && (
           <Text style={styles.smallGap}>{t('text.addTask')}</Text>
         )}
@@ -112,7 +130,7 @@ const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) =>
                     <TextInput
                       value={item.text}
                       onChangeText={(text) => handleTextChange(text, index, 'incomplete')}
-                      style={[styles.taskText, themeStylesTasks.textStyle]}
+                      style={[styles.taskText, dynamicStyles.textTask]}
                       numberOfLines={1}
                       maxLength={100}
                     />
@@ -150,7 +168,7 @@ const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) =>
 
       {/* Completed Section */}
       <View style={styles.sectionContainer}>
-        <Text style={[styles.sectionTitle, themeStylesTasks.sectionStyle]}>{t('text.completedUpper')}</Text>
+        <Text style={[styles.sectionTitle,dynamicStyles.section]}>{t('text.completedUpper')}</Text>
         {tasks.complete.length === 0 && (
           <Text style={styles.smallGap}>{t('text.markTask')}</Text>
         )}
@@ -168,7 +186,7 @@ const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) =>
                 label={
                   <View style={styles.textContainer}>
                     <Text
-                      style={[styles.taskText, styles.completedTaskText, themeStylesTasks.completedTaskStyle]}
+                      style={[styles.taskText, styles.completedTaskText, dynamicStyles.completedTask]}
                     >
                       {item.text}
                     </Text>

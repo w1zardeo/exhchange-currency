@@ -151,15 +151,32 @@ const ConverterHeader = ({ searchQuery, setSearchQuery, toggleBottomSheet, onEdi
   
   // Отримуємо стан теми з Redux, що автоматично зберігається через redux-persist
   const isDarkMode = useSelector((state) => state.theme.isDarkMode);
-  const themeStylesCurrency = ThemeStylesCurrency({ isDarkMode });
+  // const themeStylesCurrency = ThemeStylesCurrency({ isDarkMode });
+  const colors = useSelector((state) => state.theme.colors); // Отримуємо стан теми
 
   const handleCancel = () => {
     setSearchQuery(''); // Скидає пошуковий запит
     setIsSearching(false); // Приховує кнопку "Cancel"
   };
 
+
+  const dynamicStyles = {
+    headerContainer: {
+      backgroundColor: colors.background,
+    },
+    title: {
+      color: colors.text,
+    },
+    searchContainer: {
+      backgroundColor: colors.searchContainer,
+    },
+    searchInput: {
+      color: colors.text,
+    },
+  };
+
   return (
-    <View style={[styles.headerContainer, themeStylesCurrency.containerStyle]}>
+    <View style={[styles.headerContainer, dynamicStyles.headerContainer]}>
       <View style={styles.topRow}>
         <TouchableOpacity onPress={onEditToggle}>
           <Text style={styles.editText}>{isEditing ? t('text.done') : t('text.edit')}</Text>
@@ -168,9 +185,9 @@ const ConverterHeader = ({ searchQuery, setSearchQuery, toggleBottomSheet, onEdi
           <Icon name="add" size={24} color="#13518f" />
         </TouchableOpacity>
       </View>
-      <Text style={[styles.title, themeStylesCurrency.textStyle]}>{t('text.header')}</Text>
+      <Text style={[styles.title, { color: colors.text }]}>{t('text.header')}</Text>
       <View style={styles.searchRow}>
-        <View style={[styles.searchContainer, isSearching && styles.searchActive, themeStylesCurrency.searchContainer]}>
+        <View style={[styles.searchContainer, isSearching && styles.searchActive, dynamicStyles.searchContainer]}>
           <Icon name="search" size={18} color="#888" style={styles.searchIcon} />
           <TextInput
             placeholder={t('text.search')}

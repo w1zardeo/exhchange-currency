@@ -200,12 +200,68 @@ import {
 import ThemeStylesCurrency from '../theme/ThemeStylesCurrecny';
 import { useTranslation } from 'react-i18next'; // Localization
 
+import Icon from 'react-native-vector-icons/MaterialIcons';
+
+const EditMode = ({ onDrag }) => (
+  <TouchableOpacity style={styles.editIcon} onLongPress={onDrag}>
+    <Icon name="menu" size={18} color="#efefef" />
+  </TouchableOpacity>
+);
+
+const ViewMode = ({
+  symbol,
+  convertedAmount,
+  onInputChange,
+  rate,
+  currency,
+  decimalPlaces,
+  styles,
+}) => (
+  <View style={styles.rateInfo}>
+    <View style={styles.inputContainer}>
+      <Text style={[styles.symbol, styles.textStyle]}>{symbol}</Text>
+      <TextInput
+        style={[styles.rate, styles.textStyle]}
+        keyboardType="numeric"
+        value={convertedAmount}
+        onChangeText={onInputChange}
+        numberOfLines={1}
+        maxLength={10}
+        scrollEnabled={true}
+      />
+    </View>
+    <Text style={[styles.rateText, styles.rateTextStyle]}>
+      {`1 UAH = ${rate.toFixed(decimalPlaces)} ${currency}`}
+    </Text>
+  </View>
+);
+
 const CurrencyItem = ({ item, baseAmount, onAmountChange, isEditing, onDrag }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const isDarkMode = useSelector((state) => state.theme.isDarkMode);
   const decimalPlaces = useSelector((state) => state.settings.decimalPlaces);
-  const themeStylesCurrency = ThemeStylesCurrency({ isDarkMode });
+  // const themeStylesCurrency = ThemeStylesCurrency({ isDarkMode });
+  const colors = useSelector((state) => state.theme.colors); // Отримуємо стан теми
+
+
+  const dynamicStyles = {
+    line: {
+      color: colors.line,
+    },
+    text: {
+      color: colors.text,
+    },
+    label: {
+      color: colors.label,
+    },
+    rate: {
+      color: colors.rate,
+    },
+    backgroundColor: {
+      color: colors.background
+    }
+  };
 
   const convertedAmount = (baseAmount * item.rate)
     .toFixed(decimalPlaces)
@@ -232,37 +288,25 @@ const CurrencyItem = ({ item, baseAmount, onAmountChange, isEditing, onDrag }) =
   };
 
   return (
-    <View style={[styles.itemContainer, themeStylesCurrency.stylesLine]}>
+    <View style={styles.itemContainer}>
       <Image source={{ uri: item.flag }} style={styles.flag} />
       <View style={styles.currencyInfo}>
-        <Text style={[styles.currency, themeStylesCurrency.textStyle]}>{item.currency}</Text>
-        <Text style={[styles.label, themeStylesCurrency.labelText]}>{item.label}</Text>
+        <Text style={[styles.currency, styles.textStyle]}>{item.currency}</Text>
+        <Text style={[styles.label, styles.labelStyle]}>{item.label}</Text>
       </View>
-      <View style={styles.rateInfo}>
-        {isEditing ? (
-          <TouchableOpacity style={styles.editIcon} onLongPress={onDrag}>
-            <Icon name="menu" size={18} color="#efefef" />
-          </TouchableOpacity>
-        ) : (
-          <View style={styles.inputContainer}>
-            <Text style={[styles.symbol, themeStylesCurrency.textStyle]}>{item.symbol}</Text>
-            <TextInput
-              style={[styles.rate, themeStylesCurrency.textStyle]}
-              keyboardType="numeric"
-              value={convertedAmount}
-              onChangeText={handleInputChange}
-              numberOfLines={1}
-              maxLength={10}
-              scrollEnabled={true}
-            />
-          </View>
-        )}
-        {!isEditing && (
-          <Text style={[styles.rateText, themeStylesCurrency.rateText]}>
-            {`1 UAH = ${item.rate.toFixed(decimalPlaces)} ${item.currency}`}
-          </Text>
-        )}
-      </View>
+      {isEditing ? (
+        <EditMode onDrag={onDrag} />
+      ) : (
+        <ViewMode
+          symbol={item.symbol}
+          convertedAmount={convertedAmount}
+          onInputChange={handleInputChange}
+          rate={item.rate}
+          currency={item.currency}
+          decimalPlaces={decimalPlaces}
+          styles={styles}
+        />
+      )}
     </View>
   );
 };
@@ -272,11 +316,18 @@ const CurrencyList = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [sheetOpen, setSheetOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const colors = useSelector((state) => state.theme.colors); // Отримуємо стан теми
 
   const dispatch = useDispatch();
   const { currencies = [], loading, status } = useSelector((state) => state.currency);
   const isDarkMode = useSelector((state) => state.theme.isDarkMode);
   const themeStylesCurrency = ThemeStylesCurrency({ isDarkMode });
+
+  const dynamicStyles = {
+    backgroundColor: {
+      color: colors.background
+    }
+  };
 
   useEffect(() => {
     if (!Array.isArray(currencies) || currencies.length === 0) {
@@ -311,7 +362,7 @@ const CurrencyList = () => {
   );
 
   return (
-    <View style={[styles.container, themeStylesCurrency.containerStyle]}>
+    <View style={[styles.container, dynamicStyles.background]}>
       <ConverterHeader
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
