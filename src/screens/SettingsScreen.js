@@ -11,9 +11,9 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useDispatch, useSelector } from 'react-redux';
-import ThemeStylesCurrency from '../theme/ThemeStylesCurrecny';
+// import ThemeStylesCurrency from '../theme/ThemeStylesCurrecny';
 import { toggleTheme, setTheme } from '../redux/ThemeSlice';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+// import AsyncStorage from '@react-native-async-storage/async-storage';s
 import { setDecimalPlaces } from '../redux/settingsSlice';
 import { useTranslation } from 'react-i18next'; // Імпорт локалізації
 import i18n  from '../util/i18n';
@@ -21,8 +21,9 @@ import i18n  from '../util/i18n';
 export default function SettingsScreen() {
   const { t } = useTranslation(); // Використання локалізації
   const dispatch = useDispatch();
-  const isDarkMode = useSelector((state) => state.theme.isDarkMode);
-  const themeStylesCurrency = ThemeStylesCurrency({ isDarkMode });
+  // const isDarkMode = useSelector((state) => state.theme.isDarkMode);
+  const { isDarkMode, colors } = useSelector((state) => state.theme); // Отримуємо стан теми
+  // const themeStylesCurrency = ThemeStylesCurrency({ isDarkMode });
   const decimalPlaces = useSelector((state) => state.settings.decimalPlaces);
   
   // useEffect(() => {
@@ -69,22 +70,24 @@ export default function SettingsScreen() {
   };
 
   return (
-    <View style={[styles.container, themeStylesCurrency.containerStyle]}>
-      <Text style={[styles.header, themeStylesCurrency.textStyle]}>{t('settings.title')}</Text>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <Text style={[styles.header, { color: colors.text }]}>{t('settings.title')}</Text>
 
       <ScrollView style={styles.optionsContainer}>
-        <View style={[styles.combinedSection, themeStylesCurrency.sectionStyle]}>
+        <View style={[styles.combinedSection, { backgroundColor: colors.sectionBackground }]}>
           {/* Toggle theme section */}
           <View style={styles.option}>
-            <Text style={[styles.optionText, themeStylesCurrency.textStyle]}>
+            <Text style={[styles.optionText, { color: colors.text }]}>
               {t('settings.toggleTheme')}
             </Text>
             <View style={styles.switchContainer}>
               <Switch
                 value={isDarkMode}
                 onValueChange={handleToggleTheme}
-                thumbColor={isDarkMode ? '#ffcc00' : '#fff'}
-                trackColor={{ false: '#767577', true: '#374151' }}
+                // thumbColor={isDarkMode ? '#ffcc00' : '#fff'}
+                thumbColor={colors.switchThumb}
+                // trackColor={{ false: '#767577', true: '#374151' }}
+                trackColor={{ false: colors.switchTrack, true: colors.switchTrack }}
               />
               <Animated.View>
                 {isDarkMode ? (

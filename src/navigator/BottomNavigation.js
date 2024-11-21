@@ -6,6 +6,9 @@ import CalendarScreen from '../screens/CalendarScreen';
 import ExchangeCurrencyScreen from '../screens/ExchangeCurrencyScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import DayToDoScreen from '../screens/DayToDoScreen'; // Імпорт екрану
+import { Provider } from 'react-redux';
+import { store } from '../redux/store';
+
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -19,6 +22,7 @@ const CalendarStack = () => (
 
 const BottomNavigation = () => {
   return (
+    <Provider store={store}>
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
@@ -84,6 +88,7 @@ const BottomNavigation = () => {
       />
       
     </Tab.Navigator>
+    </Provider>
   );
 };
 
