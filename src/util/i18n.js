@@ -35,7 +35,8 @@ i18n
             enterTask: 'Enter Task',
             addImages: 'Add Images',
             addTaskUpper: 'Add Task',
-            close: 'Close'
+            close: 'Close',
+            today: 'Today'
           },
           monthDay: {
             jan: 'January',
@@ -91,7 +92,8 @@ i18n
             enterTask: 'Введіть завдання',
             addImages: 'Додати зображення',
             addTaskUpper: 'Додати Завдання',
-            close: 'Закрити'
+            close: 'Закрити',
+            today: 'Сьогодні'
           },
           monthDay: {
             jan: 'Січень',
@@ -147,7 +149,8 @@ i18n
             enterTask: 'Ingresar tarea',
             addImages: 'Yadd Imágenes',
             addTaskUpper: 'Agregar Tarea',
-            close: 'Cerca'
+            close: 'Cerca',
+            today: 'Hoy'
           },
           monthDay: {
             jan: 'Enero',
@@ -175,36 +178,11 @@ i18n
         }
       }
     },
-    lng: 'ua', // мова за замовчуванням
-    fallbackLng: 'en', // мова за замовчуванням, якщо переклад відсутній
+    lng: 'ua', 
+    fallbackLng: 'en', 
     interpolation: {
-      escapeValue: false, // react вже захищає від XSS
+      escapeValue: false, 
     }
   });
 
 export default i18n;
-
-// import 'intl-pluralrules';
-// import Backend from 'i18next-http-backend';
-// import i18n from 'i18next';
-// import { initReactI18next } from 'react-i18next';
-
-// i18n
-//   .use(Backend)
-//   .use(initReactI18next)
-//   .init({
-//     lng: 'ua', // Мова за замовчуванням
-//     fallbackLng: 'en', // Якщо мова не знайдена
-//     backend: {
-//       loadPath: '../locales/ua/translation.json', // Шлях до файлів перекладів
-//     },
-//     interpolation: {
-//       escapeValue: false, // React вже захищає від XSS
-//     },
-//      react: {
-//       useSuspense: false, // Використовувати Suspense для завантаження перекладів
-//     },
-//   });
-
-// export default i18n;
-

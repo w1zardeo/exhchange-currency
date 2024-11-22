@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// Async thunk for fetching currencies
 export const fetchCurrencies = createAsyncThunk(
   'currencies/fetchCurrencies', 
   async (_, { rejectWithValue }) => {
@@ -10,7 +9,6 @@ export const fetchCurrencies = createAsyncThunk(
       const data = await response.json();
       const rates = data.rates;
 
-      // Load favorite currencies from AsyncStorage
       const favoriteCurrencies = await AsyncStorage.getItem('favoriteCurrencies');
       const favorites = favoriteCurrencies ? JSON.parse(favoriteCurrencies) : [];
 
@@ -34,25 +32,24 @@ export const fetchCurrencies = createAsyncThunk(
             };
           } catch (error) {
             console.error(`Error fetching data for currency: ${currency}`, error);
-            return null; // Handle error gracefully
+            return null; 
           }
         })
       );
 
-      return currenciesArray.filter(Boolean); // Filter out null entries
+      return currenciesArray.filter(Boolean); 
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
 );
 
-// Slice for currency state
 const currencySlice = createSlice({
   name: 'currencies',
   initialState: {
-    currencies: [], // Ensure this always exists as an array
+    currencies: [], 
     loading: false,
-    status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
+    status: 'idle', 
     error: null,
   },
   reducers: {
@@ -75,7 +72,7 @@ const currencySlice = createSlice({
       .addCase(fetchCurrencies.fulfilled, (state, action) => {
         state.loading = false;
         state.status = 'succeeded';
-        state.currencies = action.payload || []; // Ensure array, even if payload is undefined
+        state.currencies = action.payload || [];
       })
       .addCase(fetchCurrencies.rejected, (state, action) => {
         state.loading = false;
@@ -85,7 +82,6 @@ const currencySlice = createSlice({
   },
 });
 
-// Async function for saving favorites to AsyncStorage
 export const saveFavoritesToAsyncStorage = () => async (dispatch, getState) => {
   const favorites = getState().currencies.currencies
     .filter((currency) => currency.isFavorite)

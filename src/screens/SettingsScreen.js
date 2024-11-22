@@ -13,15 +13,14 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleTheme, setTheme } from '../redux/ThemeSlice';
 import { setDecimalPlaces } from '../redux/settingsSlice';
-import { useTranslation } from 'react-i18next'; // Імпорт локалізації
+import { useTranslation } from 'react-i18next'; 
 import i18n  from '../util/i18n';
 
 export default function SettingsScreen() {
-  const { t } = useTranslation(); // Використання локалізації
+  const { t } = useTranslation(); 
   const dispatch = useDispatch();
-  // const isDarkMode = useSelector((state) => state.theme.isDarkMode);
-  const colors = useSelector((state) => state.theme.colors); // Отримуємо стан теми
-  const isDarkMode = useSelector((state) => state.theme.isDarkMode); // Отримуємо стан теми
+  const colors = useSelector((state) => state.theme.colors); 
+  const isDarkMode = useSelector((state) => state.theme.isDarkMode); 
   const decimalPlaces = useSelector((state) => state.settings.decimalPlaces);
   
   const handleToggleTheme = () => {
@@ -57,9 +56,7 @@ export default function SettingsScreen() {
               <Switch
                 value={isDarkMode}
                 onValueChange={handleToggleTheme}
-                // thumbColor={isDarkMode ? '#ffcc00' : '#fff'}
                 thumbColor={colors.switchThumb}
-                // trackColor={{ false: '#767577', true: '#374151' }}
                 trackColor={{ false: colors.switchTrack, true: colors.switchTrack }}
               />
               <Animated.View>
@@ -72,17 +69,15 @@ export default function SettingsScreen() {
             </View>
           </View>
 
-          {/* Divider */}
           <View style={[styles.divider, { devider: colors.devider }]} />
 
-          {/* Number of fraction digits section */}
           <View style={styles.option}>
             <Text style={[styles.optionText, { color: colors.text }]}>
               {t('settings.numberOfFractionDigits')}
             </Text>
             <View style={styles.counterGroup}>
               <Text style={[styles.counterValue, { color: colors.text }]}>
-                {decimalPlaces} {/* Відображення кількості знаків після коми */}
+                {decimalPlaces} 
               </Text>
               <View style={[styles.iconContainer, { icon: colors.iconBackground }]}>
                 <TouchableOpacity onPress={decrementDigits} style={styles.iconButton}>
@@ -95,10 +90,9 @@ export default function SettingsScreen() {
             </View>
           </View>
 
-          {/* Divider */}
+        
           <View style={[styles.divider, { devider: colors.devider }]} />
 
-          {/* Language selection section */}
           <View style={styles.option}>
             <Text style={[styles.optionText, { color: colors.text }]}>
               {t('settings.selectLanguage')}

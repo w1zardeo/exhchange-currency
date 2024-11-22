@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { View, TextInput, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { useTranslation } from 'react-i18next'; // Імпорт локалізації
+import { useTranslation } from 'react-i18next'; 
 import { useSelector } from 'react-redux';
 
 const Header = ({ incompleteCount, completeCount, navigation, selectedDate, isDarkMode }) => {
   const [inputText, setInputText] = useState('');
-  const { t } = useTranslation(); // Використання локалізації
-  const colors = useSelector((state) => state.theme.colors); // Отримуємо стан теми
+  const { t } = useTranslation(); 
+  const colors = useSelector((state) => state.theme.colors); 
 
   useEffect(() => {
-    // Використовуємо вибрану дату
     if (selectedDate) {
       setInputText(selectedDate);
     }

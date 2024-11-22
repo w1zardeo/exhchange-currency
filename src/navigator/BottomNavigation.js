@@ -5,7 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import CalendarScreen from '../screens/CalendarScreen';
 import ExchangeCurrencyScreen from '../screens/ExchangeCurrencyScreen';
 import SettingsScreen from '../screens/SettingsScreen';
-import DayToDoScreen from '../screens/DayToDoScreen'; // Імпорт екрану
+import DayToDoScreen from '../screens/DayToDoScreen'; 
 import { Provider } from 'react-redux';
 import { store } from '../redux/store';
 
@@ -28,13 +28,13 @@ const BottomNavigation = () => {
         headerShown: false,
         tabBarShowLabel: false,
         tabBarStyle: {
-          backgroundColor: 'black', // прозорий чорний колір
-          position: 'absolute', // щоб панель була внизу
-          bottom: 0, // розміщення внизу
+          backgroundColor: 'black', 
+          position: 'absolute', 
+          bottom: 0, 
           left: 0,
           right: 0,
-          elevation: 0, // для Android, щоб прибрати тінь
-          shadowOpacity: 0, // для iOS, щоб прибрати тінь
+          elevation: 0, 
+          shadowOpacity: 0, 
         },
       }}
     >
@@ -47,8 +47,8 @@ const BottomNavigation = () => {
               style={{ height: 24, width: 24 }}
               source={
                 focused
-                  ? require('../assets/icon/calendar-blue.png') // активна іконка
-                  : require('../assets/icon/calendar-white.png') // неактивна іконка
+                  ? require('../assets/icon/calendar-blue.png') 
+                  : require('../assets/icon/calendar-white.png')
               }
             />
           ),
@@ -63,8 +63,8 @@ const BottomNavigation = () => {
               style={{ height: 24, width: 24 }}
               source={
                 focused
-                  ? require('../assets/icon/exchange-blue.png') // активна іконка
-                  : require('../assets/icon/exchange-white.png') // неактивна іконка
+                  ? require('../assets/icon/exchange-blue.png') 
+                  : require('../assets/icon/exchange-white.png')
               }
             />
           ),
@@ -79,8 +79,8 @@ const BottomNavigation = () => {
               style={{ height: 24, width: 24 }}
               source={
                 focused
-                  ? require('../assets/icon/settings-blue.png') // активна іконка
-                  : require('../assets/icon/settings-white.png') // неактивна іконка
+                  ? require('../assets/icon/settings-blue.png') 
+                  : require('../assets/icon/settings-white.png') 
               }
             />
           ),

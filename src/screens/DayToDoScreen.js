@@ -10,21 +10,19 @@ import { setTasksByDate, addTask, toggleTask, updateTaskText, deleteTask } from 
 const DayToDoScreen = ({ route, navigation }) => {
   const { selectedDate, isDarkMode } = route.params;
   const dispatch = useDispatch();
-    const [showModal, setShowModal] = useState(false);
-      const colors = useSelector((state) => state.theme.colors); // Отримуємо стан теми
+  const [showModal, setShowModal] = useState(false);
+  const colors = useSelector((state) => state.theme.colors); 
 
-  // Використовуємо Redux для завантаження та оновлення завдань
   const tasksByDate = useSelector((state) => state.tasks);
   const tasks = tasksByDate[selectedDate] || { incomplete: [], complete: [] };
 
   useEffect(() => {
-    // При відкритті екрану приховуємо нижнє меню
     navigation.setOptions({
       tabBarStyle: { display: 'none' },
     });
 
     return () => {
-      // Повертаємо нижнє меню при виході з екрану
+
       navigation.setOptions({
         tabBarStyle: { display: 'flex' },
       });
@@ -32,7 +30,6 @@ const DayToDoScreen = ({ route, navigation }) => {
   }, [navigation]);
 
   useEffect(() => {
-    // При першому завантаженні екрану збережемо завдання в Redux
     dispatch(setTasksByDate({ selectedDate, tasks: tasks }));
   }, [dispatch, selectedDate, tasks]);
 
@@ -46,21 +43,11 @@ const DayToDoScreen = ({ route, navigation }) => {
   };
 
   const updateTaskText = (index, type, newText) => {
-    const updatedTasks = { ...tasks };
-    updatedTasks[type][index].text = newText;
-    setTasksByDate((prevTasksByDate) => ({
-      ...prevTasksByDate,
-      [selectedDate]: updatedTasks,
-    }));
+    dispatch(updateTaskText({ selectedDate, index, section: type, text: newText }));
   };
 
   const deleteTask = (index, type) => {
-    const updatedTasks = { ...tasks };
-    updatedTasks[type].splice(index, 1);
-    setTasksByDate((prevTasksByDate) => ({
-      ...prevTasksByDate,
-      [selectedDate]: updatedTasks,
-    }));
+    dispatch(deleteTask({ selectedDate, index, section: type }));
   };
 
   return (
@@ -90,6 +77,7 @@ const DayToDoScreen = ({ route, navigation }) => {
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {

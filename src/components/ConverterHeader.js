@@ -8,19 +8,19 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useDispatch, useSelector } from 'react-redux';
-import { toggleTheme } from '../redux/ThemeSlice'; // Оновлено для виклику toggleTheme
-import { useTranslation } from 'react-i18next'; // Імпорт локалізації
+import { toggleTheme } from '../redux/ThemeSlice'; 
+import { useTranslation } from 'react-i18next'; 
 
 const ConverterHeader = ({ searchQuery, setSearchQuery, toggleBottomSheet, onEditToggle, isEditing }) => {
-  const { t } = useTranslation(); // Використання локалізації
+  const { t } = useTranslation(); 
   const dispatch = useDispatch();
   const [isSearching, setIsSearching] = useState(false);
   
-  const colors = useSelector((state) => state.theme.colors); // Отримуємо стан теми
+  const colors = useSelector((state) => state.theme.colors); 
 
   const handleCancel = () => {
-    setSearchQuery(''); // Скидає пошуковий запит
-    setIsSearching(false); // Приховує кнопку "Cancel"
+    setSearchQuery(''); 
+    setIsSearching(false); 
   };
 
   return (
@@ -43,7 +43,7 @@ const ConverterHeader = ({ searchQuery, setSearchQuery, toggleBottomSheet, onEdi
             style={styles.searchInput}
             value={searchQuery}
             onChangeText={setSearchQuery}
-            onFocus={() => setIsSearching(true)} // Активує пошук
+            onFocus={() => setIsSearching(true)} 
           />
         </View>
         {isSearching && (
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   searchActive: {
-    flex: 0.99, // Зменшує ширину поля пошуку, коли кнопка "Cancel" активна
+    flex: 0.99, 
   },
   searchIcon: {
     marginRight: 0,

@@ -8,21 +8,18 @@ const taskSlice = createSlice({
   reducers: {
     setTasksByDate: (state, action) => {
       const { selectedDate, tasks } = action.payload;
-      // Переконайтесь, що selectedDate існує, і якщо не існує, ініціалізуйте його
       state[selectedDate] = tasks;
     },
     addTask: (state, action) => {
       const { selectedDate, newTask } = action.payload;
       const currentTasks = state[selectedDate] || { incomplete: [], complete: [] };
-      // Додаємо нове завдання в список невиконаних
       currentTasks.incomplete.push({ ...newTask, completed: false });
-      state[selectedDate] = currentTasks; // Оновлюємо state
+      state[selectedDate] = currentTasks;
     },
     toggleTask: (state, action) => {
       const { selectedDate, index, type } = action.payload;
       const tasks = state[selectedDate];
       
-      // Якщо для цієї дати немає завдань, нічого не робимо
       if (!tasks) return;
 
       if (type === 'incomplete') {
@@ -37,9 +34,10 @@ const taskSlice = createSlice({
       const { selectedDate, index, section, text } = action.payload;
       const tasks = state[selectedDate];
       
-      // Перевіряємо, чи існують завдання для дати
       if (tasks && tasks[section] && tasks[section][index]) {
         tasks[section][index].text = text;
+      } else {
+        console.error('Task not found for the given parameters');
       }
     },
     },
@@ -66,7 +64,7 @@ const taskSlice = createSlice({
       const { selectedDate, index, section } = action.payload;
       const tasks = state[selectedDate];
       if (tasks && tasks[section] && tasks[section][index]) {
-        tasks[section].splice(index, 1); // Видаляємо завдання із відповідної секції
+        tasks[section].splice(index, 1); 
       }
     },
   });

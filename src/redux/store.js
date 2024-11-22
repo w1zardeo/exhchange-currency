@@ -8,7 +8,6 @@ import settignsReducer from './settingsSlice';
 import imagesReducer from './imagesSlice';
 import currencyReducer from './currencySlice';
 
-// Combine all reducers into one
 const rootReducer = combineReducers({
   theme: themeReducer,
   tasks: tasksReducer,
@@ -17,24 +16,22 @@ const rootReducer = combineReducers({
   currency: currencyReducer,
 });
 
-// Configure persistence
 const persistConfig = {
   key: 'root',
-  storage: AsyncStorage, // Use AsyncStorage
-  whitelist: ['theme', 'tasks', 'images'], // Only persist 'theme' and 'tasks'
+  storage: AsyncStorage, 
+  whitelist: ['theme', 'tasks', 'images'], 
 };
 
 // Apply persistReducer to the rootReducer
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-// Configure the store with middleware adjustments
 const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredPaths: ['some.path.to.ignore'], // Example: adjust to match non-serializable paths
-        ignoredActions: ['persist/PERSIST'], // Ignore Redux Persist actions
+        ignoredPaths: ['some.path.to.ignore'], 
+        ignoredActions: ['persist/PERSIST'], 
       },
     }),
 });

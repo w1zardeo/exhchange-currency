@@ -2,17 +2,17 @@ import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, Switch, Animated } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useDispatch, useSelector } from 'react-redux';
-import { setTasksByDate } from '../redux/TasksSlice'; // Action to set tasks
-import { toggleTheme } from '../redux/ThemeSlice'; // Action to toggle theme
-import { useTranslation } from 'react-i18next'; // For localization
+import { setTasksByDate } from '../redux/TasksSlice'; 
+import { toggleTheme } from '../redux/ThemeSlice'; 
+import { useTranslation } from 'react-i18next'; 
 
 const CalendarScreen = ({ navigation }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const tasksByDate = useSelector(state => state.tasks);
   const isDarkMode = useSelector(state => state.theme.isDarkMode);
-  const colors = useSelector((state) => state.theme.colors); // Отримуємо стан теми
-  const currentYear = new Date().getFullYear(); // Отримуємо поточний рік
+  const colors = useSelector((state) => state.theme.colors); 
+  const currentYear = new Date().getFullYear(); 
 
   const daysInMonth = {
     [t('monthDay.jan')]: 31,
@@ -92,7 +92,7 @@ const CalendarScreen = ({ navigation }) => {
 
           const isToday = (month, day) => {
             const today = new Date();
-            return today.getDate() === day && today.getMonth() === new Date(Date.UTC(2024, Object.keys(daysInMonth).indexOf(month), 1)).getMonth();
+            return today.getDate() === day && today.getMonth() === new Date(Date.UTC(currentYear, Object.keys(daysInMonth).indexOf(month), 1)).getMonth();
           };
 
           return (
@@ -101,7 +101,7 @@ const CalendarScreen = ({ navigation }) => {
                 <Text
                   onPress={() =>
                     navigation.navigate('DayToDoScreen', {
-                      selectedDate: `${month} ${day}, 2024`,
+                      selectedDate: `${month} ${day}, ${currentYear}`,
                       isDarkMode,
                     })
                   }
@@ -116,7 +116,7 @@ const CalendarScreen = ({ navigation }) => {
               </View>
               {isToday(month, day) && (
                 <View style={styles.todayContainer}>
-                  <Text style={styles.todayText}>Today</Text>
+                  <Text style={styles.todayText}>{t('text.today')}</Text>
                 </View>
               )}
             </View>

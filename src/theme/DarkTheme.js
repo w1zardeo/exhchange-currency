@@ -1,7 +1,7 @@
 
 const DarkTheme = {
-    background: '#141419', //currency container
-    text: '#ffffff', //currency
+    background: '#141419', 
+    text: '#ffffff', 
     sectionBackground: '#1c1c1e',
     divider: '#2d2d2f',
     iconBackground: '#323136',
@@ -14,7 +14,7 @@ const DarkTheme = {
     weekend: {
       color: 'orange'
       },
-    label: '#666', // currency
+    label: '#666',
     rate: '#666',
     iconBackground: '#323136',
     divider: '#2d2d2f',

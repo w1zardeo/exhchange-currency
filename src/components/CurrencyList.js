@@ -11,13 +11,13 @@ import {
 } from 'react-native';
 import ConverterHeader from './ConverterHeader';
 import BottomSheet from './BottomSheet';
-import { useDispatch, useSelector } from 'react-redux'; // Redux hooks
+import { useDispatch, useSelector } from 'react-redux'; 
 import {
   toggleFavorite,
   updateCurrenciesOrder,
   fetchCurrencies,
-} from '../redux/currencySlice'; // Redux actions
-import { useTranslation } from 'react-i18next'; // Localization
+} from '../redux/currencySlice'; 
+import { useTranslation } from 'react-i18next'; 
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -28,7 +28,7 @@ const EditMode = ({ onDrag }) => (
 );
 
 const ViewMode = ({symbol,convertedAmount,onInputChange,rate,currency,decimalPlaces}) => {
-  const colors = useSelector((state) => state.theme.colors); // Отримуємо стан теми
+  const colors = useSelector((state) => state.theme.colors); 
 
   return(
   <View style={styles.rateInfo}>
@@ -54,7 +54,7 @@ const CurrencyItem = ({ item, baseAmount, onAmountChange, isEditing, onDrag }) =
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const decimalPlaces = useSelector((state) => state.settings.decimalPlaces);
-  const colors = useSelector((state) => state.theme.colors); // Отримуємо стан теми
+  const colors = useSelector((state) => state.theme.colors); 
 
   const convertedAmount = (baseAmount * item.rate)
     .toFixed(decimalPlaces)
@@ -109,17 +109,11 @@ const CurrencyList = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [sheetOpen, setSheetOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const colors = useSelector((state) => state.theme.colors); // Отримуємо стан теми
+  const colors = useSelector((state) => state.theme.colors); 
 
   const dispatch = useDispatch();
   const { currencies = [], loading, status } = useSelector((state) => state.currency);
   const isDarkMode = useSelector((state) => state.theme.isDarkMode);
-
-  // const dynamicStyles = {
-  //   backgroundColor: {
-  //     color: colors.background
-  //   }
-  // };
 
   useEffect(() => {
     if (!Array.isArray(currencies) || currencies.length === 0) {
@@ -145,10 +139,8 @@ const CurrencyList = () => {
     }
   };
 
-  // Фільтрація улюблених валют
   const favoriteCurrencies = currencies.filter((currency) => currency.isFavorite);
 
-  // Пошук по улюблених валютах
   const filteredFavoriteCurrencies = favoriteCurrencies.filter((currency) =>
     currency.currency.toLowerCase().includes(searchQuery.toLowerCase())
   );

@@ -2,13 +2,12 @@ import { Pressable, StyleSheet, Text, View, Animated, TextInput, FlatList, Image
 import React, { useState, useRef, useEffect } from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import { useSelector, useDispatch } from 'react-redux'; // Redux hooks
-import { toggleFavorite } from '../redux/currencySlice'; // Redux action
-import { useTranslation } from 'react-i18next'; // Localization
+import { useSelector, useDispatch } from 'react-redux'; 
+import { toggleFavorite } from '../redux/currencySlice'; 
+import { useTranslation } from 'react-i18next'; 
 
 const BottomSheet = ({ sheetOpen, setSheetOpen }) => {
-  const currencies = useSelector((state) => state.currency.currencies); // Get currencies from Redux store
-  const dispatch = useDispatch();
+  const currencies = useSelector((state) => state.currency.currencies); 
   const [searchQuery, setSearchQuery] = useState('');
   const sheetAnimation = useRef(new Animated.Value(0)).current;
   const coverOpacityAnimation = useRef(new Animated.Value(0)).current;
@@ -98,7 +97,7 @@ const BottomSheet = ({ sheetOpen, setSheetOpen }) => {
           renderItem={({ item }) => (
             <CurrencyItemInBotomSheet
               item={item}
-              toggleFavorite={() => dispatch(toggleFavorite(item.id))} // Dispatch Redux action
+              toggleFavorite={() => dispatch(toggleFavorite(item.id))} 
             />
           )}
           keyExtractor={(item) => item.id}
@@ -181,7 +180,6 @@ const styles = StyleSheet.create({
   },
   cancelButton: {
     flex: 0.25,
-    // justifyContent: 'center', // Вирівнює текст по центру
   },
   cancelText: {
     color: '#007AFF',

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, TextInput, Image, ScrollView, TouchableOpacity, Modal, TouchableWithoutFeedback } from 'react-native';
 import Checkbox from './Checkbox';
-import { useTranslation } from 'react-i18next'; // Імпорт локалізації
+import { useTranslation } from 'react-i18next'; 
 import { useDispatch, useSelector } from 'react-redux';
-import { removeImageFromTask, setTaskImages } from '../redux/imagesSlice'; // Імпорт дій
+import { removeImageFromTask, setTaskImages } from '../redux/imagesSlice'; 
 const getCategoryEmoji = (category) => {
   switch (category) {
     case 'Finance':
@@ -21,11 +21,11 @@ const getCategoryEmoji = (category) => {
 
 const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) => {
 
-  const { t } = useTranslation(); // Використання локалізації
-  const [imageDoubleClick, setImageDoubleClick] = useState(null); // Стан для двократного натискання
-  const [isModalVisible, setIsModalVisible] = useState(false); // Стан для відображення модального вікна
-  const [selectedImage, setSelectedImage] = useState(null); // Стан для вибраного зображення
-  const colors = useSelector((state) => state.theme.colors); // Отримуємо стан теми
+  const { t } = useTranslation(); 
+  const [imageDoubleClick, setImageDoubleClick] = useState(null); 
+  const [isModalVisible, setIsModalVisible] = useState(false); 
+  const [selectedImage, setSelectedImage] = useState(null); 
+  const colors = useSelector((state) => state.theme.colors); 
   const dispatch = useDispatch();
 
 
@@ -45,18 +45,17 @@ const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) =>
     }
 
   const handleImageDoubleClick = (imageUri) => {
-    setSelectedImage(imageUri); // Зберігаємо URI зображення для модального вікна
-    setIsModalVisible(true); // Відкриваємо модальне вікно
+    setSelectedImage(imageUri); 
+    setIsModalVisible(true);
   };
 
   const handleModalClose = () => {
-    setIsModalVisible(false); // Закриваємо модальне вікно
-    setSelectedImage(null); // Очищаємо вибране зображення
+    setIsModalVisible(false); 
+    setSelectedImage(null);
   };
 
   return (
     <View style={styles.tasks}>
-      {/* Incomplete Section */}
       <View style={styles.sectionContainer}>
         <Text style={[styles.sectionTitle, {color: colors.text}]}>{t('text.incompleteUpper')}</Text>
         {tasks.incomplete.length === 0 && (
@@ -95,7 +94,7 @@ const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) =>
                     <Image
                       source={{ uri: image }}
                       style={styles.imagePreview}
-                      onTouchEnd={() => handleImageDoubleClick(image)} // Двократне натискання на зображення
+                      onTouchEnd={() => handleImageDoubleClick(image)} 
                     />
                     <TouchableOpacity 
                       style={styles.deleteIcon} 
@@ -114,7 +113,6 @@ const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) =>
         />
       </View>
 
-      {/* Completed Section */}
       <View style={styles.sectionContainer}>
         <Text style={[styles.sectionTitle, {color: colors.text}]}>{t('text.completedUpper')}</Text>
         {tasks.complete.length === 0 && (
@@ -147,7 +145,7 @@ const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) =>
                   <Image
                     source={{ uri: item.file.uri }}
                     style={styles.imagePreview}
-                    onTouchEnd={() => handleImageDoubleClick(item.file.uri)} // Двократне натискання на зображення
+                    onTouchEnd={() => handleImageDoubleClick(item.file.uri)} 
                   />
                   <TouchableOpacity 
                     style={styles.deleteIcon} 
@@ -164,7 +162,6 @@ const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) =>
           scrollEnabled={false}
         />
       </View>
-      {/* Modal для перегляду зображення на весь екран */}
       <Modal visible={isModalVisible} transparent={true} animationType="fade" onRequestClose={handleModalClose}>
         <TouchableWithoutFeedback onPress={handleModalClose}>
           <View style={styles.modalOverlay}>

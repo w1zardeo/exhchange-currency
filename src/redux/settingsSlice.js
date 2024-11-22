@@ -4,14 +4,12 @@ import { createSlice } from '@reduxjs/toolkit';
 const settingsSlice = createSlice({
   name: 'settings',
   initialState: {
-    decimalPlaces: 2, // за замовчуванням
-    // інші налаштування
+    decimalPlaces: 2, 
   },
   reducers: {
     setDecimalPlaces: (state, action) => {
       state.decimalPlaces = action.payload;
     },
-    // інші редюсери
   },
 });
 

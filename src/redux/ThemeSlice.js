@@ -3,8 +3,8 @@ import DarkTheme from '../theme/DarkTheme';
 import DefaultTheme from '../theme/DefaultTheme';
 
 const initialState = {
-  isDarkMode: true, // Початковий стан
-  colors: DarkTheme, // Початкові кольор
+  isDarkMode: true,
+  colors: DarkTheme, 
 };
 
 const themeSlice = createSlice({
@@ -13,11 +13,11 @@ const themeSlice = createSlice({
   reducers: {
     toggleTheme: (state) => {
       state.isDarkMode = !state.isDarkMode;
-      state.colors = state.isDarkMode ? DarkTheme : DefaultTheme; // Перемикаємо кольори
+      state.colors = state.isDarkMode ? DarkTheme : DefaultTheme; 
     },
     setTheme: (state, action) => {
       state.isDarkMode = action.payload;
-      state.colors = action.payload ? DarkTheme : DefaultTheme; // Встановлюємо кольори явно
+      state.colors = action.payload ? DarkTheme : DefaultTheme; 
     },
   },
 });

@@ -1,4 +1,4 @@
-// App.js
+
 import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -8,7 +8,7 @@ import SplashScreen from 'react-native-splash-screen';
 import BottomNavigation from '../ToDoReact/src/navigator/BottomNavigation';
 import CalendarScreen from '../ToDoReact/src/screens/CalendarScreen';
 import DayToDoScreen from '../ToDoReact/src/screens/DayToDoScreen';
-import { store, persistor } from '../ToDoReact/src/redux/store'; // Використовуємо іменовані імпорти
+import { store, persistor } from '../ToDoReact/src/redux/store'; 
 
 const Stack = createStackNavigator();
 
@@ -45,57 +45,3 @@ const App = () => {
 };
 
 export default App;
-
-// // App.js
-// import React, { useEffect, useState } from 'react';
-// import { NavigationContainer } from '@react-navigation/native';
-// import { createStackNavigator } from '@react-navigation/stack';
-// import { Provider } from 'react-redux';
-// import { PersistGate } from 'redux-persist/integration/react';
-// import SplashScreen from 'react-native-splash-screen';
-// import BottomNavigation from '../ToDoReact/src/navigator/BottomNavigation';
-// import CalendarScreen from '../ToDoReact/src/screens/CalendarScreen';
-// import DayToDoScreen from '../ToDoReact/src/screens/DayToDoScreen';
-// import { store, persistor } from '../ToDoReact/src/redux/store'; // Використовуємо іменовані імпорти
-// import DarkTheme from '../ToDoReact/src/theme/DarkTheme'
-// import DefaultTheme from '../ToDoReact/src/theme/DefaultTheme';
-
-// const Stack = createStackNavigator();
-
-// const App = () => {
-//   const [isDarkMode, setIsDarkMode] = useState(true)
-
-
-//   useEffect(() => {
-//     SplashScreen.hide();
-//   }, []);
-
-//   return (
-//     <Provider store={store}>
-//       <PersistGate loading={null} persistor={persistor}>
-//         <NavigationContainer theme={isDarkMode ? DarkTheme : DefaultTheme}>
-//           <Stack.Navigator initialRouteName="Main">
-//             <Stack.Screen 
-//               name="Main" 
-//               component={BottomNavigation} 
-//               options={{ headerShown: false }} 
-//             />
-//             <Stack.Screen 
-//               name="Calendar" 
-//               component={CalendarScreen} 
-//               options={{ headerShown: false }} 
-//             />
-//             <Stack.Screen 
-//               name="DayToDoScreen" 
-//               component={DayToDoScreen} 
-//               options={{ headerShown: false }}  
-//             />
-//           </Stack.Navigator>
-//         </NavigationContainer>
-//       </PersistGate>
-//     </Provider>
-//   );
-// };
-
-// export default App;
-

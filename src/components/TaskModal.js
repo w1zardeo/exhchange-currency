@@ -8,8 +8,8 @@ import { launchImageLibrary } from 'react-native-image-picker';
 const TaskModal = ({ visible, onAddTask, onClose }) => {
   const [task, setTask] = useState('');
   const [category, setCategory] = useState('Finance');
-  const [images, setImages] = useState([]); // Масив для зображень
-  const { t } = useTranslation(); // Використання локалізації
+  const [images, setImages] = useState([]); 
+  const { t } = useTranslation();
 
   const handleAdd = () => {
     if (task.trim()) {
@@ -17,7 +17,7 @@ const TaskModal = ({ visible, onAddTask, onClose }) => {
       console.log('Images:', images);
       onAddTask({ text: task, category, completed: false, images });
       setTask('');
-      setImages([]); // Очистити масив після додавання
+      setImages([]);
     }
   };
 
@@ -31,7 +31,7 @@ const TaskModal = ({ visible, onAddTask, onClose }) => {
           console.error('ImagePicker Error:', response.error);
         } else if (response.assets && response.assets.length > 0) {
           const { uri } = response.assets[0];
-          setImages((prevImages) => [...prevImages, uri]); // Add the selected image to the array
+          setImages((prevImages) => [...prevImages, uri]); 
           console.log('Selected Image URI:', uri);
         }
       }

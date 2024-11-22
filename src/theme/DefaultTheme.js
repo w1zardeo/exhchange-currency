@@ -15,7 +15,7 @@ const DefaultTheme = {
     color: 'orange'
     },
     label: '#c2c2c2',
-    rate: '#c1c1c1', // currency rate text
+    rate: '#c1c1c1',
     iconBackground: '#eeeeee',
     divider: '#e0e0e0',
     line: {
