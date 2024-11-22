@@ -37,9 +37,11 @@ const taskSlice = createSlice({
       const { selectedDate, index, section, text } = action.payload;
       const tasks = state[selectedDate];
       
-      if (tasks) {
+      // Перевіряємо, чи існують завдання для дати
+      if (tasks && tasks[section] && tasks[section][index]) {
         tasks[section][index].text = text;
       }
+    },
     },
     setTaskImages: (state, action) => {
       const { selectedDate, taskIndex, section, images } = action.payload;
@@ -48,10 +50,27 @@ const taskSlice = createSlice({
       if (tasks) {
         tasks[section][taskIndex].images = images;
       }
-    }
-  }
-});
+    },
+    removeImageFromTask: (state, action) => {
+      const { selectedDate, index, section, imageIndex } = action.payload;
+      const tasks = state[selectedDate];
+    
+      if (tasks && tasks[section] && tasks[section][index]) {
+        const task = tasks[section][index];
+        if (task.images && task.images.length > imageIndex) {
+          task.images.splice(imageIndex, 1);
+        }
+      }
+    },
+    deleteTask: (state, action) => {
+      const { selectedDate, index, section } = action.payload;
+      const tasks = state[selectedDate];
+      if (tasks && tasks[section] && tasks[section][index]) {
+        tasks[section].splice(index, 1); // Видаляємо завдання із відповідної секції
+      }
+    },
+  });
 
-export const { setTasksByDate, addTask, toggleTask, updateTaskText, setTaskImages } = taskSlice.actions;
+export const { setTasksByDate, addTask, toggleTask, updateTaskText, setTaskImages, removeImageFromTask, deleteTask } = taskSlice.actions;
 
 export default taskSlice.reducer;

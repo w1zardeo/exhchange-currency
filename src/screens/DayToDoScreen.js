@@ -17,7 +17,6 @@ const DayToDoScreen = ({ route, navigation }) => {
   const tasksByDate = useSelector((state) => state.tasks);
   const tasks = tasksByDate[selectedDate] || { incomplete: [], complete: [] };
 
-
   useEffect(() => {
     // При відкритті екрану приховуємо нижнє меню
     navigation.setOptions({
@@ -46,12 +45,22 @@ const DayToDoScreen = ({ route, navigation }) => {
     dispatch(toggleTask({ selectedDate, index, type }));
   };
 
-  const changeTaskText = (index, type, newText) => {
-    dispatch(updateTaskText({ selectedDate, index, type, newText }));
+  const updateTaskText = (index, type, newText) => {
+    const updatedTasks = { ...tasks };
+    updatedTasks[type][index].text = newText;
+    setTasksByDate((prevTasksByDate) => ({
+      ...prevTasksByDate,
+      [selectedDate]: updatedTasks,
+    }));
   };
 
-  const removeTask = (index, type) => {
-    dispatch(deleteTask({ selectedDate, index, type }));
+  const deleteTask = (index, type) => {
+    const updatedTasks = { ...tasks };
+    updatedTasks[type].splice(index, 1);
+    setTasksByDate((prevTasksByDate) => ({
+      ...prevTasksByDate,
+      [selectedDate]: updatedTasks,
+    }));
   };
 
   return (
@@ -67,8 +76,8 @@ const DayToDoScreen = ({ route, navigation }) => {
         <Tasks 
           tasks={tasks} 
           toggleTask={toggleTaskStatus} 
-          deleteTask={removeTask} 
-          updateTaskText={changeTaskText} 
+          deleteTask={deleteTask} 
+          updateTaskText={updateTaskText} 
           isDarkMode={isDarkMode}
         />
       </ScrollView>

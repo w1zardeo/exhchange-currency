@@ -3,7 +3,7 @@ import { View, Text, FlatList, StyleSheet, TextInput, Image, ScrollView, Touchab
 import Checkbox from './Checkbox';
 import { useTranslation } from 'react-i18next'; // Імпорт локалізації
 import { useDispatch, useSelector } from 'react-redux';
-
+import { removeImageFromTask, setTaskImages } from '../redux/imagesSlice'; // Імпорт дій
 const getCategoryEmoji = (category) => {
   switch (category) {
     case 'Finance':
@@ -26,6 +26,7 @@ const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) =>
   const [isModalVisible, setIsModalVisible] = useState(false); // Стан для відображення модального вікна
   const [selectedImage, setSelectedImage] = useState(null); // Стан для вибраного зображення
   const colors = useSelector((state) => state.theme.colors); // Отримуємо стан теми
+  const dispatch = useDispatch();
 
 
   const handleTextChange = (text, index, section) => {
@@ -39,11 +40,9 @@ const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) =>
   const handleImageDelete = (index, section, imageIndex) => {
     const updatedTasks = [...tasks[section]];
     const task = updatedTasks[index];
-    if (task.images && task.images.length > imageIndex) {
       task.images.splice(imageIndex, 1);
       updateTaskText(index, section, task.text);
     }
-  };
 
   const handleImageDoubleClick = (imageUri) => {
     setSelectedImage(imageUri); // Зберігаємо URI зображення для модального вікна
