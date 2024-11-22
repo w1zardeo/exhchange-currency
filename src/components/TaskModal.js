@@ -11,14 +11,6 @@ const TaskModal = ({ visible, onAddTask, onClose }) => {
   const [images, setImages] = useState([]); // Масив для зображень
   const { t } = useTranslation(); // Використання локалізації
 
-  // const handleAdd = () => {
-  //   if (task.trim()) {
-  //     onAddTask({ text: task, category, completed: false, images });
-  //     setTask('');
-  //     setImages([]); // Очистити масив після додавання
-  //   }
-  // };
-
   const handleAdd = () => {
     if (task.trim()) {
       console.log('Adding task:', task);
@@ -28,24 +20,6 @@ const TaskModal = ({ visible, onAddTask, onClose }) => {
       setImages([]); // Очистити масив після додавання
     }
   };
-  
-
-  // Функція для відкриття файлового провідника
-  // const openFileExplorer = async () => {
-  //   try {
-  //     const res = await DocumentPicker.pick({
-  //       type: [DocumentPicker.types.images], // Обмежуємо вибір зображень
-  //       allowMultiSelection: true, // Дозволяємо вибір кількох файлів
-  //     });
-  //     setImages(res.map(file => file.uri)); // Додаємо вибрані зображення в масив
-  //   } catch (err) {
-  //     if (DocumentPicker.isCancel(err)) {
-  //       console.log('User cancelled file picker');
-  //     } else {
-  //       console.error('DocumentPicker Error:', err);
-  //     }
-  //   }
-  // };
 
   const pickImage = () => {
     launchImageLibrary(

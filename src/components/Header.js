@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { View, TextInput, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import ThemeStylesHeader from '../theme/ThemeStylesHeader';
 import { useTranslation } from 'react-i18next'; // Імпорт локалізації
+import { useSelector } from 'react-redux';
 
 const Header = ({ incompleteCount, completeCount, navigation, selectedDate, isDarkMode }) => {
   const [inputText, setInputText] = useState('');
-  const themeStylesHeader = ThemeStylesHeader({ isDarkMode }); // Використовуємо компонент для стилів
   const { t } = useTranslation(); // Використання локалізації
+  const colors = useSelector((state) => state.theme.colors); // Отримуємо стан теми
 
   useEffect(() => {
     // Використовуємо вибрану дату
@@ -19,7 +19,7 @@ const Header = ({ incompleteCount, completeCount, navigation, selectedDate, isDa
     <View style={styles.header}>
       <View style={styles.headerRow}>
         <TextInput
-          style={[styles.title, themeStylesHeader.titleStyle]}
+          style={[styles.title, {color: colors.titleStyle}]}
           value={inputText}
           onChangeText={setInputText}
           placeholder="Enter date"
@@ -30,8 +30,8 @@ const Header = ({ incompleteCount, completeCount, navigation, selectedDate, isDa
           <Text style={styles.calendarButton}>{t('text.calendar')}</Text>
         </TouchableOpacity>
       </View>
-      <Text style={[styles.subtitle, themeStylesHeader.subtitleStyle]}>{incompleteCount} {t('text.incompleteLower')}, {completeCount} {t('text.completedLower')}</Text>
-      <View style={[styles.line, themeStylesHeader.lineStyle]}/>
+      <Text style={[styles.subtitle, {color: colors.subtitleStyle}]}>{incompleteCount} {t('text.incompleteLower')}, {completeCount} {t('text.completedLower')}</Text>
+      <View style={[styles.line, {backgroundColor: colors.lineStyle}]}/>
     </View>
   );
 };

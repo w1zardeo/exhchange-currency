@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, TextInput, Image, ScrollView, TouchableOpacity, Modal, TouchableWithoutFeedback } from 'react-native';
 import Checkbox from './Checkbox';
-import ThemeStylesTasks from '../theme/ThemeStylesTasks';
 import { useTranslation } from 'react-i18next'; // Імпорт локалізації
-import AsyncStorage from '@react-native-async-storage/async-storage'; // Імпорт AsyncStorage
 import { useDispatch, useSelector } from 'react-redux';
 
 const getCategoryEmoji = (category) => {
@@ -22,61 +20,13 @@ const getCategoryEmoji = (category) => {
 };
 
 const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) => {
-  const themeStylesTasks = ThemeStylesTasks({ isDarkMode });
+
   const { t } = useTranslation(); // Використання локалізації
   const [imageDoubleClick, setImageDoubleClick] = useState(null); // Стан для двократного натискання
   const [isModalVisible, setIsModalVisible] = useState(false); // Стан для відображення модального вікна
   const [selectedImage, setSelectedImage] = useState(null); // Стан для вибраного зображення
   const colors = useSelector((state) => state.theme.colors); // Отримуємо стан теми
 
-
-  const dynamicStyles = {
-    section: {
-      color: colors.section
-    },
-    textTask: {
-      color: colors.textTask
-    },
-    subtitle: {
-      color: colors.subtitle 
-    },
-    completedTask: {
-      color: colors.completedTask 
-    },
-  };
-
-  // useEffect(() => {
-  //   loadImagesFromStorage(); // Завантаження зображень при запуску
-  //   console.log(1);
-    
-  // }, []);
-
-    // Функція для збереження зображень у AsyncStorage
-    // const saveImagesToStorage = async (updatedTasks) => {
-    //   try {
-    //     await AsyncStorage.setItem('tasksImages', JSON.stringify(updatedTasks));
-    //   } catch (error) {
-    //     console.error('Error saving images:', error);
-    //   }
-    // };
-
-    //   // Функція для завантаження зображень із AsyncStorage
-    //   const loadImagesFromStorage = async () => {
-    //     try {
-    //       const savedImages = await AsyncStorage.getItem('tasksImages');
-    //       console.log("Raw savedImages:", savedImages);
-    //       if (savedImages) {
-    //         const parsedImages = JSON.parse(savedImages);
-    //         if (parsedImages.incomplete && Array.isArray(parsedImages.incomplete)) {
-    //           parsedImages.incomplete.forEach((task, index) => {
-    //             updateTaskText(index, 'incomplete', task.text);
-    //           });
-    //         }
-    //       }
-    //     } catch (error) {
-    //       console.error('Error loading images:', error.message); // Logs the specific error message
-    //     }
-    //   };
 
   const handleTextChange = (text, index, section) => {
     if (text === '') {
@@ -92,7 +42,6 @@ const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) =>
     if (task.images && task.images.length > imageIndex) {
       task.images.splice(imageIndex, 1);
       updateTaskText(index, section, task.text);
-      // saveImagesToStorage(tasks); // Зберігаємо оновлені зображення після видалення
     }
   };
 
@@ -110,7 +59,7 @@ const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) =>
     <View style={styles.tasks}>
       {/* Incomplete Section */}
       <View style={styles.sectionContainer}>
-        <Text style={[styles.sectionTitle, dynamicStyles.section]}>{t('text.incompleteUpper')}</Text>
+        <Text style={[styles.sectionTitle, {color: colors.text}]}>{t('text.incompleteUpper')}</Text>
         {tasks.incomplete.length === 0 && (
           <Text style={styles.smallGap}>{t('text.addTask')}</Text>
         )}
@@ -130,7 +79,7 @@ const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) =>
                     <TextInput
                       value={item.text}
                       onChangeText={(text) => handleTextChange(text, index, 'incomplete')}
-                      style={[styles.taskText, dynamicStyles.textTask]}
+                      style={[styles.taskText, {color: colors.text}]}
                       numberOfLines={1}
                       maxLength={100}
                     />
@@ -168,7 +117,7 @@ const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) =>
 
       {/* Completed Section */}
       <View style={styles.sectionContainer}>
-        <Text style={[styles.sectionTitle,dynamicStyles.section]}>{t('text.completedUpper')}</Text>
+        <Text style={[styles.sectionTitle, {color: colors.text}]}>{t('text.completedUpper')}</Text>
         {tasks.complete.length === 0 && (
           <Text style={styles.smallGap}>{t('text.markTask')}</Text>
         )}
@@ -186,7 +135,7 @@ const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) =>
                 label={
                   <View style={styles.textContainer}>
                     <Text
-                      style={[styles.taskText, styles.completedTaskText, dynamicStyles.completedTask]}
+                      style={[styles.taskText, styles.completedTaskText, {color: colors.completedTask.color}]}
                     >
                       {item.text}
                     </Text>

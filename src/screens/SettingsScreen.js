@@ -11,9 +11,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useDispatch, useSelector } from 'react-redux';
-// import ThemeStylesCurrency from '../theme/ThemeStylesCurrecny';
 import { toggleTheme, setTheme } from '../redux/ThemeSlice';
-// import AsyncStorage from '@react-native-async-storage/async-storage';s
 import { setDecimalPlaces } from '../redux/settingsSlice';
 import { useTranslation } from 'react-i18next'; // Імпорт локалізації
 import i18n  from '../util/i18n';
@@ -24,38 +22,11 @@ export default function SettingsScreen() {
   // const isDarkMode = useSelector((state) => state.theme.isDarkMode);
   const colors = useSelector((state) => state.theme.colors); // Отримуємо стан теми
   const isDarkMode = useSelector((state) => state.theme.isDarkMode); // Отримуємо стан теми
-
-  // const themeStylesCurrency = ThemeStylesCurrency({ isDarkMode });
   const decimalPlaces = useSelector((state) => state.settings.decimalPlaces);
   
-  // useEffect(() => {
-  //   const loadTheme = async () => {
-  //     try {
-  //       const savedTheme = await AsyncStorage.getItem('isDarkMode');
-  //       if (savedTheme !== null) {
-  //         dispatch(setTheme(JSON.parse(savedTheme)));
-  //       }
-  //     } catch (e) {
-  //       console.log('Failed to load theme.', e);
-  //     }
-  //   };
-
-  //   loadTheme();
-  // }, [dispatch]);
-
   const handleToggleTheme = () => {
-    // const newTheme = !isDarkMode;
     dispatch(toggleTheme());
-    // saveTheme(newTheme);
   };
-
-  // const saveTheme = async (theme) => {
-  //   try {
-  //     await AsyncStorage.setItem('isDarkMode', JSON.stringify(theme));
-  //   } catch (e) {
-  //     console.log('Failed to save theme.', e);
-  //   }
-  // };
 
   const incrementDigits = () => {
     dispatch(setDecimalPlaces(decimalPlaces + 1));

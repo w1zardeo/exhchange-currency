@@ -16,16 +16,15 @@ const DarkTheme = {
       },
     label: '#666', // currency
     rate: '#666',
-    sectionBackground: '#1c1c1e',
     iconBackground: '#323136',
     divider: '#2d2d2f',
-    line: '#1a1a1a',
-    searchContainer: '#1c1c1e',
-    section: {
-      color: '#FFFFFF'
+    line: {
+      color:'#1a1a1a'
     },
+    searchContainer: '#1c1c1e',
+    sectionText: '#ffffff',
     textTask: {
-        color:'#DADADA',
+      color:'#DADADA',
     },
     subtitle: {
       color: '#575767' 
@@ -33,6 +32,9 @@ const DarkTheme = {
     completedTask: {
       color: "#575767" 
     },
+    titleStyle: '#DADADA',
+    subtitleStyle: '#575767',
+    lineStyle: '#575767'
   };
   
   export default DarkTheme;
