@@ -1,6 +1,6 @@
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
-import AsyncStorage from '@react-native-async-storage/async-storage'; // Use AsyncStorage for React Native
+import AsyncStorage from '@react-native-async-storage/async-storage'; 
 import { combineReducers } from 'redux';
 import themeReducer from './ThemeSlice';
 import tasksReducer from './TasksSlice';
@@ -22,7 +22,6 @@ const persistConfig = {
   whitelist: ['theme', 'tasks', 'images'], 
 };
 
-// Apply persistReducer to the rootReducer
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const store = configureStore({
@@ -36,7 +35,6 @@ const store = configureStore({
     }),
 });
 
-// Create the persistor
 const persistor = persistStore(store);
 
 export { store, persistor };

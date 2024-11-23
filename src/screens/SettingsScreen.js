@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from 'react'; // Тут не треба замніяти на ScrollView так як саписок малий
 import {
   View,
   Text,

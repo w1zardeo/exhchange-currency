@@ -6,7 +6,7 @@ import TaskModal from '../components/TaskModal';
 import Tasks from '../components/Tasks';
 import { Plus } from '../components/Plus';
 import { setTasksByDate, addTask, toggleTask, updateTaskText, deleteTask } from '../redux/TasksSlice'; 
-
+// Тут не замінив на ScrollView тому що видає помилку
 const DayToDoScreen = ({ route, navigation }) => {
   const { selectedDate, isDarkMode } = route.params;
   const dispatch = useDispatch();

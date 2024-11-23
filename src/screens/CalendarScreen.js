@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, Switch, Animated } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Switch, Animated, FlatList} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useDispatch, useSelector } from 'react-redux';
 import { setTasksByDate } from '../redux/TasksSlice'; 
@@ -130,6 +130,8 @@ const CalendarScreen = ({ navigation }) => {
     dispatch(toggleTheme());
   };
 
+  const renderMonthItem = ({ item: month }) => renderMonth(month);
+
   return (
     <View style={[styles.container, {backgroundColor: colors.background}]}>
       <View style={styles.switchContainer}>
@@ -148,9 +150,15 @@ const CalendarScreen = ({ navigation }) => {
         </Animated.View>
       </View>
 
-      <ScrollView>
+      {/* <ScrollView>
         {Object.keys(daysInMonth).map(month => renderMonth(month))}
-      </ScrollView>
+      </ScrollView> */}
+      <FlatList
+      data={Object.keys(daysInMonth)} // Перетворення ключів об'єкта в масив
+      renderItem={renderMonthItem}
+      keyExtractor={(item) => item} // Унікальний ключ для кожного елемента
+      showsVerticalScrollIndicator={false} // Сховати індикатор прокручування
+    />
     </View>
   );
 };
