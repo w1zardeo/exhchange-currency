@@ -138,14 +138,14 @@ const CalendarScreen = ({ navigation }) => {
         <Switch
           value={isDarkMode}
           onValueChange={handleToggleTheme}
-          thumbColor={isDarkMode ? '#ffcc00' : '#fff'}
-          trackColor={{ false: '#767577', true: '#374151' }}
+          thumbColor={colors.switchThumb}
+          trackColor={{ false: colors.switchTrack, true: colors.switchTrack }}
         />
         <Animated.View>
           {isDarkMode ? (
-            <Icon name="moon-outline" size={20} color="#fff" />
+            <Icon name="moon-outline" size={20} color={colors.iconMoon} />
           ) : (
-            <Icon name="sunny-outline" size={20} color="#ffcc00" />
+            <Icon name="sunny-outline" size={20} color={colors.iconSun} />
           )}
         </Animated.View>
       </View>
@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
   },
   todayText: {
     color: 'cyan',
-    fontSize: 12,
+    fontSize: 11,
   },
 });
 

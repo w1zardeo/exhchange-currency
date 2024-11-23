@@ -88,7 +88,7 @@ const BottomSheet = ({ sheetOpen, setSheetOpen }) => {
           </View>
           {isSearching && (
             <TouchableOpacity onPress={handleCancel} style={styles.cancelButton}>
-              <Text style={styles.cancelText}>Cancel</Text>
+              <Text style={styles.cancelText}>{t('text.cancel')}</Text>
             </TouchableOpacity>
           )}
         </View>
@@ -102,6 +102,9 @@ const BottomSheet = ({ sheetOpen, setSheetOpen }) => {
           )}
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.listContainer}
+          ListFooterComponent={() => (
+             <Text style={styles.noResults}>{t('text.noResults')}</Text>
+          )}
         />
       </Animated.View>
     </View>
@@ -183,7 +186,7 @@ const styles = StyleSheet.create({
   },
   cancelText: {
     color: '#007AFF',
-    marginLeft: 10,
+    marginLeft: 5,
     fontSize: 16,
   },
   itemContainer: {
@@ -224,6 +227,12 @@ const styles = StyleSheet.create({
   },
   searchActive: {
     flex: 0.99
+  },
+  noResults: {
+    color: 'white',
+    fontSize: 16,
+    textAlign: 'center',
+    marginTop: 20,
   }
 });
 

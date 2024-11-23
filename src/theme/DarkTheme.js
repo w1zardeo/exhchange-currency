@@ -1,3 +1,5 @@
+import Checkbox from "../components/Checkbox";
+import { Checkmark } from "../components/Checkmark";
 
 const DarkTheme = {
     background: '#141419', 
@@ -34,7 +36,12 @@ const DarkTheme = {
     },
     titleStyle: '#DADADA',
     subtitleStyle: '#575767',
-    lineStyle: '#575767'
+    lineStyle: '#575767',
+    iconMoon: '#fff',
+    icon: '#fff',
+    checkbox: '#2B2D37',
+    borderCheckbox: '#0E0E11',
+    checkmark: '#DADADA'
   };
   
   export default DarkTheme;

@@ -48,7 +48,7 @@ const ConverterHeader = ({ searchQuery, setSearchQuery, toggleBottomSheet, onEdi
         </View>
         {isSearching && (
           <TouchableOpacity onPress={handleCancel}>
-            <Text style={styles.cancelText}>Cancel</Text>
+            <Text style={styles.cancelText}>{t('text.cancel')}</Text>
           </TouchableOpacity>
         )}
       </View>
