@@ -2,25 +2,22 @@ import React, { useState } from 'react';
 import { Modal, View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import DocumentPicker from 'react-native-document-picker';
-import { useTranslation } from 'react-i18next';
 import { launchImageLibrary } from 'react-native-image-picker';
-
 const TaskModal = ({ visible, onAddTask, onClose }) => {
   const [task, setTask] = useState('');
   const [category, setCategory] = useState('Finance');
-  const [images, setImages] = useState([]); 
-  const { t } = useTranslation();
-
+  const [images, setImages] = useState([]); // Масив для зображень
+  
   const handleAdd = () => {
     if (task.trim()) {
       console.log('Adding task:', task);
       console.log('Images:', images);
       onAddTask({ text: task, category, completed: false, images });
       setTask('');
-      setImages([]);
+      setImages([]); // Очистити масив після додавання
     }
   };
-
+  // Функція для відкриття файлового провідника
   const pickImage = () => {
     launchImageLibrary(
       { mediaType: 'photo', includeBase64: false },
@@ -31,61 +28,53 @@ const TaskModal = ({ visible, onAddTask, onClose }) => {
           console.error('ImagePicker Error:', response.error);
         } else if (response.assets && response.assets.length > 0) {
           const { uri } = response.assets[0];
-          setImages((prevImages) => [...prevImages, uri]); 
+          setImages((prevImages) => [...prevImages, uri]); // Add the selected image to the array
           console.log('Selected Image URI:', uri);
         }
       }
     );
   };
-
   return (
     <Modal visible={visible} transparent={true} animationType="slide">
       <View style={styles.modalBackdrop}>
         <View style={styles.modal}>
-          <Text style={styles.modalTitle}>{t('text.addNewTask')}</Text>
-
+          <Text style={styles.modalTitle}>Add New Task</Text>
           <TextInput
             style={styles.input}
             value={task}
             onChangeText={setTask}
-            placeholder={t('text.enterTask')}
+            placeholder="Enter task"
             placeholderTextColor="#B0B0B0"
           />
-
           <View style={styles.imagePreviewContainer}>
             {images.map((image, index) => (
               <Image key={index} source={{ uri: image }} style={styles.imagePreview} />
             ))}
           </View>
-
           <Picker
             selectedValue={category}
             style={styles.picker}
             onValueChange={(itemValue) => setCategory(itemValue)}
           >
-            <Picker.Item label={t('text.finance')} value="Finance" />
-            <Picker.Item label={t('text.weeding')} value="Weeding" />
-            <Picker.Item label={t('text.freelance')} value="Freelance" />
-            <Picker.Item label={t('text.shoppingList')} value="Shopping List" />
+            <Picker.Item label="💵 Finance" value="Finance" />
+            <Picker.Item label="💍 Weeding" value="Weeding" />
+            <Picker.Item label="💼 Freelance" value="Freelance" />
+            <Picker.Item label="🛒 Shopping List" value="Shopping List" />
           </Picker>
-
           <TouchableOpacity style={styles.paperclipButton} onPress={pickImage}>
-            <Text style={styles.buttonText}>📎 {t('text.addImages')}</Text>
+            <Text style={styles.buttonText}>📎 Add Images</Text>
           </TouchableOpacity>
-
           <TouchableOpacity style={styles.button} onPress={handleAdd}>
-            <Text style={styles.buttonText}>{t('text.addTaskUpper')}</Text>
+            <Text style={styles.buttonText}>Add Task</Text>
           </TouchableOpacity>
-
           <TouchableOpacity style={styles.button} onPress={onClose}>
-            <Text style={styles.buttonText}>{t('text.close')}</Text>
+            <Text style={styles.buttonText}>Close</Text>
           </TouchableOpacity>
         </View>
       </View>
     </Modal>
   );
 };
-
 const styles = StyleSheet.create({
   modalBackdrop: {
     flex: 1,
@@ -156,5 +145,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-
 export default TaskModal;

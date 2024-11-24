@@ -41,7 +41,10 @@ const DefaultTheme = {
     checkbox: '#FCFCFC',
     borderCheckbox: 'DADADA',
     checkmark: '#575767',
-    thumbColor: '#fff'
+    thumbColor: '#fff',
+    taskIncomplete: '#800000', // Додано для завдань, що не виконані
+    taskComplete: 'green', // Додано для виконаних завдань
+    transparent: 'transparent'
   };
   
   export default DefaultTheme;

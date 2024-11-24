@@ -5,6 +5,11 @@ import DefaultTheme from '../theme/DefaultTheme';
 const initialState = {
   isDarkMode: true,
   colors: DarkTheme, 
+  taskColors: {  // Кольори для завдань
+    incomplete: 'red',
+    complete: 'green',
+    default: 'transparent',
+  },
 };
 
 const themeSlice = createSlice({

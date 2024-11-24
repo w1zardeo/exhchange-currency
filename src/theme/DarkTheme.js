@@ -41,7 +41,11 @@ const DarkTheme = {
     icon: '#fff',
     checkbox: '#2B2D37',
     borderCheckbox: '#0E0E11',
-    checkmark: '#DADADA'
+    checkmark: '#DADADA',
+    thumbColor: '#ffcc00',
+    taskIncomplete: '#800000', // Додано для завдань, що не виконані
+    taskComplete: 'green', // Додано для виконаних завдань
+    transparent: 'transparent'
   };
   
   export default DarkTheme;

@@ -8,20 +8,24 @@ const taskSlice = createSlice({
   reducers: {
     setTasksByDate: (state, action) => {
       const { selectedDate, tasks } = action.payload;
-      state[selectedDate] = tasks;
+      state[selectedDate] = tasks || { incomplete: [], complete: [] };
     },
     addTask: (state, action) => {
       const { selectedDate, newTask } = action.payload;
-      const currentTasks = state[selectedDate] || { incomplete: [], complete: [] };
-      currentTasks.incomplete.push({ ...newTask, completed: false });
-      state[selectedDate] = currentTasks;
+      if (!state[selectedDate]) {
+        state[selectedDate] = { incomplete: [], complete: [] };
+      }
+      state[selectedDate].incomplete.push({ ...newTask, completed: false });
     },
     toggleTask: (state, action) => {
       const { selectedDate, index, type } = action.payload;
       const tasks = state[selectedDate];
-      
-      if (!tasks) return;
-
+    
+      if (!tasks || !tasks[type] || index < 0 || index >= tasks[type].length) {
+        console.error('Invalid task index or section');
+        return;
+      }
+    
       if (type === 'incomplete') {
         const completedTask = tasks.incomplete.splice(index, 1)[0];
         tasks.complete.push({ ...completedTask, completed: true });
@@ -33,12 +37,13 @@ const taskSlice = createSlice({
     updateTaskText: (state, action) => {
       const { selectedDate, index, section, text } = action.payload;
       const tasks = state[selectedDate];
-      
-      if (tasks && tasks[section] && tasks[section][index]) {
-        tasks[section][index].text = text;
-      } else {
-        console.error('Task not found for the given parameters');
+    
+      if (!tasks || !tasks[section] || !tasks[section][index]) {
+        console.error('Invalid task section or index');
+        return;
       }
+    
+      tasks[section][index].text = text;
     },
     },
     setTaskImages: (state, action) => {
@@ -53,19 +58,29 @@ const taskSlice = createSlice({
       const { selectedDate, index, section, imageIndex } = action.payload;
       const tasks = state[selectedDate];
     
-      if (tasks && tasks[section] && tasks[section][index]) {
-        const task = tasks[section][index];
-        if (task.images && task.images.length > imageIndex) {
-          task.images.splice(imageIndex, 1);
-        }
+      if (!tasks || !tasks[section] || !tasks[section][index]) {
+        console.error('Invalid task or section');
+        return;
       }
+    
+      const task = tasks[section][index];
+      if (!task.images || imageIndex < 0 || imageIndex >= task.images.length) {
+        console.error('Invalid image index');
+        return;
+      }
+    
+      task.images.splice(imageIndex, 1);
     },
     deleteTask: (state, action) => {
       const { selectedDate, index, section } = action.payload;
       const tasks = state[selectedDate];
-      if (tasks && tasks[section] && tasks[section][index]) {
-        tasks[section].splice(index, 1); 
+    
+      if (!tasks || !tasks[section] || index < 0 || index >= tasks[section].length) {
+        console.error('Invalid task or section');
+        return;
       }
+    
+      tasks[section].splice(index, 1);
     },
   });
 

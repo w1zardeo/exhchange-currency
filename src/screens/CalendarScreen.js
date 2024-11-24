@@ -65,9 +65,9 @@ const CalendarScreen = ({ navigation }) => {
   };
 
   const getCircleStyle = (hasIncompleteTasks, hasCompleteTasks) => {
-    if (hasIncompleteTasks) return { backgroundColor: 'red' };
-    if (hasCompleteTasks) return { backgroundColor: 'green' };
-    return { backgroundColor: 'transparent' };
+    if (hasIncompleteTasks) return { backgroundColor: colors.taskIncomplete };
+    if (hasCompleteTasks) return { backgroundColor: colors.taskComplete };
+    return { backgroundColor: colors.transparent };
   };
 
   const renderMonth = month => (
@@ -141,13 +141,11 @@ const CalendarScreen = ({ navigation }) => {
           thumbColor={colors.switchThumb}
           trackColor={{ false: colors.switchTrack, true: colors.switchTrack }}
         />
-        <View>
           {isDarkMode ? (
             <Icon name="moon-outline" size={20} color={colors.iconMoon} />
           ) : (
             <Icon name="sunny-outline" size={20} color={colors.iconSun} />
           )}
-        </View>
       </View>
       <FlatList
       data={Object.keys(daysInMonth)} 

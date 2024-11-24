@@ -57,13 +57,11 @@ export default function SettingsScreen() {
                 thumbColor={colors.switchThumb}
                 trackColor={{ false: colors.switchTrack, true: colors.switchTrack }}
               />
-              <View>
                 {isDarkMode ? (
                   <Icon name="moon-outline" size={20} color={colors.iconMoon} />
                 ) : (
                   <Icon name="sunny-outline" size={20} color={colors.iconSun} />
                 )}
-              </View>
             </View>
           </View>
 
