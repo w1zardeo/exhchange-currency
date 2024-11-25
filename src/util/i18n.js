@@ -36,7 +36,10 @@ i18n
             addImages: 'Add Images',
             addTaskUpper: 'Add Task',
             close: 'Close',
-            today: 'Today'
+            today: 'Today',
+            cancel: 'Cancel',
+            noResults: 'No results',
+            emptyText: 'No favorite currencies available. Try adding some'
           },
           monthDay: {
             jan: 'January',
@@ -93,7 +96,10 @@ i18n
             addImages: 'Додати зображення',
             addTaskUpper: 'Додати Завдання',
             close: 'Закрити',
-            today: 'Сьогодні'
+            today: 'Сьогодні',
+            cancel: 'Скасувати',
+            noResults: 'Немає результатів',
+            emptyText: 'Немає улюблених валют. Спробуйте додати ще'
           },
           monthDay: {
             jan: 'Січень',
@@ -150,7 +156,10 @@ i18n
             addImages: 'Yadd Imágenes',
             addTaskUpper: 'Agregar Tarea',
             close: 'Cerca',
-            today: 'Hoy'
+            today: 'Hoy',
+            cancel: 'Cancelar',
+            noResults: 'No hay resultados',
+            emptyText: 'No hay monedas favoritas disponibles. Intente agregar algunas'
           },
           monthDay: {
             jan: 'Enero',

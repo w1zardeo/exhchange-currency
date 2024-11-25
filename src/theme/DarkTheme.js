@@ -34,7 +34,16 @@ const DarkTheme = {
     },
     titleStyle: '#DADADA',
     subtitleStyle: '#575767',
-    lineStyle: '#575767'
+    lineStyle: '#575767',
+    iconMoon: '#fff',
+    icon: '#fff',
+    checkbox: '#2B2D37',
+    borderCheckbox: '#0E0E11',
+    checkmark: '#DADADA',
+    thumbColor: '#ffcc00',
+    taskIncomplete: '#800000', 
+    taskComplete: 'green', 
+    transparent: 'transparent',
   };
   
   export default DarkTheme;

@@ -40,7 +40,6 @@ const taskSlice = createSlice({
         console.error('Task not found for the given parameters');
       }
     },
-    },
     setTaskImages: (state, action) => {
       const { selectedDate, taskIndex, section, images } = action.payload;
       const tasks = state[selectedDate];
@@ -60,15 +59,16 @@ const taskSlice = createSlice({
         }
       }
     },
-    deleteTask: (state, action) => {
+    deleteTaskText: (state, action) => {
       const { selectedDate, index, section } = action.payload;
       const tasks = state[selectedDate];
       if (tasks && tasks[section] && tasks[section][index]) {
         tasks[section].splice(index, 1); 
       }
     },
-  });
+  }
+});
 
-export const { setTasksByDate, addTask, toggleTask, updateTaskText, setTaskImages, removeImageFromTask, deleteTask } = taskSlice.actions;
+export const { setTasksByDate, addTask, toggleTask, updateTaskText, setTaskImages, removeImageFromTask, deleteTaskText } = taskSlice.actions;
 
 export default taskSlice.reducer;

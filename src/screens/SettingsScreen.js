@@ -1,12 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from 'react'; 
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
-  ScrollView,
   Switch,
-  Animated,
   Image
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -45,7 +43,7 @@ export default function SettingsScreen() {
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <Text style={[styles.header, { color: colors.text }]}>{t('settings.title')}</Text>
 
-      <ScrollView style={styles.optionsContainer}>
+      <View style={styles.optionsContainer}>
         <View style={[styles.combinedSection, { backgroundColor: colors.sectionBackground }]}>
           {/* Toggle theme section */}
           <View style={styles.option}>
@@ -59,13 +57,11 @@ export default function SettingsScreen() {
                 thumbColor={colors.switchThumb}
                 trackColor={{ false: colors.switchTrack, true: colors.switchTrack }}
               />
-              <Animated.View>
                 {isDarkMode ? (
-                  <Icon name="moon-outline" size={20} color="#fff" />
+                  <Icon name="moon-outline" size={20} color={colors.iconMoon} />
                 ) : (
-                  <Icon name="sunny-outline" size={20} color="#ffcc00" />
+                  <Icon name="sunny-outline" size={20} color={colors.iconSun} />
                 )}
-              </Animated.View>
             </View>
           </View>
 
@@ -81,10 +77,10 @@ export default function SettingsScreen() {
               </Text>
               <View style={[styles.iconContainer, { icon: colors.iconBackground }]}>
                 <TouchableOpacity onPress={decrementDigits} style={styles.iconButton}>
-                  <Icon name="remove-outline" size={20} color={isDarkMode ? '#fff' : '#000'} />
+                  <Icon name="remove-outline" size={20} color={colors.icon} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={incrementDigits} style={styles.iconButton}>
-                  <Icon name="add-outline" size={20} color={isDarkMode ? '#fff' : '#000'} />
+                  <Icon name="add-outline" size={20} color={colors.icon} />
                 </TouchableOpacity>
               </View>
             </View>
@@ -110,7 +106,7 @@ export default function SettingsScreen() {
             </View>
           </View>
         </View>
-      </ScrollView>
+      </View>
     </View>
   );
 }

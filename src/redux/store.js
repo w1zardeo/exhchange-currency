@@ -22,7 +22,6 @@ const persistConfig = {
   whitelist: ['theme', 'tasks', 'images'], 
 };
 
-// Apply persistReducer to the rootReducer
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const store = configureStore({
@@ -36,7 +35,6 @@ const store = configureStore({
     }),
 });
 
-// Create the persistor
 const persistor = persistStore(store);
 
 export { store, persistor };

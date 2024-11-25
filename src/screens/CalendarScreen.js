@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, Switch, Animated } from 'react-native';
+import { View, Text, StyleSheet, Switch, Animated, FlatList } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useDispatch, useSelector } from 'react-redux';
 import { setTasksByDate } from '../redux/TasksSlice'; 
 import { toggleTheme } from '../redux/ThemeSlice'; 
 import { useTranslation } from 'react-i18next'; 
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const CalendarScreen = ({ navigation }) => {
   const { t } = useTranslation();
@@ -65,9 +66,9 @@ const CalendarScreen = ({ navigation }) => {
   };
 
   const getCircleStyle = (hasIncompleteTasks, hasCompleteTasks) => {
-    if (hasIncompleteTasks) return { backgroundColor: 'red' };
-    if (hasCompleteTasks) return { backgroundColor: 'green' };
-    return { backgroundColor: 'transparent' };
+    if (hasIncompleteTasks) return { backgroundColor: colors.taskIncomplete };
+    if (hasCompleteTasks) return  { backgroundColor: colors.taskComplete };
+    return { backgroundColor: colors.transparent };
   };
 
   const renderMonth = month => (
@@ -108,7 +109,7 @@ const CalendarScreen = ({ navigation }) => {
                   style={[
                     styles.dayText, {color: colors.text},
                     isWeekend ? colors.weekend : colors.text,
-                    isToday(month, day) && { color: 'cyan' },
+                    isToday(month, day) && { color: colors.today },
                   ]}
                 >
                   {day}
@@ -130,27 +131,29 @@ const CalendarScreen = ({ navigation }) => {
     dispatch(toggleTheme());
   };
 
+  const renderMonthItem = ({ item: month }) => renderMonth(month);
+
   return (
     <View style={[styles.container, {backgroundColor: colors.background}]}>
       <View style={styles.switchContainer}>
         <Switch
           value={isDarkMode}
           onValueChange={handleToggleTheme}
-          thumbColor={isDarkMode ? '#ffcc00' : '#fff'}
-          trackColor={{ false: '#767577', true: '#374151' }}
+          thumbColor={colors.switchThumb}
+          trackColor={{ false: colors.switchTrack, true: colors.switchTrack }}
         />
-        <Animated.View>
           {isDarkMode ? (
-            <Icon name="moon-outline" size={20} color="#fff" />
+            <Icon name="moon-outline" size={20} color={colors.iconMoon} />
           ) : (
-            <Icon name="sunny-outline" size={20} color="#ffcc00" />
+            <Icon name="sunny-outline" size={20} color={colors.iconSun} />
           )}
-        </Animated.View>
       </View>
-
-      <ScrollView>
-        {Object.keys(daysInMonth).map(month => renderMonth(month))}
-      </ScrollView>
+      <FlatList
+      data={Object.keys(daysInMonth)} 
+      renderItem={renderMonthItem}
+      keyExtractor={(item) => item} 
+      showsVerticalScrollIndicator={false} 
+    />
     </View>
   );
 };

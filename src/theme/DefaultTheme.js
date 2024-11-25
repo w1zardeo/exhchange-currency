@@ -34,7 +34,16 @@ const DefaultTheme = {
     },
     titleStyle: '#0E0E11',
     subtitleStyle: '#575767',
-    lineStyle: '#D0D0D0'
+    lineStyle: '#D0D0D0',
+    iconSun:'#ffcc00',
+    icon: '#000',
+    checkbox: '#FCFCFC',
+    borderCheckbox: 'DADADA',
+    checkmark: '#575767',
+    thumbColor: '#fff',
+    taskIncomplete: '#800000', // Додано для завдань, що не виконані
+    taskComplete: 'green', // Додано для виконаних завдань
+    transparent: 'transparent'
   };
   
   export default DefaultTheme;

@@ -13,7 +13,8 @@ const BottomSheet = ({ sheetOpen, setSheetOpen }) => {
   const coverOpacityAnimation = useRef(new Animated.Value(0)).current;
   const [isSearching, setIsSearching] = useState(false);
   const { t } = useTranslation();
-
+  const dispatch = useDispatch();
+  
   const handleCancel = () => {
     setSearchQuery('');
     setIsSearching(false);
@@ -88,7 +89,7 @@ const BottomSheet = ({ sheetOpen, setSheetOpen }) => {
           </View>
           {isSearching && (
             <TouchableOpacity onPress={handleCancel} style={styles.cancelButton}>
-              <Text style={styles.cancelText}>Cancel</Text>
+              <Text style={styles.cancelText}>{t('text.cancel')}</Text>
             </TouchableOpacity>
           )}
         </View>
@@ -102,6 +103,9 @@ const BottomSheet = ({ sheetOpen, setSheetOpen }) => {
           )}
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.listContainer}
+          ListFooterComponent={() => (
+            <Text style={styles.noResults}>{t('text.noResults')}</Text>
+         )}
         />
       </Animated.View>
     </View>
@@ -127,7 +131,6 @@ const CurrencyItemInBotomSheet = ({ item, toggleFavorite }) => {
   );
 };
 
-// Styles
 const styles = StyleSheet.create({
   BottomSheet: {
     position: 'absolute',
@@ -224,6 +227,12 @@ const styles = StyleSheet.create({
   },
   searchActive: {
     flex: 0.99
+  },
+  noResults: {
+    color: 'white',
+    fontSize: 16,
+    textAlign: 'center',
+    marginTop: 20,
   }
 });
 
