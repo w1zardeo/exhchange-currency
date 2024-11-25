@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setTasksByDate } from '../redux/TasksSlice'; 
 import { toggleTheme } from '../redux/ThemeSlice'; 
 import { useTranslation } from 'react-i18next'; 
-import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const CalendarScreen = ({ navigation }) => {
   const { t } = useTranslation();

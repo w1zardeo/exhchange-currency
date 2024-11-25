@@ -1,3 +1,4 @@
+import { isFluxStandardAction } from "@reduxjs/toolkit";
 
 const DarkTheme = {
     background: '#141419', 
@@ -44,6 +45,11 @@ const DarkTheme = {
     taskIncomplete: '#800000', 
     taskComplete: 'green', 
     transparent: 'transparent',
+    favorite: '#0c86eb',
+    unfavorite: '#0c86eb',
+    checkbox: '#2B2D37',
+    borderColor: '#0E0E11',
+    strokeColor: '#DADADA'
   };
   
   export default DarkTheme;

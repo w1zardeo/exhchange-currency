@@ -113,6 +113,7 @@ const BottomSheet = ({ sheetOpen, setSheetOpen }) => {
 };
 
 const CurrencyItemInBotomSheet = ({ item, toggleFavorite }) => {
+  const colors = useSelector(state => state.theme.colors);
   return (
     <View style={styles.itemContainer}>
       <Image source={{ uri: item.flag }} style={styles.flag} />
@@ -124,7 +125,7 @@ const CurrencyItemInBotomSheet = ({ item, toggleFavorite }) => {
         <AntDesign
           name={item.isFavorite ? 'star' : 'staro'}
           size={20}
-          color={item.isFavorite ? '#0c86eb' : '#0c86eb'}
+          color={item.isFavorite ? colors.favorite : colors.unfavorite}
         />
       </Pressable>
     </View>
@@ -187,7 +188,7 @@ const styles = StyleSheet.create({
   cancelText: {
     color: '#007AFF',
     marginLeft: 10,
-    fontSize: 16,
+    fontSize: 12,
   },
   itemContainer: {
     flexDirection: 'row',

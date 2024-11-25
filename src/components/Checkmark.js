@@ -1,7 +1,9 @@
 import Svg, { Path } from "react-native-svg";
+import { useSelector } from 'react-redux';
 
 export const Checkmark = ({ style, isDarkMode }) => {
-  const strokeColor = isDarkMode ? '#DADADA' : '#575767';
+  const colors = useSelector(state => state.theme.colors);
+  const strokeColor = colors.strokeColor;
   return (
     <Svg
       width="10"

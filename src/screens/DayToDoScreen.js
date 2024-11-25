@@ -80,9 +80,7 @@ const DayToDoScreen = ({ route, navigation }) => {
         contentContainerStyle={styles.content}
       />
       <TouchableOpacity style={styles.floatingButton} onPress={() => setShowModal(true)}>
-        <View>
           <Plus />
-        </View>
       </TouchableOpacity>
       <TaskModal visible={showModal} onAddTask={addNewTask} onClose={() => setShowModal(false)} />
     </View>
