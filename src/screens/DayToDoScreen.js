@@ -96,8 +96,6 @@ const styles = StyleSheet.create({
   },
   content: {
     paddingBottom: 1000,
-    // justifyContent: 'center',
-    // alignItems: 'center',
   },
   floatingButton: {
     position: 'absolute',
