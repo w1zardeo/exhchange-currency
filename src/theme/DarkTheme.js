@@ -34,7 +34,26 @@ const DarkTheme = {
     },
     titleStyle: '#DADADA',
     subtitleStyle: '#575767',
-    lineStyle: '#575767'
+    lineStyle: '#575767',
+    iconMoon: '#fff',
+    icon: '#fff',
+    checkbox: '#2B2D37',
+    borderCheckbox: '#0E0E11',
+    checkmark: '#DADADA',
+    thumbColor: '#ffcc00',
+    taskIncomplete: '#800000', 
+    taskComplete: 'green', 
+    transparent: 'transparent',
+    favorite: '#0c86eb',
+    unfavorite: '#0c86eb',
+    checkbox: '#2B2D37',
+    borderColor: '#0E0E11',
+    strokeColor: '#DADADA',
+    placeholder: '#888',
+    addIcon: '#13518f',
+    ativityIndicator: '#00ff00',
+    headerPlaceholder: '#DADADA',
+    taskModalPlaceholder: '#B0B0B0'
   };
   
   export default DarkTheme;

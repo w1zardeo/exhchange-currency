@@ -22,7 +22,7 @@ const Header = ({ incompleteCount, completeCount, navigation, selectedDate, isDa
           value={inputText}
           onChangeText={setInputText}
           placeholder="Enter date"
-          placeholderTextColor="#DADADA"
+          placeholderTextColor={colors.headerPlaceholder}
           underlineColorAndroid="transparent"
         />
         <TouchableOpacity onPress={() => navigation.navigate('Calendar')}>

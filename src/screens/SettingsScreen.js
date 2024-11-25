@@ -59,13 +59,11 @@ export default function SettingsScreen() {
                 thumbColor={colors.switchThumb}
                 trackColor={{ false: colors.switchTrack, true: colors.switchTrack }}
               />
-              <Animated.View>
                 {isDarkMode ? (
-                  <Icon name="moon-outline" size={20} color="#fff" />
+                  <Icon name="moon-outline" size={20} color={colors.iconMoon} />
                 ) : (
-                  <Icon name="sunny-outline" size={20} color="#ffcc00" />
+                  <Icon name="sunny-outline" size={20} color={colors.iconSun} />
                 )}
-              </Animated.View>
             </View>
           </View>
 
@@ -81,10 +79,10 @@ export default function SettingsScreen() {
               </Text>
               <View style={[styles.iconContainer, { icon: colors.iconBackground }]}>
                 <TouchableOpacity onPress={decrementDigits} style={styles.iconButton}>
-                  <Icon name="remove-outline" size={20} color={isDarkMode ? '#fff' : '#000'} />
+                  <Icon name="remove-outline" size={20} color={colors.icon}/>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={incrementDigits} style={styles.iconButton}>
-                  <Icon name="add-outline" size={20} color={isDarkMode ? '#fff' : '#000'} />
+                  <Icon name="add-outline" size={20} color={colors.icon} />
                 </TouchableOpacity>
               </View>
             </View>

@@ -4,12 +4,14 @@ import { Picker } from '@react-native-picker/picker';
 import DocumentPicker from 'react-native-document-picker';
 import { useTranslation } from 'react-i18next'; // Імпорт локалізації
 import { launchImageLibrary } from 'react-native-image-picker';
+import { useSelector } from 'react-redux';
 
 const TaskModal = ({ visible, onAddTask, onClose }) => {
   const [task, setTask] = useState('');
   const [category, setCategory] = useState('Finance');
   const [images, setImages] = useState([]); 
   const { t } = useTranslation();
+  const colors = useSelector((state) => state.theme.colors); 
 
   const handleAdd = () => {
     if (task.trim()) {
@@ -49,7 +51,7 @@ const TaskModal = ({ visible, onAddTask, onClose }) => {
             value={task}
             onChangeText={setTask}
             placeholder={t('text.enterTask')}
-            placeholderTextColor="#B0B0B0"
+            placeholderTextColor={colors.taskModalPlaceholder}
           />
 
           <View style={styles.imagePreviewContainer}>

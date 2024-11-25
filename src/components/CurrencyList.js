@@ -105,6 +105,7 @@ const CurrencyItem = ({ item, baseAmount, onAmountChange, isEditing, onDrag }) =
 };
 
 const CurrencyList = () => {
+  const { t } = useTranslation();
   const [baseAmount, setBaseAmount] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
   const [sheetOpen, setSheetOpen] = useState(false);
@@ -156,12 +157,10 @@ const CurrencyList = () => {
       />
       {loading ? (
         <View style={styles.loaderContainer}>
-          <ActivityIndicator size="large" color="#00ff00" />
+          <ActivityIndicator size="large" color={colors.ativityIndicator} />
         </View>
       ) : filteredFavoriteCurrencies.length === 0 ? (
-        <View style={styles.emptyContainer}>
-          <Text style={styles.emptyText}>No favorite currencies available. Try adding some.</Text>
-        </View>
+          <Text style={styles.emptyText}>{t('text.emptyText')}</Text> 
       ) : (
         <FlatList
           data={filteredFavoriteCurrencies}
@@ -265,6 +264,12 @@ const styles = StyleSheet.create({
   editIcon: {
     padding: 10,
   },
+  emptyText: {
+    color: 'white',
+    fontSize: 16,
+    textAlign: 'center',
+    marginTop: 20,
+  }
 });
 
 export default CurrencyList;

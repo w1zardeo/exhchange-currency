@@ -13,6 +13,7 @@ const BottomSheet = ({ sheetOpen, setSheetOpen }) => {
   const coverOpacityAnimation = useRef(new Animated.Value(0)).current;
   const [isSearching, setIsSearching] = useState(false);
   const { t } = useTranslation();
+  const colors = useSelector((state) => state.theme.colors); 
 
   const handleCancel = () => {
     setSearchQuery('');
@@ -76,10 +77,10 @@ const BottomSheet = ({ sheetOpen, setSheetOpen }) => {
         <Text style={styles.addCurrencies}>{t('text.addCurrencies')}</Text>
         <View style={[styles.searchRow]}>
           <View style={[styles.searchContainer, isSearching && styles.searchActive]}>
-            <Icon name="search" size={18} color="#888" style={styles.searchIcon} />
+            <Icon name="search" size={18} color={colors.placeholder} style={styles.searchIcon} />
             <TextInput
               placeholder={t('text.search')}
-              placeholderTextColor="#888"
+              placeholderTextColor={colors.placeholder}
               style={styles.searchInput}
               value={searchQuery}
               onChangeText={setSearchQuery}
@@ -88,7 +89,7 @@ const BottomSheet = ({ sheetOpen, setSheetOpen }) => {
           </View>
           {isSearching && (
             <TouchableOpacity onPress={handleCancel} style={styles.cancelButton}>
-              <Text style={styles.cancelText}>Cancel</Text>
+              <Text style={styles.cancelText}>{t('text.cancel')}</Text>
             </TouchableOpacity>
           )}
         </View>
@@ -102,6 +103,9 @@ const BottomSheet = ({ sheetOpen, setSheetOpen }) => {
           )}
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.listContainer}
+          ListFooterComponent={() => (
+            <Text style={styles.noResults}>{t('text.noResults')}</Text>
+         )}
         />
       </Animated.View>
     </View>
@@ -109,6 +113,7 @@ const BottomSheet = ({ sheetOpen, setSheetOpen }) => {
 };
 
 const CurrencyItemInBotomSheet = ({ item, toggleFavorite }) => {
+  const colors = useSelector((state) => state.theme.colors); 
   return (
     <View style={styles.itemContainer}>
       <Image source={{ uri: item.flag }} style={styles.flag} />
@@ -120,7 +125,7 @@ const CurrencyItemInBotomSheet = ({ item, toggleFavorite }) => {
         <AntDesign
           name={item.isFavorite ? 'star' : 'staro'}
           size={20}
-          color={item.isFavorite ? '#0c86eb' : '#0c86eb'}
+          color={item.isFavorite ? colors.favorite : colors.unfavorite}
         />
       </Pressable>
     </View>
@@ -224,6 +229,12 @@ const styles = StyleSheet.create({
   },
   searchActive: {
     flex: 0.99
+  },
+  noResults: {
+    color: 'white',
+    fontSize: 16,
+    textAlign: 'center',
+    marginTop: 20,
   }
 });
 

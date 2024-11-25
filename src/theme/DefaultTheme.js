@@ -34,7 +34,26 @@ const DefaultTheme = {
     },
     titleStyle: '#0E0E11',
     subtitleStyle: '#575767',
-    lineStyle: '#D0D0D0'
+    lineStyle: '#D0D0D0',
+    iconSun:'#ffcc00',
+    icon: '#000',
+    checkbox: '#FCFCFC',
+    borderCheckbox: 'DADADA',
+    checkmark: '#575767',
+    thumbColor: '#fff',
+    taskIncomplete: '#800000', 
+    taskComplete: 'green', 
+    transparent: 'transparent',
+     favorite: '#0c86eb',
+    unfavorite: '#0c86eb',
+    checkbox: '#FCFCFC',
+    borderColor: '#DADADA',
+    strokeColor: '#575767',
+    placeholder: '#888',
+    addIcon: '#13518f',
+    ativityIndicator: '#00ff00',
+    headerPlaceholder: '#DADADA',
+    taskModalPlaceholder: '#B0B0B0'
   };
   
   export default DefaultTheme;

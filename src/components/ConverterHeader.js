@@ -30,16 +30,16 @@ const ConverterHeader = ({ searchQuery, setSearchQuery, toggleBottomSheet, onEdi
           <Text style={styles.editText}>{isEditing ? t('text.done') : t('text.edit')}</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={toggleBottomSheet}>
-          <Icon name="add" size={24} color="#13518f" />
+          <Icon name="add" size={24} color={colors.addIcon} />
         </TouchableOpacity>
       </View>
       <Text style={[styles.title, { color: colors.text }]}>{t('text.header')}</Text>
       <View style={styles.searchRow}>
         <View style={[styles.searchContainer, isSearching && styles.searchActive, {backgroundColor: colors.searchContainer}]}>
-          <Icon name="search" size={18} color="#888" style={styles.searchIcon} />
+          <Icon name="search" size={18} color={colors.placeholder} style={styles.searchIcon} />
           <TextInput
             placeholder={t('text.search')}
-            placeholderTextColor="#888"
+            placeholderTextColor={colors.placeholder}
             style={styles.searchInput}
             value={searchQuery}
             onChangeText={setSearchQuery}
@@ -48,7 +48,7 @@ const ConverterHeader = ({ searchQuery, setSearchQuery, toggleBottomSheet, onEdi
         </View>
         {isSearching && (
           <TouchableOpacity onPress={handleCancel}>
-            <Text style={styles.cancelText}>Cancel</Text>
+            <Text style={styles.cancelText}>{t('text.cancel')}</Text>
           </TouchableOpacity>
         )}
       </View>

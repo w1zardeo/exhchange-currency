@@ -65,9 +65,9 @@ const CalendarScreen = ({ navigation }) => {
   };
 
   const getCircleStyle = (hasIncompleteTasks, hasCompleteTasks) => {
-    if (hasIncompleteTasks) return { backgroundColor: 'red' };
-    if (hasCompleteTasks) return { backgroundColor: 'green' };
-    return { backgroundColor: 'transparent' };
+    if (hasIncompleteTasks) return { backgroundColor: colors.taskIncomplete };
+    if (hasCompleteTasks) return { backgroundColor: colors.taskComplete };
+    return { backgroundColor: colors.transparent };
   };
 
   const renderMonth = month => (
@@ -108,7 +108,7 @@ const CalendarScreen = ({ navigation }) => {
                   style={[
                     styles.dayText, {color: colors.text},
                     isWeekend ? colors.weekend : colors.text,
-                    isToday(month, day) && { color: 'cyan' },
+                    isToday(month, day) && { color: colors.today },
                   ]}
                 >
                   {day}
@@ -136,14 +136,14 @@ const CalendarScreen = ({ navigation }) => {
         <Switch
           value={isDarkMode}
           onValueChange={handleToggleTheme}
-          thumbColor={isDarkMode ? '#ffcc00' : '#fff'}
-          trackColor={{ false: '#767577', true: '#374151' }}
+          thumbColor={colors.switchThumb}
+          trackColor={{ false: colors.switchTrack, true: colors.switchTrack }}
         />
         <Animated.View>
           {isDarkMode ? (
-            <Icon name="moon-outline" size={20} color="#fff" />
+            <Icon name="moon-outline" size={20} color={colors.iconMoon} />
           ) : (
-            <Icon name="sunny-outline" size={20} color="#ffcc00" />
+            <Icon name="sunny-outline" size={20} color={colors.iconSun} />
           )}
         </Animated.View>
       </View>
