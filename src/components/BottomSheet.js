@@ -132,7 +132,6 @@ const CurrencyItemInBotomSheet = ({ item, toggleFavorite }) => {
   );
 };
 
-// Styles
 const styles = StyleSheet.create({
   BottomSheet: {
     position: 'absolute',

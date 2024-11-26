@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Modal, View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import DocumentPicker from 'react-native-document-picker';
-import { useTranslation } from 'react-i18next'; // Імпорт локалізації
+import { useTranslation } from 'react-i18next'; 
 import { launchImageLibrary } from 'react-native-image-picker';
 import { useSelector } from 'react-redux';
 

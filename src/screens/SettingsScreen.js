@@ -1,12 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from 'react'; 
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
-  ScrollView,
   Switch,
-  Animated,
   Image
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -45,7 +43,7 @@ export default function SettingsScreen() {
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <Text style={[styles.header, { color: colors.text }]}>{t('settings.title')}</Text>
 
-      <ScrollView style={styles.optionsContainer}>
+      <View style={styles.optionsContainer}>
         <View style={[styles.combinedSection, { backgroundColor: colors.sectionBackground }]}>
           {/* Toggle theme section */}
           <View style={styles.option}>
@@ -79,7 +77,7 @@ export default function SettingsScreen() {
               </Text>
               <View style={[styles.iconContainer, { icon: colors.iconBackground }]}>
                 <TouchableOpacity onPress={decrementDigits} style={styles.iconButton}>
-                  <Icon name="remove-outline" size={20} color={colors.icon}/>
+                  <Icon name="remove-outline" size={20} color={colors.icon} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={incrementDigits} style={styles.iconButton}>
                   <Icon name="add-outline" size={20} color={colors.icon} />
@@ -108,7 +106,7 @@ export default function SettingsScreen() {
             </View>
           </View>
         </View>
-      </ScrollView>
+      </View>
     </View>
   );
 }

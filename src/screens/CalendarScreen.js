@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, Switch, Animated } from 'react-native';
+import { View, Text, StyleSheet, Switch, FlatList} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useDispatch, useSelector } from 'react-redux';
 import { setTasksByDate } from '../redux/TasksSlice'; 
@@ -108,7 +108,7 @@ const CalendarScreen = ({ navigation }) => {
                   style={[
                     styles.dayText, {color: colors.text},
                     isWeekend ? colors.weekend : colors.text,
-                    isToday(month, day) && { color: colors.today },
+                    isToday(month, day) && { color: 'cyan' },
                   ]}
                 >
                   {day}
@@ -130,6 +130,8 @@ const CalendarScreen = ({ navigation }) => {
     dispatch(toggleTheme());
   };
 
+  const renderMonthItem = ({ item: month }) => renderMonth(month);
+
   return (
     <View style={[styles.container, {backgroundColor: colors.background}]}>
       <View style={styles.switchContainer}>
@@ -139,18 +141,18 @@ const CalendarScreen = ({ navigation }) => {
           thumbColor={colors.switchThumb}
           trackColor={{ false: colors.switchTrack, true: colors.switchTrack }}
         />
-        <Animated.View>
           {isDarkMode ? (
             <Icon name="moon-outline" size={20} color={colors.iconMoon} />
           ) : (
             <Icon name="sunny-outline" size={20} color={colors.iconSun} />
           )}
-        </Animated.View>
       </View>
-
-      <ScrollView>
-        {Object.keys(daysInMonth).map(month => renderMonth(month))}
-      </ScrollView>
+      <FlatList
+      data={Object.keys(daysInMonth)} 
+      renderItem={renderMonthItem}
+      keyExtractor={(item) => item} 
+      showsVerticalScrollIndicator={false} 
+    />
     </View>
   );
 };
@@ -216,7 +218,7 @@ const styles = StyleSheet.create({
   },
   todayText: {
     color: 'cyan',
-    fontSize: 12,
+    fontSize: 11,
   },
 });
 

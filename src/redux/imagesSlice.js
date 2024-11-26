@@ -1,8 +1,8 @@
-// redux/imagesSlice.js
+
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  images: [], // Можна зберігати масив зображень
+  images: [], 
 };
 
 const imagesSlice = createSlice({
