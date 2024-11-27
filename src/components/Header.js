@@ -14,23 +14,33 @@ const Header = ({ incompleteCount, completeCount, navigation, selectedDate, isDa
     }
   }, [selectedDate]);
 
+  const dynamicStyles = {
+    titleStyle: { color: colors.titleStyle },
+    placeholderColor: colors.headerPlaceholder,
+    subtitleColor: { color: colors.subtitleStyle },
+    lineColor: { backgroundColor: colors.lineStyle },
+    calendar: {color: colors.calendar}
+  };
+
   return (
     <View style={styles.header}>
       <View style={styles.headerRow}>
         <TextInput
-          style={[styles.title, {color: colors.titleStyle}]}
+          style={[styles.title, dynamicStyles.titleStyle]}
           value={inputText}
           onChangeText={setInputText}
           placeholder="Enter date"
-          placeholderTextColor={colors.headerPlaceholder}
+          placeholderTextColor={dynamicStyles.placeholderColor}
           underlineColorAndroid="transparent"
         />
         <TouchableOpacity onPress={() => navigation.navigate('Calendar')}>
-          <Text style={styles.calendarButton}>{t('text.calendar')}</Text>
+          <Text style={[styles.calendarButton, dynamicStyles.calendar]}>{t('text.calendar')}</Text>
         </TouchableOpacity>
       </View>
-      <Text style={[styles.subtitle, {color: colors.subtitleStyle}]}>{incompleteCount} {t('text.incompleteLower')}, {completeCount} {t('text.completedLower')}</Text>
-      <View style={[styles.line, {backgroundColor: colors.lineStyle}]}/>
+      <Text style={[styles.subtitle, dynamicStyles.subtitleColor]}>
+        {incompleteCount} {t('text.incompleteLower')}, {completeCount} {t('text.completedLower')}
+      </Text>
+      <View style={[styles.line, dynamicStyles.lineColor]} />
     </View>
   );
 };
@@ -50,12 +60,10 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#DADADA',
     fontFamily: 'inter',
     marginTop: 76,
   },
   calendarButton: {
-    color: '#007BFF',
     fontSize: 16,
   },
   subtitle: {
@@ -68,7 +76,6 @@ const styles = StyleSheet.create({
   line: {
     height: 2,
     width: 343,
-    backgroundColor: '#575767',
     marginTop: 16,
     marginLeft: 18,
     borderRadius: 5,

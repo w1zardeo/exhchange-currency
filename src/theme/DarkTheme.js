@@ -1,3 +1,4 @@
+import { Symbol } from "react-native-svg";
 
 const DarkTheme = {
     background: '#141419', 
@@ -53,7 +54,29 @@ const DarkTheme = {
     addIcon: '#13518f',
     ativityIndicator: '#00ff00',
     headerPlaceholder: '#DADADA',
-    taskModalPlaceholder: '#B0B0B0'
+    taskModalPlaceholder: '#B0B0B0',
+    today: '#00ccff',
+    weekDay: '#575767',
+    iconMenu: '#efefef',
+    bottomSheet: '#000000b3',
+    bottomSheetMain: '#1c1c1e',
+    searchContainerBottom: '#313036',
+    cancelText: '#007AFF',
+    borderBottom: '#1a1a1a',
+    currency: '#efefef',
+    addCurrencies: 'white',
+    searchInput: 'white',
+    noResults: 'white',
+    header: 'black',
+    edit: '#13518f',
+    empty: 'white',
+    calendar: '#007BFF',
+    modalBackdrop: 'rgba(0, 0, 0, 0.5)',
+    modal: '#141419',
+    modalTitle: 'white',
+    input: '#2c2c2e',
+    button: '#2563EB',
+    buttonBackground: 'transparent'
   };
   
   export default DarkTheme;

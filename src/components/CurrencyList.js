@@ -21,16 +21,15 @@ import { useTranslation } from 'react-i18next';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-const EditMode = ({ onDrag }) => (
-  <TouchableOpacity style={styles.editIcon} onLongPress={onDrag}>
-    <Icon name="menu" size={18} color="#efefef" />
-  </TouchableOpacity>
-);
-
-const ViewMode = ({symbol,convertedAmount,onInputChange,rate,currency,decimalPlaces}) => {
+const EditMode = ({ onDrag }) => {
   const colors = useSelector((state) => state.theme.colors); 
+  return (
+  <TouchableOpacity style={styles.editIcon} onLongPress={onDrag}>
+    <Icon name="menu" size={18} color={colors.iconMenu} />
+  </TouchableOpacity>
+)};
 
-  return(
+const CurrencyInfo = ({ symbol, convertedAmount, rate, currency, decimalPlaces, onInputChange, colors }) => (
   <View style={styles.rateInfo}>
     <View style={styles.inputContainer}>
       <Text style={[styles.symbol, {color: colors.text}]}>{symbol}</Text>
@@ -48,7 +47,7 @@ const ViewMode = ({symbol,convertedAmount,onInputChange,rate,currency,decimalPla
       {`1 UAH = ${rate.toFixed(decimalPlaces)} ${currency}`}
     </Text>
   </View>
-)};
+);
 
 const CurrencyItem = ({ item, baseAmount, onAmountChange, isEditing, onDrag }) => {
   const { t } = useTranslation();
@@ -90,14 +89,14 @@ const CurrencyItem = ({ item, baseAmount, onAmountChange, isEditing, onDrag }) =
       {isEditing ? (
         <EditMode onDrag={onDrag} />
       ) : (
-        <ViewMode
+        <CurrencyInfo
           symbol={item.symbol}
           convertedAmount={convertedAmount}
           onInputChange={handleInputChange}
           rate={item.rate}
           currency={item.currency}
           decimalPlaces={decimalPlaces}
-          styles={styles}
+          colors={colors}
         />
       )}
     </View>
@@ -160,7 +159,7 @@ const CurrencyList = () => {
           <ActivityIndicator size="large" color={colors.ativityIndicator} />
         </View>
       ) : filteredFavoriteCurrencies.length === 0 ? (
-          <Text style={styles.emptyText}>{t('text.emptyText')}</Text> 
+          <Text style={[styles.emptyText, {color: colors.empty}]}>{t('text.emptyText')}</Text> 
       ) : (
         <FlatList
           data={filteredFavoriteCurrencies}
@@ -195,7 +194,6 @@ const styles = StyleSheet.create({
   },
   symbol: {
     fontSize: 18,
-    color: '#efefef',
     marginLeft: 10,
   },
   loaderContainer: {
@@ -225,13 +223,11 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   currency: {
-    color: '#efefef',
     fontSize: 18,
     fontWeight: 'bold',
   },
   label: {
     fontSize: 12,
-    color: '#666',
   },
   rateInfo: {
     alignItems: 'flex-end',
@@ -242,13 +238,7 @@ const styles = StyleSheet.create({
     maxWidth: 150,
     overflow: 'hidden',
   },
-  symbol: {
-    fontSize: 18,
-    color: '#efefef',
-    marginLeft: 10,
-  },
   rate: {
-    color: '#efefef',
     fontSize: 18,
     fontWeight: 'bold',
     marginRight: 10,
@@ -259,13 +249,12 @@ const styles = StyleSheet.create({
   rateText: {
     fontSize: 13,
     marginRight: 10,
-    marginTop: -10,
+    marginBottom: 10,
   },
   editIcon: {
     padding: 10,
   },
   emptyText: {
-    color: 'white',
     fontSize: 16,
     textAlign: 'center',
     marginTop: 20,
@@ -273,5 +262,3 @@ const styles = StyleSheet.create({
 });
 
 export default CurrencyList;
-
-

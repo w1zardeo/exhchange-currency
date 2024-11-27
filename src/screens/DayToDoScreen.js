@@ -32,29 +32,33 @@ const DayToDoScreen = ({ route, navigation }) => {
     dispatch(setTasksByDate({ selectedDate, tasks: tasks }));
   }, [dispatch, selectedDate, tasks]);
 
-  const addNewTask = (newTask) => {
-    dispatch(addTask({ selectedDate, newTask }));
-    setShowModal(false);
-  };
-
-  const toggleTaskStatus = (index, type) => {
-    dispatch(toggleTask({ selectedDate, index, type }));
-  };
-
-  const updateTaskText = (index, type, newText) => {
-    dispatch(updateTaskText({ selectedDate, index, section: type, text: newText }));
-  };
-
-  const deleteTask = (index, type) => {
-    dispatch(deleteTask({ selectedDate, index, section: type }));
+  // Абстрагована функція для роботи з задачами
+  const handleTaskAction = (action, index, type, newText = '') => {
+    switch (action) {
+      case 'toggle':
+        dispatch(toggleTask({ selectedDate, index, type }));
+        break;
+      case 'update':
+        dispatch(updateTaskText({ selectedDate, index, section: type, text: newText }));
+        break;
+      case 'delete':
+        dispatch(deleteTask({ selectedDate, index, section: type }));
+        break;
+      case 'add':
+        dispatch(addTask({ selectedDate, newTask: newText }));
+        setShowModal(false);
+        break;
+      default:
+        break;
+    }
   };
 
   const renderTasks = ({ item, index }) => (
     <Tasks
       tasks={tasks}
-      toggleTask={toggleTaskStatus}
-      deleteTask={deleteTask}
-      updateTaskText={updateTaskText}
+      toggleTask={(index, type) => handleTaskAction('toggle', index, type)}
+      deleteTask={(index, type) => handleTaskAction('delete', index, type)}
+      updateTaskText={(index, type, newText) => handleTaskAction('update', index, type, newText)}
       isDarkMode={isDarkMode}
     />
   );
@@ -77,7 +81,7 @@ const DayToDoScreen = ({ route, navigation }) => {
       <TouchableOpacity style={styles.floatingButton} onPress={() => setShowModal(true)}>
         <Plus />
       </TouchableOpacity>
-      <TaskModal visible={showModal} onAddTask={addNewTask} onClose={() => setShowModal(false)} />
+      <TaskModal visible={showModal} onAddTask={(newTask) => handleTaskAction('add', null, null, newTask)} onClose={() => setShowModal(false)} />
     </View>
   );
 };
@@ -85,7 +89,6 @@ const DayToDoScreen = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#141419',
   },
   flatListContent: {
     flexGrow: 1,

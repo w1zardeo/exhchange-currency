@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'; 
+import React from 'react'; 
 import {
   View,
   Text,
@@ -9,10 +9,17 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useDispatch, useSelector } from 'react-redux';
-import { toggleTheme, setTheme } from '../redux/ThemeSlice';
+import { toggleTheme } from '../redux/ThemeSlice';
 import { setDecimalPlaces } from '../redux/settingsSlice';
 import { useTranslation } from 'react-i18next'; 
 import i18n  from '../util/i18n';
+
+// Масив мов для рендерингу
+const languages = [
+  { code: 'ua', flag: require('../flags/ua-flag.png') },
+  { code: 'en', flag: require('../flags/gb-flag.png') },
+  { code: 'es', flag: require('../flags/spanish-flag.png') }
+];
 
 export default function SettingsScreen() {
   const { t } = useTranslation(); 
@@ -45,6 +52,7 @@ export default function SettingsScreen() {
 
       <View style={styles.optionsContainer}>
         <View style={[styles.combinedSection, { backgroundColor: colors.sectionBackground }]}>
+          
           {/* Toggle theme section */}
           <View style={styles.option}>
             <Text style={[styles.optionText, { color: colors.text }]}>
@@ -57,25 +65,26 @@ export default function SettingsScreen() {
                 thumbColor={colors.switchThumb}
                 trackColor={{ false: colors.switchTrack, true: colors.switchTrack }}
               />
-                {isDarkMode ? (
-                  <Icon name="moon-outline" size={20} color={colors.iconMoon} />
-                ) : (
-                  <Icon name="sunny-outline" size={20} color={colors.iconSun} />
-                )}
+              {isDarkMode ? (
+                <Icon name="moon-outline" size={20} color={colors.iconMoon} />
+              ) : (
+                <Icon name="sunny-outline" size={20} color={colors.iconSun} />
+              )}
             </View>
           </View>
 
-          <View style={[styles.divider, { devider: colors.devider }]} />
+          <View style={[styles.divider, { backgroundColor: colors.devider }]} />
 
+          {/* Number of decimal places section */}
           <View style={styles.option}>
             <Text style={[styles.optionText, { color: colors.text }]}>
               {t('settings.numberOfFractionDigits')}
             </Text>
             <View style={styles.counterGroup}>
               <Text style={[styles.counterValue, { color: colors.text }]}>
-                {decimalPlaces} 
+                {decimalPlaces}
               </Text>
-              <View style={[styles.iconContainer, { icon: colors.iconBackground }]}>
+              <View style={styles.iconContainer}>
                 <TouchableOpacity onPress={decrementDigits} style={styles.iconButton}>
                   <Icon name="remove-outline" size={20} color={colors.icon} />
                 </TouchableOpacity>
@@ -86,25 +95,26 @@ export default function SettingsScreen() {
             </View>
           </View>
 
-        
-          <View style={[styles.divider, { devider: colors.devider }]} />
+          <View style={[styles.divider, { backgroundColor: colors.devider }]} />
 
+          {/* Language selection section */}
           <View style={styles.option}>
             <Text style={[styles.optionText, { color: colors.text }]}>
               {t('settings.selectLanguage')}
             </Text>
             <View style={styles.languageContainer}>
-              <TouchableOpacity style={styles.languageButton} onPress={() => changeLanguage('ua')}>
-                <Image source={require('../flags/ua-flag.png')} style={{ width: 30, height: 20 }} />
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.languageButton} onPress={() => changeLanguage('en')}>
-                <Image source={require('../flags/gb-flag.png')} style={{ width: 30, height: 20 }} />
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.languageButton} onPress={() => changeLanguage('es')}>
-                <Image source={require('../flags/spanish-flag.png')} style={{ width: 30, height: 20 }} />
-              </TouchableOpacity>
+              {languages.map((language) => (
+                <TouchableOpacity
+                  key={language.code}
+                  style={styles.languageButton}
+                  onPress={() => changeLanguage(language.code)}
+                >
+                  <Image source={language.flag} style={styles.languageFlag} />
+                </TouchableOpacity>
+              ))}
             </View>
           </View>
+
         </View>
       </View>
     </View>
@@ -132,7 +142,7 @@ const styles = StyleSheet.create({
   divider: {
     height: 0.1,
     backgroundColor: '#e0e0e0',
-    marginLeft: 20
+    marginLeft: 20,
   },
   option: {
     flexDirection: 'row',
@@ -169,15 +179,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingTop: -10
+    marginBottom: 5,
   },
   languageButton: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: 10,
   },
-  languageText: {
-    marginLeft: 5,
-    fontSize: 16,
+  languageFlag: {
+    width: 30,
+    height: 20,
   },
 });
+

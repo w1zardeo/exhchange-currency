@@ -10,9 +10,7 @@ const CurrencyConverterApp = () => {
   return (
     <Provider store={store}>
       <SafeAreaView style={styles.container}>
-       
         <CurrencyList />
-        
         <BottomSheet />
       </SafeAreaView>
     </Provider>

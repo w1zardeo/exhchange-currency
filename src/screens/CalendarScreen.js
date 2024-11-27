@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, Switch, FlatList} from 'react-native';
+import { View, Text, StyleSheet, Switch, FlatList } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useDispatch, useSelector } from 'react-redux';
 import { setTasksByDate } from '../redux/TasksSlice'; 
@@ -47,13 +47,12 @@ const CalendarScreen = ({ navigation }) => {
     });
   
     const initialTasks = { incomplete: [], complete: [] };
-  
     dispatch(setTasksByDate({ selectedDate: today, tasks: initialTasks }));
   }, [dispatch]);
 
   const getFirstDayOfMonth = month => {
     const date = new Date(currentYear, Object.keys(daysInMonth).indexOf(month), 1);
-    return date.getDay(); 
+    return date.getDay();
   };
 
   const generateMonthDays = month => {
@@ -70,6 +69,48 @@ const CalendarScreen = ({ navigation }) => {
     return { backgroundColor: colors.transparent };
   };
 
+  const isToday = (month, day) => {
+    const today = new Date();
+    return today.getDate() === day && today.getMonth() === new Date(Date.UTC(currentYear, Object.keys(daysInMonth).indexOf(month), 1)).getMonth();
+  };
+
+  const renderDay = (month, day) => {
+    const date = new Date(Date.UTC(currentYear, Object.keys(daysInMonth).indexOf(month), day));
+    const dayOfWeekIndex = date.getUTCDay();
+    const isWeekend = dayOfWeekIndex === 0 || dayOfWeekIndex === 6;
+    const tasks = tasksByDate[`${month} ${day}, ${currentYear}`] || { incomplete: [], complete: [] };
+    const hasIncompleteTasks = tasks.incomplete.length > 0;
+    const hasCompleteTasks = tasks.complete.length > 0;
+
+    return (
+      <View key={day} style={styles.dayContainer}>
+        <View style={[styles.circleStyle, getCircleStyle(hasIncompleteTasks, hasCompleteTasks)]}>
+          <Text
+            onPress={() =>
+              navigation.navigate('DayToDoScreen', {
+                selectedDate: `${month} ${day}, ${currentYear}`,
+                isDarkMode,
+              })
+            }
+            style={[
+              styles.dayText,
+              { color: colors.text },
+              isWeekend ? colors.weekend : colors.text,
+              isToday(month, day) && { color: colors.today },
+            ]}
+          >
+            {day}
+          </Text>
+        </View>
+        {isToday(month, day) && (
+          <View style={styles.todayContainer}>
+            <Text style={[styles.todayText, { color: colors.today }]}>{t('text.today')}</Text>
+          </View>
+        )}
+      </View>
+    );
+  };
+
   const renderMonth = month => (
     <View key={month} style={styles.monthContainer}>
       <Text style={[styles.monthText, { color: colors.text }]}>
@@ -78,50 +119,10 @@ const CalendarScreen = ({ navigation }) => {
       <View style={styles.daysGrid}>
         {daysOfWeek.map(dayOfWeek => (
           <View key={dayOfWeek} style={styles.weekDayContainer}>
-            <Text style={styles.weekDayText}>{dayOfWeek}</Text>
+            <Text style={[styles.weekDayText, { color: colors.weekDay }]}>{dayOfWeek}</Text>
           </View>
         ))}
-        {generateMonthDays(month).map((day, index) => {
-          const date = new Date(Date.UTC(currentYear, Object.keys(daysInMonth).indexOf(month), day));
-          const dayOfWeekIndex = date.getUTCDay();
-          const isWeekend = dayOfWeekIndex === 0 || dayOfWeekIndex === 6;
-
-          const tasks = tasksByDate[`${month} ${day}, ${currentYear}`] || { incomplete: [], complete: [] };
-          const hasIncompleteTasks = tasks.incomplete.length > 0;
-          const hasCompleteTasks = tasks.complete.length > 0;
-
-          const isToday = (month, day) => {
-            const today = new Date();
-            return today.getDate() === day && today.getMonth() === new Date(Date.UTC(currentYear, Object.keys(daysInMonth).indexOf(month), 1)).getMonth();
-          };
-
-          return (
-            <View key={index} style={styles.dayContainer}>
-              <View style={[styles.circleStyle, getCircleStyle(hasIncompleteTasks, hasCompleteTasks)]}>
-                <Text
-                  onPress={() =>
-                    navigation.navigate('DayToDoScreen', {
-                      selectedDate: `${month} ${day}, ${currentYear}`,
-                      isDarkMode,
-                    })
-                  }
-                  style={[
-                    styles.dayText, {color: colors.text},
-                    isWeekend ? colors.weekend : colors.text,
-                    isToday(month, day) && { color: 'cyan' },
-                  ]}
-                >
-                  {day}
-                </Text>
-              </View>
-              {isToday(month, day) && (
-                <View style={styles.todayContainer}>
-                  <Text style={styles.todayText}>{t('text.today')}</Text>
-                </View>
-              )}
-            </View>
-          );
-        })}
+        {generateMonthDays(month).map(day => renderDay(month, day))}
       </View>
     </View>
   );
@@ -130,10 +131,8 @@ const CalendarScreen = ({ navigation }) => {
     dispatch(toggleTheme());
   };
 
-  const renderMonthItem = ({ item: month }) => renderMonth(month);
-
   return (
-    <View style={[styles.container, {backgroundColor: colors.background}]}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={styles.switchContainer}>
         <Switch
           value={isDarkMode}
@@ -141,18 +140,18 @@ const CalendarScreen = ({ navigation }) => {
           thumbColor={colors.switchThumb}
           trackColor={{ false: colors.switchTrack, true: colors.switchTrack }}
         />
-          {isDarkMode ? (
-            <Icon name="moon-outline" size={20} color={colors.iconMoon} />
-          ) : (
-            <Icon name="sunny-outline" size={20} color={colors.iconSun} />
-          )}
+        {isDarkMode ? (
+          <Icon name="moon-outline" size={20} color={colors.iconMoon} />
+        ) : (
+          <Icon name="sunny-outline" size={20} color={colors.iconSun} />
+        )}
       </View>
       <FlatList
-      data={Object.keys(daysInMonth)} 
-      renderItem={renderMonthItem}
-      keyExtractor={(item) => item} 
-      showsVerticalScrollIndicator={false} 
-    />
+        data={Object.keys(daysInMonth)}
+        renderItem={({ item }) => renderMonth(item)}
+        keyExtractor={(item) => item}
+        showsVerticalScrollIndicator={false}
+      />
     </View>
   );
 };
@@ -186,7 +185,6 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   weekDayText: {
-    color: '#575767',
     textAlign: 'center',
   },
   daysGrid: {
@@ -217,7 +215,6 @@ const styles = StyleSheet.create({
     top: 30,
   },
   todayText: {
-    color: 'cyan',
     fontSize: 11,
   },
 });

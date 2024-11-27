@@ -29,11 +29,11 @@ const getCategoryEmoji = category => {
   }
 };
 
-const Tasks = ({tasks, toggleTask, deleteTask, updateTaskText, isDarkMode}) => {
-  const {t} = useTranslation();
+const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) => {
+  const { t } = useTranslation();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
-  const colors = useSelector(state => state.theme.colors);
+  const colors = useSelector((state) => state.theme.colors);
 
   const handleTextChange = (text, index, section) => {
     if (text === '') {
@@ -49,7 +49,7 @@ const Tasks = ({tasks, toggleTask, deleteTask, updateTaskText, isDarkMode}) => {
     updateTaskText(index, section, updatedTasks[index].text);
   };
 
-  const handleImageClick = imageUri => {
+  const handleImageClick = (imageUri) => {
     setSelectedImage(imageUri);
     setIsModalVisible(true);
   };
@@ -59,7 +59,7 @@ const Tasks = ({tasks, toggleTask, deleteTask, updateTaskText, isDarkMode}) => {
     setSelectedImage(null);
   };
 
-  const renderTaskItem = ({item, index}, section) => (
+  const renderTaskItem = ({ item, index }, section) => (
     <View style={styles.taskContainer}>
       <Checkbox
         isDarkMode={isDarkMode}
@@ -69,8 +69,8 @@ const Tasks = ({tasks, toggleTask, deleteTask, updateTaskText, isDarkMode}) => {
           <View style={styles.textContainer}>
             <TextInput
               value={item.text}
-              onChangeText={text => handleTextChange(text, index, section)}
-              style={[styles.taskText, {color: colors.text}]}
+              onChangeText={(text) => handleTextChange(text, index, section)}
+              style={[styles.taskText, { color: colors.text }]}
               numberOfLines={1}
               maxLength={100}
             />
@@ -85,18 +85,17 @@ const Tasks = ({tasks, toggleTask, deleteTask, updateTaskText, isDarkMode}) => {
         showsHorizontalScrollIndicator={false}
         data={item.images}
         keyExtractor={(image, imageIndex) => imageIndex.toString()}
-        renderItem={({item: image, index: imageIndex}) => (
+        renderItem={({ item: image, index: imageIndex }) => (
           <View key={imageIndex} style={styles.imageWrapper}>
             <Image
-              source={{uri: image}}
+              source={{ uri: image }}
               style={styles.imagePreview}
               onTouchEnd={() => handleImageClick(image)}
             />
             <TouchableOpacity
               style={styles.deleteIcon}
-              onPress={() =>
-                handleImageDelete(index, 'incomplete', imageIndex)
-              }>
+              onPress={() => handleImageDelete(index, section, imageIndex)}
+            >
               <Text style={styles.deleteText}>❌</Text>
             </TouchableOpacity>
           </View>
@@ -106,45 +105,44 @@ const Tasks = ({tasks, toggleTask, deleteTask, updateTaskText, isDarkMode}) => {
     </View>
   );
 
+  const renderTaskSection = (section, titleKey, placeholderKey) => (
+    <View key={section}>
+      <Text style={[styles.sectionTitle, { color: colors.text }]}>
+        {t(titleKey)}
+      </Text>
+      {tasks[section].length === 0 && (
+        <Text style={styles.smallGap}>{t(placeholderKey)}</Text>
+      )}
+      <FlatList
+        data={tasks[section]}
+        keyExtractor={(item, index) => `${section}-${index}`}
+        renderItem={(props) => renderTaskItem(props, section)}
+        contentContainerStyle={styles.flatList}
+      />
+    </View>
+  );
+
   return (
     <View style={styles.tasks}>
-      {['incomplete', 'complete'].map(section => (
-        <View key={section}>
-          <Text style={[styles.sectionTitle, {color: colors.text}]}>
-            {section === 'incomplete'
-              ? t('text.incompleteUpper')
-              : t('text.completedUpper')}
-          </Text>
-          {tasks[section].length === 0 && (
-            <Text style={styles.smallGap}>
-              {section === 'incomplete'
-                ? t('text.addTask')
-                : t('text.markTask')}
-            </Text>
-          )}
-          <FlatList
-            data={tasks[section]}
-            keyExtractor={(item, index) => `${section}-${index}`}
-            renderItem={props => renderTaskItem(props, section)}
-            contentContainerStyle={styles.flatList}
-          />
-        </View>
-      ))}
+      {renderTaskSection('incomplete', 'text.incompleteUpper', 'text.addTask')}
+      {renderTaskSection('complete', 'text.completedUpper', 'text.markTask')}
 
       <Modal
         visible={isModalVisible}
         transparent={true}
         animationType="fade"
-        onRequestClose={handleModalClose}>
+        onRequestClose={handleModalClose}
+      >
         <TouchableWithoutFeedback onPress={handleModalClose}>
           <View style={styles.modalOverlay}>
-            <Image source={{uri: selectedImage}} style={styles.modalImage} />
+            <Image source={{ uri: selectedImage }} style={styles.modalImage} />
           </View>
         </TouchableWithoutFeedback>
       </Modal>
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   tasks: {
