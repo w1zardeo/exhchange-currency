@@ -75,7 +75,15 @@ const DefaultTheme = {
     modal: '#141419',
     input: '#2c2c2e',
     button: '#2563EB',
-    buttonBackground: 'transparent'
+    buttonBackground: 'transparent',
+    section: '#DADADA',
+    smallGroup: '#575767',
+    red: 'red',
+    modalOverlay: 'rgba(0,0,0,0.8)',
+    black: 'black',
+    floating: '#3F4EA0',
+    floatingBorder: '#515CC6',
+    combinedSection: '#333'
   };
   
   export default DefaultTheme;

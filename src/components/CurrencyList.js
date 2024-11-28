@@ -21,20 +21,26 @@ import { useTranslation } from 'react-i18next';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
+// Константи
+const DECIMAL_PLACES = 2; // Замість використання state.decimalPlaces
+const DEFAULT_BASE_AMOUNT = 0;
+const DEFAULT_SEARCH_QUERY = '';
+
 const EditMode = ({ onDrag }) => {
   const colors = useSelector((state) => state.theme.colors); 
   return (
-  <TouchableOpacity style={styles.editIcon} onLongPress={onDrag}>
-    <Icon name="menu" size={18} color={colors.iconMenu} />
-  </TouchableOpacity>
-)};
+    <TouchableOpacity style={styles.editIcon} onLongPress={onDrag}>
+      <Icon name="menu" size={18} color={colors.iconMenu} />
+    </TouchableOpacity>
+  );
+};
 
 const CurrencyInfo = ({ symbol, convertedAmount, rate, currency, decimalPlaces, onInputChange, colors }) => (
   <View style={styles.rateInfo}>
     <View style={styles.inputContainer}>
-      <Text style={[styles.symbol, {color: colors.text}]}>{symbol}</Text>
+      <Text style={[styles.symbol, { color: colors.text }]}>{symbol}</Text>
       <TextInput
-        style={[styles.rate, {color:colors.text}]}
+        style={[styles.rate, { color: colors.text }]}
         keyboardType="numeric"
         value={convertedAmount}
         onChangeText={onInputChange}
@@ -43,7 +49,7 @@ const CurrencyInfo = ({ symbol, convertedAmount, rate, currency, decimalPlaces, 
         scrollEnabled={true}
       />
     </View>
-    <Text style={[styles.rateText, {color: colors.rate}]}>
+    <Text style={[styles.rateText, { color: colors.rate }]}>
       {`1 UAH = ${rate.toFixed(decimalPlaces)} ${currency}`}
     </Text>
   </View>
@@ -52,11 +58,10 @@ const CurrencyInfo = ({ symbol, convertedAmount, rate, currency, decimalPlaces, 
 const CurrencyItem = ({ item, baseAmount, onAmountChange, isEditing, onDrag }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const decimalPlaces = useSelector((state) => state.settings.decimalPlaces);
   const colors = useSelector((state) => state.theme.colors); 
 
   const convertedAmount = (baseAmount * item.rate)
-    .toFixed(decimalPlaces)
+    .toFixed(DECIMAL_PLACES)
     .replace('.', ',')
     .replace(/,00$/, '');
 
@@ -80,11 +85,11 @@ const CurrencyItem = ({ item, baseAmount, onAmountChange, isEditing, onDrag }) =
   };
 
   return (
-    <View style={[styles.itemContainer, {borderBottomColor: colors.line}]}>
+    <View style={[styles.itemContainer, { borderBottomColor: colors.line }]}>
       <Image source={{ uri: item.flag }} style={styles.flag} />
       <View style={styles.currencyInfo}>
-        <Text style={[styles.currency, styles.textStyle, {color: colors.text}]}>{item.currency}</Text>
-        <Text style={[styles.label, styles.labelStyle, {color: colors.label}]}>{item.label}</Text>
+        <Text style={[styles.currency, { color: colors.text }]}>{item.currency}</Text>
+        <Text style={[styles.label, { color: colors.label }]}>{item.label}</Text>
       </View>
       {isEditing ? (
         <EditMode onDrag={onDrag} />
@@ -95,7 +100,7 @@ const CurrencyItem = ({ item, baseAmount, onAmountChange, isEditing, onDrag }) =
           onInputChange={handleInputChange}
           rate={item.rate}
           currency={item.currency}
-          decimalPlaces={decimalPlaces}
+          decimalPlaces={DECIMAL_PLACES}
           colors={colors}
         />
       )}
@@ -105,15 +110,14 @@ const CurrencyItem = ({ item, baseAmount, onAmountChange, isEditing, onDrag }) =
 
 const CurrencyList = () => {
   const { t } = useTranslation();
-  const [baseAmount, setBaseAmount] = useState(0);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [baseAmount, setBaseAmount] = useState(DEFAULT_BASE_AMOUNT);
+  const [searchQuery, setSearchQuery] = useState(DEFAULT_SEARCH_QUERY);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const colors = useSelector((state) => state.theme.colors); 
 
   const dispatch = useDispatch();
-  const { currencies = [], loading, status } = useSelector((state) => state.currency);
-  const isDarkMode = useSelector((state) => state.theme.isDarkMode);
+  const { currencies = [], loading } = useSelector((state) => state.currency);
 
   useEffect(() => {
     if (!Array.isArray(currencies) || currencies.length === 0) {
@@ -146,7 +150,7 @@ const CurrencyList = () => {
   );
 
   return (
-    <View style={[styles.container, {backgroundColor: colors.background}]}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <ConverterHeader
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
@@ -159,7 +163,9 @@ const CurrencyList = () => {
           <ActivityIndicator size="large" color={colors.ativityIndicator} />
         </View>
       ) : filteredFavoriteCurrencies.length === 0 ? (
-          <Text style={[styles.emptyText, {color: colors.empty}]}>{t('text.emptyText')}</Text> 
+        <Text style={[styles.emptyText, { color: colors.empty }]}>
+          {t('text.emptyText')}
+        </Text>
       ) : (
         <FlatList
           data={filteredFavoriteCurrencies}
@@ -186,7 +192,6 @@ const CurrencyList = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'black',
     paddingBottom: 50,
   },
   listContainer: {

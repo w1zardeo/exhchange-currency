@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -11,23 +11,29 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import Checkbox from './Checkbox';
-import {useTranslation} from 'react-i18next';
-import {useSelector} from 'react-redux';
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 
-const getCategoryEmoji = category => {
-  switch (category) {
-    case 'Finance':
-      return '💰';
-    case 'Weeding':
-      return '💍';
-    case 'Freelance':
-      return '💻';
-    case 'Shopping List':
-      return '🛒';
-    default:
-      return '';
-  }
+// Константи
+const CONSTANTS = {
+  categories: {
+    Finance: '💰',
+    Weeding: '💍',
+    Freelance: '💻',
+    'Shopping List': '🛒',
+    default: '',
+  },
+  placeholders: {
+    incomplete: 'text.addTask',
+    complete: 'text.markTask',
+  },
+  titles: {
+    incomplete: 'text.incompleteUpper',
+    complete: 'text.completedUpper',
+  },
 };
+
+const getCategoryEmoji = (category) => CONSTANTS.categories[category] || CONSTANTS.categories.default;
 
 const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) => {
   const { t } = useTranslation();
@@ -74,7 +80,7 @@ const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) =>
               numberOfLines={1}
               maxLength={100}
             />
-            <Text style={styles.categoryText}>
+            <Text style={[styles.categoryText, { color: colors.smallGroup }]}>
               {getCategoryEmoji(item.category)} {item.category}
             </Text>
           </View>
@@ -96,7 +102,7 @@ const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) =>
               style={styles.deleteIcon}
               onPress={() => handleImageDelete(index, section, imageIndex)}
             >
-              <Text style={styles.deleteText}>❌</Text>
+              <Text style={[styles.deleteText, { color: colors.red }]}>❌</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -107,11 +113,9 @@ const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) =>
 
   const renderTaskSection = (section, titleKey, placeholderKey) => (
     <View key={section}>
-      <Text style={[styles.sectionTitle, { color: colors.text }]}>
-        {t(titleKey)}
-      </Text>
+      <Text style={[styles.sectionTitle, { color: colors.text }]}>{t(titleKey)}</Text>
       {tasks[section].length === 0 && (
-        <Text style={styles.smallGap}>{t(placeholderKey)}</Text>
+        <Text style={[styles.smallGap, { color: colors.smallGroup }]}>{t(placeholderKey)}</Text>
       )}
       <FlatList
         data={tasks[section]}
@@ -124,8 +128,8 @@ const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) =>
 
   return (
     <View style={styles.tasks}>
-      {renderTaskSection('incomplete', 'text.incompleteUpper', 'text.addTask')}
-      {renderTaskSection('complete', 'text.completedUpper', 'text.markTask')}
+      {renderTaskSection('incomplete', CONSTANTS.titles.incomplete, CONSTANTS.placeholders.incomplete)}
+      {renderTaskSection('complete', CONSTANTS.titles.complete, CONSTANTS.placeholders.complete)}
 
       <Modal
         visible={isModalVisible}
@@ -134,7 +138,7 @@ const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) =>
         onRequestClose={handleModalClose}
       >
         <TouchableWithoutFeedback onPress={handleModalClose}>
-          <View style={styles.modalOverlay}>
+          <View style={[styles.modalOverlay, { backgroundColor: colors.modalOverlay }]}>
             <Image source={{ uri: selectedImage }} style={styles.modalImage} />
           </View>
         </TouchableWithoutFeedback>
@@ -143,77 +147,45 @@ const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) =>
   );
 };
 
-
+// Стилі
 const styles = StyleSheet.create({
   tasks: {
     flex: 1,
     width: '100%',
     padding: 0,
   },
-  sectionContainer: {
-    marginBottom: 0,
-  },
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#DADADA',
-    fontFamily: 'inter',
     marginTop: 16,
     marginLeft: 18,
   },
   smallGap: {
-    color: '#575767',
     fontSize: 14,
-    marginBottom: 0,
-    fontFamily: 'inter',
-    fontWeight: 'bold',
     marginLeft: 18,
   },
   flatList: {
     padding: 0,
-    margin: 0,
-  },
-  listContainer: {
-    flexGrow: 0,
-    marginBottom: 0,
   },
   taskContainer: {
-    flexDirection: 'row', 
-    alignItems: 'flex-start', 
-    flex: 1,
-    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'flex-start',
     marginBottom: 10,
   },
   textContainer: {
-    flexDirection: 'column', 
     flex: 1,
-    width: '70%',
   },
   taskText: {
     fontSize: 18,
     fontWeight: 'bold',
-    flex: 1,
-    width: '100%',
-  },
-  completedTaskText: {
-    fontWeight: 'bold',
-    fontSize: 18,
-    flex: 1,
-    paddingBottom: 18,
   },
   categoryText: {
-    color: '#575767',
     fontSize: 14,
     fontWeight: 'bold',
     marginTop: 2,
   },
-  imagePreviewContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginVertical: 10,
-  },
   imageWrapper: {
-    position: 'relative', 
+    position: 'relative',
     marginLeft: 10,
   },
   imagePreview: {
@@ -227,18 +199,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     right: 0,
-    borderRadius: 50,
     padding: 5,
-  },
-  deleteText: {
-    color: 'red',
-    fontSize: 10,
   },
   modalOverlay: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.8)',
   },
   modalImage: {
     width: '90%',

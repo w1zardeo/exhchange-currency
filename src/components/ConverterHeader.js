@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useDispatch, useSelector } from 'react-redux';
-import { toggleTheme } from '../redux/ThemeSlice'; 
-import { useTranslation } from 'react-i18next'; 
+import { toggleTheme } from '../redux/ThemeSlice';
+import { useTranslation } from 'react-i18next';
+
+// Константи
+const ICON_SIZE = 18;
+const ADD_ICON_SIZE = 24;
+const SEARCH_PLACEHOLDER_KEY = 'text.search';
+const CANCEL_TEXT_KEY = 'text.cancel';
+const HEADER_TEXT_KEY = 'text.header';
+const EDIT_TEXT_KEY = 'text.edit';
+const DONE_TEXT_KEY = 'text.done';
 
 const SearchBar = ({ searchQuery, setSearchQuery, isSearching, setIsSearching }) => {
   const colors = useSelector((state) => state.theme.colors);
@@ -22,12 +25,18 @@ const SearchBar = ({ searchQuery, setSearchQuery, isSearching, setIsSearching })
 
   return (
     <View style={styles.searchRow}>
-      <View style={[styles.searchContainer, isSearching && styles.searchActive, { backgroundColor: colors.searchContainer }]}>
-        <Icon name="search" size={18} color={colors.placeholder} style={styles.searchIcon} />
+      <View
+        style={[
+          styles.searchContainer,
+          isSearching && styles.searchActive,
+          { backgroundColor: colors.searchContainer },
+        ]}
+      >
+        <Icon name="search" size={ICON_SIZE} color={colors.placeholder} style={styles.searchIcon} />
         <TextInput
-          placeholder={t('text.search')}
+          placeholder={t(SEARCH_PLACEHOLDER_KEY)}
           placeholderTextColor={colors.placeholder}
-          style={[styles.searchInput, {color: colors.searchInput}]}
+          style={[styles.searchInput, { color: colors.searchInput }]}
           value={searchQuery}
           onChangeText={setSearchQuery}
           onFocus={() => setIsSearching(true)}
@@ -35,7 +44,9 @@ const SearchBar = ({ searchQuery, setSearchQuery, isSearching, setIsSearching })
       </View>
       {isSearching && (
         <TouchableOpacity onPress={handleCancel}>
-          <Text style={[styles.textBase, styles.cancelText, {color: colors.cancelText}]}>{t('text.cancel')}</Text>
+          <Text style={[styles.textBase, styles.cancelText, { color: colors.cancelText }]}>
+            {t(CANCEL_TEXT_KEY)}
+          </Text>
         </TouchableOpacity>
       )}
     </View>
@@ -43,23 +54,25 @@ const SearchBar = ({ searchQuery, setSearchQuery, isSearching, setIsSearching })
 };
 
 const ConverterHeader = ({ searchQuery, setSearchQuery, toggleBottomSheet, onEditToggle, isEditing }) => {
-  const { t } = useTranslation(); 
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const [isSearching, setIsSearching] = useState(false);
-  
-  const colors = useSelector((state) => state.theme.colors); 
+
+  const colors = useSelector((state) => state.theme.colors);
 
   return (
     <View style={[styles.headerContainer, { backgroundColor: colors.background }]}>
       <View style={styles.topRow}>
         <TouchableOpacity onPress={onEditToggle}>
-          <Text style={[styles.textBase, {color: colors.edit}]}>{isEditing ? t('text.done') : t('text.edit')}</Text>
+          <Text style={[styles.textBase, { color: colors.edit }]}>
+            {isEditing ? t(DONE_TEXT_KEY) : t(EDIT_TEXT_KEY)}
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={toggleBottomSheet}>
-          <Icon name="add" size={24} color={colors.addIcon} />
+          <Icon name="add" size={ADD_ICON_SIZE} color={colors.addIcon} />
         </TouchableOpacity>
       </View>
-      <Text style={[styles.textBase, styles.title, { color: colors.text }]}>{t('text.header')}</Text>
+      <Text style={[styles.textBase, styles.title, { color: colors.text }]}>{t(HEADER_TEXT_KEY)}</Text>
       <SearchBar
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}

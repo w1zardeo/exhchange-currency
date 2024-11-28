@@ -8,17 +8,36 @@ import SettingsScreen from '../screens/SettingsScreen';
 import DayToDoScreen from '../screens/DayToDoScreen';
 import { Provider } from 'react-redux';
 import { store } from '../redux/store';
+import { useSelector } from 'react-redux';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
+// Константи для іконок
+const ICONS = {
+  Calendar: {
+    focused: require('../assets/icon/calendar-blue.png'),
+    default: require('../assets/icon/calendar-white.png'),
+  },
+  ExchangeCurrency: {
+    focused: require('../assets/icon/exchange-blue.png'),
+    default: require('../assets/icon/exchange-white.png'),
+  },
+  Settings: {
+    focused: require('../assets/icon/settings-blue.png'),
+    default: require('../assets/icon/settings-white.png'),
+  },
+};
+
 // Функція для створення іконок
-const TabBarIcon = ({ focused, icon }) => (
-  <Image
-    style={{ height: 24, width: 24 }}
-    source={focused ? icon.focused : icon.default}
-  />
-);
+const TabBarIcon = ({ focused, icon }) => {
+  return (
+    <Image
+      style={{ height: 24, width: 24 }}
+      source={focused ? icon.focused : icon.default}
+    />
+  );
+};
 
 const CalendarStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -28,21 +47,24 @@ const CalendarStack = () => (
 );
 
 const BottomNavigation = () => {
+  const colors = useSelector((state) => state.theme.colors);
+  const tabBarStyle = {
+    backgroundColor: colors.black,
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    elevation: 0,
+    shadowOpacity: 0,
+  };
+
   return (
     <Provider store={store}>
       <Tab.Navigator
         screenOptions={{
           headerShown: false,
           tabBarShowLabel: false,
-          tabBarStyle: {
-            backgroundColor: 'black',
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            right: 0,
-            elevation: 0,
-            shadowOpacity: 0,
-          },
+          tabBarStyle: tabBarStyle,
         }}
       >
         <Tab.Screen
@@ -50,13 +72,7 @@ const BottomNavigation = () => {
           component={CalendarStack}
           options={{
             tabBarIcon: ({ focused }) => (
-              <TabBarIcon
-                focused={focused}
-                icon={{
-                  focused: require('../assets/icon/calendar-blue.png'),
-                  default: require('../assets/icon/calendar-white.png'),
-                }}
-              />
+              <TabBarIcon focused={focused} icon={ICONS.Calendar} />
             ),
           }}
         />
@@ -65,13 +81,7 @@ const BottomNavigation = () => {
           component={ExchangeCurrencyScreen}
           options={{
             tabBarIcon: ({ focused }) => (
-              <TabBarIcon
-                focused={focused}
-                icon={{
-                  focused: require('../assets/icon/exchange-blue.png'),
-                  default: require('../assets/icon/exchange-white.png'),
-                }}
-              />
+              <TabBarIcon focused={focused} icon={ICONS.ExchangeCurrency} />
             ),
           }}
         />
@@ -80,13 +90,7 @@ const BottomNavigation = () => {
           component={SettingsScreen}
           options={{
             tabBarIcon: ({ focused }) => (
-              <TabBarIcon
-                focused={focused}
-                icon={{
-                  focused: require('../assets/icon/settings-blue.png'),
-                  default: require('../assets/icon/settings-white.png'),
-                }}
-              />
+              <TabBarIcon focused={focused} icon={ICONS.Settings} />
             ),
           }}
         />

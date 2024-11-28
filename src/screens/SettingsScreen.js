@@ -14,7 +14,7 @@ import { setDecimalPlaces } from '../redux/settingsSlice';
 import { useTranslation } from 'react-i18next'; 
 import i18n  from '../util/i18n';
 
-// Масив мов для рендерингу
+// Мови та прапори
 const languages = [
   { code: 'ua', flag: require('../flags/ua-flag.png') },
   { code: 'en', flag: require('../flags/gb-flag.png') },
@@ -24,10 +24,13 @@ const languages = [
 export default function SettingsScreen() {
   const { t } = useTranslation(); 
   const dispatch = useDispatch();
+  
+  // Використовуємо стани з Redux
   const colors = useSelector((state) => state.theme.colors); 
   const isDarkMode = useSelector((state) => state.theme.isDarkMode); 
   const decimalPlaces = useSelector((state) => state.settings.decimalPlaces);
-  
+
+  // Функції обробки
   const handleToggleTheme = () => {
     dispatch(toggleTheme());
   };
@@ -52,12 +55,10 @@ export default function SettingsScreen() {
 
       <View style={styles.optionsContainer}>
         <View style={[styles.combinedSection, { backgroundColor: colors.sectionBackground }]}>
-          
+
           {/* Toggle theme section */}
           <View style={styles.option}>
-            <Text style={[styles.optionText, { color: colors.text }]}>
-              {t('settings.toggleTheme')}
-            </Text>
+            <Text style={[styles.optionText, { color: colors.text }]}>{t('settings.toggleTheme')}</Text>
             <View style={styles.switchContainer}>
               <Switch
                 value={isDarkMode}
@@ -77,13 +78,9 @@ export default function SettingsScreen() {
 
           {/* Number of decimal places section */}
           <View style={styles.option}>
-            <Text style={[styles.optionText, { color: colors.text }]}>
-              {t('settings.numberOfFractionDigits')}
-            </Text>
+            <Text style={[styles.optionText, { color: colors.text }]}>{t('settings.numberOfFractionDigits')}</Text>
             <View style={styles.counterGroup}>
-              <Text style={[styles.counterValue, { color: colors.text }]}>
-                {decimalPlaces}
-              </Text>
+              <Text style={[styles.counterValue, { color: colors.text }]}>{decimalPlaces}</Text>
               <View style={styles.iconContainer}>
                 <TouchableOpacity onPress={decrementDigits} style={styles.iconButton}>
                   <Icon name="remove-outline" size={20} color={colors.icon} />
@@ -99,9 +96,7 @@ export default function SettingsScreen() {
 
           {/* Language selection section */}
           <View style={styles.option}>
-            <Text style={[styles.optionText, { color: colors.text }]}>
-              {t('settings.selectLanguage')}
-            </Text>
+            <Text style={[styles.optionText, { color: colors.text }]}>{t('settings.selectLanguage')}</Text>
             <View style={styles.languageContainer}>
               {languages.map((language) => (
                 <TouchableOpacity
@@ -137,11 +132,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginHorizontal: 20,
     paddingVertical: 1,
-    backgroundColor: '#333',
   },
   divider: {
     height: 0.1,
-    backgroundColor: '#e0e0e0',
     marginLeft: 20,
   },
   option: {
@@ -191,4 +184,3 @@ const styles = StyleSheet.create({
     height: 20,
   },
 });
-

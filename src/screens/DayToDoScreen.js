@@ -11,10 +11,16 @@ const DayToDoScreen = ({ route, navigation }) => {
   const { selectedDate, isDarkMode } = route.params;
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
+  
+  // Використовуємо селектори для кольорів та задач
   const colors = useSelector((state) => state.theme.colors);
-
   const tasksByDate = useSelector((state) => state.tasks);
   const tasks = tasksByDate[selectedDate] || { incomplete: [], complete: [] };
+
+  // Константи для стилів
+  const backgroundColor = colors.background;
+  const floatingButtonColor = colors.floating;
+  const floatingButtonBorderColor = colors.floatingBorder;
 
   useEffect(() => {
     navigation.setOptions({
@@ -64,7 +70,7 @@ const DayToDoScreen = ({ route, navigation }) => {
   );
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <View style={[styles.container, { backgroundColor }]}>
       <Header
         incompleteCount={tasks.incomplete.length}
         completeCount={tasks.complete.length}
@@ -78,7 +84,10 @@ const DayToDoScreen = ({ route, navigation }) => {
         keyExtractor={(item, index) => index.toString()}
         contentContainerStyle={styles.flatListContent}
       />
-      <TouchableOpacity style={styles.floatingButton} onPress={() => setShowModal(true)}>
+      <TouchableOpacity 
+        style={[styles.floatingButton, {backgroundColor: floatingButtonColor}, {borderColor: floatingButtonBorderColor}]} 
+        onPress={() => setShowModal(true)}
+      >
         <Plus />
       </TouchableOpacity>
       <TaskModal visible={showModal} onAddTask={(newTask) => handleTaskAction('add', null, null, newTask)} onClose={() => setShowModal(false)} />
@@ -100,12 +109,10 @@ const styles = StyleSheet.create({
     right: 20,
     width: 60,
     height: 60,
-    backgroundColor: '#3F4EA0',
     borderWidth: 2,
     borderRadius: 30,
     justifyContent: 'center',
-    alignItems: 'center',
-    borderColor: '#515CC6',
+    alignItems: 'center'
   },
 });
 

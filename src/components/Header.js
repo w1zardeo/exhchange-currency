@@ -1,12 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { useTranslation } from 'react-i18next'; 
+import { View, TextInput, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
-const Header = ({ incompleteCount, completeCount, navigation, selectedDate, isDarkMode }) => {
+const Header = ({ incompleteCount, completeCount, navigation, selectedDate }) => {
   const [inputText, setInputText] = useState('');
-  const { t } = useTranslation(); 
-  const colors = useSelector((state) => state.theme.colors); 
+  const { t } = useTranslation();
+  const colors = useSelector((state) => state.theme.colors);
+
+  // Константи стилів і текстів
+  const placeholderText = 'Enter date';
+  const calendarButtonText = t('text.calendar');
+  const incompleteLabel = t('text.incompleteLower');
+  const completeLabel = t('text.completedLower');
+
+  const dynamicStyles = {
+    titleStyle: { color: colors.titleStyle },
+    placeholderColor: colors.headerPlaceholder,
+    subtitleColor: { color: colors.subtitleStyle },
+    lineColor: { backgroundColor: colors.lineStyle },
+    calendar: { color: colors.calendar },
+  };
 
   useEffect(() => {
     if (selectedDate) {
@@ -14,33 +28,38 @@ const Header = ({ incompleteCount, completeCount, navigation, selectedDate, isDa
     }
   }, [selectedDate]);
 
-  const dynamicStyles = {
-    titleStyle: { color: colors.titleStyle },
-    placeholderColor: colors.headerPlaceholder,
-    subtitleColor: { color: colors.subtitleStyle },
-    lineColor: { backgroundColor: colors.lineStyle },
-    calendar: {color: colors.calendar}
-  };
-
   return (
-    <View style={styles.header}>
-      <View style={styles.headerRow}>
+    <View style={{ width: '100%', padding: 0, marginTop: 0 }}>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 18 }}>
         <TextInput
-          style={[styles.title, dynamicStyles.titleStyle]}
+          style={[
+            { fontSize: 32, fontWeight: 'bold', fontFamily: 'inter', marginTop: 76 },
+            dynamicStyles.titleStyle,
+          ]}
           value={inputText}
           onChangeText={setInputText}
-          placeholder="Enter date"
+          placeholder={placeholderText}
           placeholderTextColor={dynamicStyles.placeholderColor}
           underlineColorAndroid="transparent"
         />
         <TouchableOpacity onPress={() => navigation.navigate('Calendar')}>
-          <Text style={[styles.calendarButton, dynamicStyles.calendar]}>{t('text.calendar')}</Text>
+          <Text style={[{ fontSize: 16 }, dynamicStyles.calendar]}>{calendarButtonText}</Text>
         </TouchableOpacity>
       </View>
-      <Text style={[styles.subtitle, dynamicStyles.subtitleColor]}>
-        {incompleteCount} {t('text.incompleteLower')}, {completeCount} {t('text.completedLower')}
+      <Text
+        style={[
+          { fontSize: 14, fontWeight: 'bold', fontFamily: 'inter', marginTop: 11, marginLeft: 18 },
+          dynamicStyles.subtitleColor,
+        ]}
+      >
+        {incompleteCount} {incompleteLabel}, {completeCount} {completeLabel}
       </Text>
-      <View style={[styles.line, dynamicStyles.lineColor]} />
+      <View
+        style={[
+          { height: 2, width: 343, marginTop: 16, marginLeft: 18, borderRadius: 5 },
+          dynamicStyles.lineColor,
+        ]}
+      />
     </View>
   );
 };

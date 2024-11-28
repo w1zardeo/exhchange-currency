@@ -6,10 +6,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import { toggleFavorite } from '../redux/currencySlice';
 import { useTranslation } from 'react-i18next';
 
-const runAnimation = (animation, toValue, duration = 300) => {
+const DURATION = 300;
+
+const runAnimation = (animation, toValue) => {
   Animated.timing(animation, {
     toValue,
-    duration,
+    duration: DURATION,
     useNativeDriver: false,
   }).start();
 };
@@ -25,12 +27,18 @@ const SearchBar = ({ searchQuery, setSearchQuery, isSearching, setIsSearching })
 
   return (
     <View style={[styles.searchRow]}>
-      <View style={[styles.searchContainer, {backgroundColor: colors.searchContainerBottom}, isSearching && styles.searchActive]}>
+      <View
+        style={[
+          styles.searchContainer,
+          { backgroundColor: colors.searchContainerBottom },
+          isSearching && styles.searchActive,
+        ]}
+      >
         <Icon name="search" size={18} color={colors.placeholder} style={styles.searchIcon} />
         <TextInput
           placeholder={t('text.search')}
           placeholderTextColor={colors.placeholder}
-          style={[styles.searchInput, {color: colors.searchInput}]}
+          style={[styles.searchInput, { color: colors.searchInput }]}
           value={searchQuery}
           onChangeText={setSearchQuery}
           onFocus={() => setIsSearching(true)}
@@ -38,21 +46,21 @@ const SearchBar = ({ searchQuery, setSearchQuery, isSearching, setIsSearching })
       </View>
       {isSearching && (
         <TouchableOpacity onPress={handleCancel} style={styles.cancelButton}>
-          <Text style={[styles.cancelText, {color: colors.cancelText}]}>{t('text.cancel')}</Text>
+          <Text style={[styles.cancelText, { color: colors.cancelText }]}>{t('text.cancel')}</Text>
         </TouchableOpacity>
       )}
     </View>
   );
 };
 
-const CurrencyItemInBotomSheet = React.memo(({ item, toggleFavorite }) => {
+const CurrencyItemInBottomSheet = React.memo(({ item, toggleFavorite }) => {
   const colors = useSelector((state) => state.theme.colors);
   return (
-    <View style={[styles.itemContainer, {borderBottomColor: colors.borderBottom}]}>
+    <View style={[styles.itemContainer, { borderBottomColor: colors.borderBottom }]}>
       <Image source={{ uri: item.flag }} style={styles.flag} />
       <View style={styles.currencyInfo}>
-        <Text style={[styles.currency, {color: colors.currency}]}>{item.currency}</Text>
-        <Text style={[styles.label, {color: colors.label}]}>{item.label}</Text>
+        <Text style={[styles.currency, { color: colors.currency }]}>{item.currency}</Text>
+        <Text style={[styles.label, { color: colors.label }]}>{item.label}</Text>
       </View>
       <Pressable onPress={toggleFavorite} style={styles.starContainer}>
         <AntDesign
@@ -100,16 +108,27 @@ const BottomSheet = ({ sheetOpen, setSheetOpen }) => {
   return (
     <View style={styles.BottomSheet}>
       <Pressable onPress={() => setSheetOpen(false)} style={{ pointerEvents: sheetOpen ? 'auto' : 'none' }}>
-        <Animated.View style={[styles.BottomSheetShadowCover, {backgroundColor: colors.bottomSheet}, { opacity: coverOpacityAnimation }]} />
+        <Animated.View
+          style={[
+            styles.BottomSheetShadowCover,
+            { backgroundColor: colors.bottomSheet },
+            { opacity: coverOpacityAnimation },
+          ]}
+        />
       </Pressable>
       <Animated.View
         style={[
           styles.BottomSheetMainContainer,
-          {backgroundColor: colors.bottomSheetMain},
-          { bottom: sheetAnimation.interpolate({ inputRange: [0, 1], outputRange: ['-95%', '0%'] }) },
+          { backgroundColor: colors.bottomSheetMain },
+          {
+            bottom: sheetAnimation.interpolate({
+              inputRange: [0, 1],
+              outputRange: ['-95%', '0%'],
+            }),
+          },
         ]}
       >
-        <Text style={[styles.addCurrencies, {color: colors.addCurrencies}]}>{t('text.addCurrencies')}</Text>
+        <Text style={[styles.addCurrencies, { color: colors.addCurrencies }]}>{t('text.addCurrencies')}</Text>
         <SearchBar
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
@@ -119,7 +138,7 @@ const BottomSheet = ({ sheetOpen, setSheetOpen }) => {
         <FlatList
           data={filteredCurrencies}
           renderItem={({ item }) => (
-            <CurrencyItemInBotomSheet
+            <CurrencyItemInBottomSheet
               item={item}
               toggleFavorite={() => dispatch(toggleFavorite(item.id))}
             />
@@ -127,7 +146,9 @@ const BottomSheet = ({ sheetOpen, setSheetOpen }) => {
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.listContainer}
           ListFooterComponent={() =>
-            filteredCurrencies.length === 0 && <Text style={[styles.noResults, {color:colors.noResults}]}>{t('text.noResults')}</Text>
+            filteredCurrencies.length === 0 && (
+              <Text style={[styles.noResults, { color: colors.noResults }]}>{t('text.noResults')}</Text>
+            )
           }
         />
       </Animated.View>
