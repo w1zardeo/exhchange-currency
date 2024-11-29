@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { useDispatch, useSelector } from 'react-redux';
 import { setTasksByDate } from '../redux/TasksSlice'; 
 import { toggleTheme } from '../redux/ThemeSlice'; 
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'; 
 
 const CalendarScreen = ({ navigation }) => {
   const { t } = useTranslation();
@@ -83,7 +83,7 @@ const CalendarScreen = ({ navigation }) => {
     const hasCompleteTasks = tasks.complete.length > 0;
 
     return (
-      <View key={day} style={styles.dayContainer(colors)}>
+      <View key={day} style={styles.dayContainer}>
         <View style={[styles.circleStyle, getCircleStyle(hasIncompleteTasks, hasCompleteTasks)]}>
           <Text
             onPress={() =>
@@ -94,7 +94,7 @@ const CalendarScreen = ({ navigation }) => {
             }
             style={[
               styles.dayText(colors),
-              isWeekend ? { color: colors.weekend } : { color: colors.text },
+              isWeekend ? colors.weekend : colors.text,
               isToday(month, day) && { color: colors.today },
             ]}
           >
@@ -103,7 +103,7 @@ const CalendarScreen = ({ navigation }) => {
         </View>
         {isToday(month, day) && (
           <View style={styles.todayContainer}>
-            <Text style={[styles.todayText, { color: colors.today }]}>{t('text.today')}</Text>
+            <Text style={[styles.todayText(colors)]}>{t('text.today')}</Text>
           </View>
         )}
       </View>
@@ -111,7 +111,7 @@ const CalendarScreen = ({ navigation }) => {
   };
 
   const renderMonth = month => (
-    <View key={month} style={styles.monthContainer(colors)}>
+    <View key={month} style={styles.monthContainer}>
       <Text style={[styles.monthText(colors)]}>
         {currentYear} {month}
       </Text>
@@ -131,11 +131,11 @@ const CalendarScreen = ({ navigation }) => {
   };
 
   const themeIcon = isDarkMode
-    ? { name: 'moon-outline', color: colors.iconMoon }
-    : { name: 'sunny-outline', color: colors.iconSun };
+  ? { name: 'moon-outline', color: colors.iconMoon }
+  : { name: 'sunny-outline', color: colors.iconSun };
 
   return (
-    <View style={[styles.container(colors)]}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={styles.switchContainer}>
         <Switch
           value={isDarkMode}
@@ -143,7 +143,7 @@ const CalendarScreen = ({ navigation }) => {
           thumbColor={colors.switchThumb}
           trackColor={{ false: colors.switchTrack, true: colors.switchTrack }}
         />
-        <Icon name={themeIcon.name} size={20} color={themeIcon.color} />
+       <Icon name={themeIcon.name} size={20} color={themeIcon.color} />
       </View>
       <FlatList
         data={Object.keys(daysInMonth)}
@@ -156,30 +156,28 @@ const CalendarScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create = ({
-  container: (colors) => ({
+  container: {
     flex: 1,
     padding: 10,
     paddingTop: 30,
-    backgroundColor: colors.background,
-  }),
+  },
   switchContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'center',
     marginBottom: 10,
   },
-  monthContainer: (colors) => ({
+  monthContainer: {
     marginBottom: 20,
     borderRadius: 10,
     padding: 10,
-    backgroundColor: colors.cardBackground,
-  }),
+  },
   monthText: (colors) => ({
     fontSize: 18,
     marginBottom: 5,
     textAlign: 'start',
     marginLeft: 8,
-    color: colors.text,
+    color: colors.text
   }),
   weekDayContainer: {
     width: '14%',
@@ -188,21 +186,21 @@ const styles = StyleSheet.create = ({
   },
   weekDayText: (colors) => ({
     textAlign: 'center',
-    color: colors.weekDay,
+    color: colors.weekDay
   }),
   daysGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     alignItems: 'flex-start',
   },
-  dayContainer: (colors) => ({
+  dayContainer: {
     width: '14%',
     aspectRatio: 1,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 10,
     padding: 1,
-  }),
+  },
   circleStyle: {
     width: 28,
     height: 28,
@@ -212,15 +210,16 @@ const styles = StyleSheet.create = ({
   },
   dayText: (colors) => ({
     textAlign: 'center',
-    color: colors.text,
+    color: colors.text
   }),
   todayContainer: {
     position: 'absolute',
     top: 30,
   },
-  todayText: {
+  todayText: (colors) => ({
     fontSize: 11,
-  },
+    color: colors.today
+  }),
 });
 
 export default CalendarScreen;
