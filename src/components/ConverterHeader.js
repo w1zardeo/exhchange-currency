@@ -26,16 +26,15 @@ const SearchBar = ({ searchQuery, setSearchQuery, isSearching, setIsSearching })
     <View style={styles.searchRow}>
       <View
         style={[
-          styles.searchContainer,
-          isSearching && styles.searchActive,
-          { backgroundColor: colors.searchContainer },
+          styles.searchContainer(colors),
+          isSearching && styles.searchActive
         ]}
       >
-        <Icon name="search" size={ICON_SIZE} color={colors.placeholder} style={styles.searchIcon} />
+        <Icon name="search" size={ICON_SIZE} style={styles.searchIcon(colors)} />
         <TextInput
           placeholder={t(SEARCH_PLACEHOLDER_KEY)}
           placeholderTextColor={colors.placeholder}
-          style={[styles.searchInput, { color: colors.searchInput }]}
+          style={styles.searchInput(colors)}
           value={searchQuery}
           onChangeText={setSearchQuery}
           onFocus={() => setIsSearching(true)}
@@ -43,7 +42,7 @@ const SearchBar = ({ searchQuery, setSearchQuery, isSearching, setIsSearching })
       </View>
       {isSearching && (
         <TouchableOpacity onPress={handleCancel}>
-          <Text style={[styles.textBase, styles.cancelText, { color: colors.cancelText }]}>
+          <Text style={[styles.textBase, styles.cancelText(colors)]}>
             {t(CANCEL_TEXT_KEY)}
           </Text>
         </TouchableOpacity>
@@ -60,18 +59,18 @@ const ConverterHeader = ({ searchQuery, setSearchQuery, toggleBottomSheet, onEdi
   const colors = useSelector((state) => state.theme.colors);
 
   return (
-    <View style={[styles.headerContainer, { backgroundColor: colors.background }]}>
+    <View style={[styles.headerContainer(colors)]}>
       <View style={styles.topRow}>
         <TouchableOpacity onPress={onEditToggle}>
-          <Text style={[styles.textBase, { color: colors.edit }]}>
+          <Text style={styles.textBase(colors)}>
             {isEditing ? t(DONE_TEXT_KEY) : t(EDIT_TEXT_KEY)}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={toggleBottomSheet}>
-          <Icon name="add" size={ADD_ICON_SIZE} color={colors.addIcon} />
+          <Icon name="add" size={ADD_ICON_SIZE} color={styles.addIcon} />
         </TouchableOpacity>
       </View>
-      <Text style={[styles.textBase, styles.title, { color: colors.text }]}>{t(HEADER_TEXT_KEY)}</Text>
+      <Text style={[styles.textBase, styles.title(colors)]}>{t(HEADER_TEXT_KEY)}</Text>
       <SearchBar
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
@@ -83,49 +82,62 @@ const ConverterHeader = ({ searchQuery, setSearchQuery, toggleBottomSheet, onEdi
 };
 
 const styles = StyleSheet.create = ({
-  headerContainer: {
+  headerContainer: (colors) => ({
     padding: 10,
-  },
+    backgroundColor: colors.background
+  }),
   topRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  placeholder: (colors) => ({
+    color: colors.placeholder
+  }),
   searchRow: {
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 10,
   },
-  searchContainer: {
+  searchContainer: (colors) => ({
     flexDirection: 'row',
     alignItems: 'center',
     borderRadius: 8,
     paddingHorizontal: 6,
     height: 35,
     flex: 1,
-  },
+    backgroundColor: colors.searchContainer,
+  }),
   searchActive: {
     flex: 0.99,
   },
-  searchIcon: {
+  searchIcon: (colors) => ({
     marginRight: 0,
-  },
-  searchInput: {
+    color: colors.placeholder
+  }),
+  searchInput: (colors) => ({
     flex: 1,
     fontSize: 14,
     paddingVertical: 4,
-  },
-  textBase: {
+    color: colors.searchInput
+  }),
+  textBase: (colors) => ({
     fontSize: 16,
-  },
-  title: {
+    color: colors.edit
+  }),
+  addIcon: (colors) => ({
+    color: colors.addIcon
+  }),
+  title: (colors) => ({
     fontSize: 27,
     fontWeight: 'bold',
     marginTop: 5,
-  },
-  cancelText: {
+    color: colors.text
+  }),
+  cancelText:  (colors) => ({
     marginLeft: 10,
-  },
+    color: colors.cancelText
+  }),
 });
 
 export default ConverterHeader;

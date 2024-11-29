@@ -8,7 +8,6 @@ const Header = ({ incompleteCount, completeCount, navigation, selectedDate }) =>
   const { t } = useTranslation();
   const colors = useSelector((state) => state.theme.colors);
 
-  const placeholderText = 'Enter date';
   const calendarButtonText = t('text.calendar');
   const incompleteLabel = t('text.incompleteLower');
   const completeLabel = t('text.completedLower');
@@ -26,9 +25,8 @@ const Header = ({ incompleteCount, completeCount, navigation, selectedDate }) =>
           style={styles.title(colors)}
           value={inputText}
           onChangeText={setInputText}
-          placeholder={placeholderText}
           placeholderTextColor={colors.headerPlaceholder}
-          underlineColorAndroid="transparent"
+          underlineColorAndroid={colors.transparent}
         />
         <TouchableOpacity onPress={() => navigation.navigate('Calendar')}>
           <Text style={styles.calendarButton(colors)}>{calendarButtonText}</Text>

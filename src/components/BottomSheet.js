@@ -104,11 +104,11 @@ const BottomSheet = ({ sheetOpen, setSheetOpen }) => {
     <View style={styles.BottomSheet}>
       <Pressable onPress={() => setSheetOpen(false)} style={{ pointerEvents: sheetOpen ? 'auto' : 'none' }}>
         <Animated.View
-          style={[styles.BottomSheetShadowCover, { backgroundColor: colors.bottomSheet }, { opacity: coverOpacityAnimation }]}
+          style={[styles.BottomSheetShadowCover(colors), { opacity: coverOpacityAnimation }]}
         />
       </Pressable>
       <Animated.View
-        style={[styles.BottomSheetMainContainer, { backgroundColor: colors.bottomSheetMain }, {
+        style={[styles.BottomSheetMainContainer(colors), {
           bottom: sheetAnimation.interpolate({
             inputRange: [0, 1],
             outputRange: ['-95%', '0%'],
@@ -151,11 +151,13 @@ const styles = StyleSheet.create = ({
     height: '100%',
     width: '100%',
   },
-  BottomSheetShadowCover: {
+  BottomSheetShadowCover: (colors) => ({
+    backgroundColor: colors.bottomSheet,
     height: '100%',
     width: '100%',
-  },
-  BottomSheetMainContainer: {
+  }),
+  BottomSheetMainContainer: (colors) => ({
+    backgroundColor: colors.bottomSheetMain,
     position: 'absolute',
     width: '100%',
     height: '95%',
@@ -164,7 +166,7 @@ const styles = StyleSheet.create = ({
     borderTopRightRadius: 10,
     paddingTop: 12,
     alignItems: 'center',
-  },
+  }),
   addCurrencies: {
     fontSize: 16,
     fontWeight: 'bold',

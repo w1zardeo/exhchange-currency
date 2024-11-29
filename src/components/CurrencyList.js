@@ -186,7 +186,7 @@ const CurrencyList = () => {
   );
 };
 
-const styles = StyleSheet.create =({
+const styles = StyleSheet.create = ({
   container: (colors) => ({
     flex: 1,
     backgroundColor: colors.background,
