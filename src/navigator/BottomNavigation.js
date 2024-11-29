@@ -1,4 +1,4 @@
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, StyleSheet } from 'react-native';
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -12,7 +12,6 @@ import { useSelector } from 'react-redux';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
-
 
 const ICONS = {
   Calendar: {
@@ -29,11 +28,12 @@ const ICONS = {
   },
 };
 
-
 const TabBarIcon = ({ focused, icon }) => {
+  const colors = useSelector((state) => state.theme.colors);
+  const styles = useStyles(colors);
   return (
     <Image
-      style={{ height: 24, width: 24 }}
+      style={styles.icon}
       source={focused ? icon.focused : icon.default}
     />
   );
@@ -48,15 +48,7 @@ const CalendarStack = () => (
 
 const BottomNavigation = () => {
   const colors = useSelector((state) => state.theme.colors);
-  const tabBarStyle = {
-    backgroundColor: colors.black,
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    elevation: 0,
-    shadowOpacity: 0,
-  };
+  const styles = useStyles(colors);
 
   return (
     <Provider store={store}>
@@ -64,7 +56,7 @@ const BottomNavigation = () => {
         screenOptions={{
           headerShown: false,
           tabBarShowLabel: false,
-          tabBarStyle: tabBarStyle,
+          tabBarStyle: [styles.tabBarStyle],
         }}
       >
         <Tab.Screen
@@ -98,5 +90,22 @@ const BottomNavigation = () => {
     </Provider>
   );
 };
+
+// Using the `useStyles` function to create styles dynamically
+const useStyles = (colors) => StyleSheet.create = ({
+  tabBarStyle: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    elevation: 0,
+    shadowOpacity: 0,
+    backgroundColor: colors.black,
+  },
+  icon: {
+    height: 24,
+    width: 24,
+  },
+});
 
 export default BottomNavigation;

@@ -11,16 +11,10 @@ const DayToDoScreen = ({ route, navigation }) => {
   const { selectedDate, isDarkMode } = route.params;
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
-  
- 
+
   const colors = useSelector((state) => state.theme.colors);
   const tasksByDate = useSelector((state) => state.tasks);
   const tasks = tasksByDate[selectedDate] || { incomplete: [], complete: [] };
-
-
-  const backgroundColor = colors.background;
-  const floatingButtonColor = colors.floating;
-  const floatingButtonBorderColor = colors.floatingBorder;
 
   useEffect(() => {
     navigation.setOptions({
@@ -38,7 +32,6 @@ const DayToDoScreen = ({ route, navigation }) => {
     dispatch(setTasksByDate({ selectedDate, tasks: tasks }));
   }, [dispatch, selectedDate, tasks]);
 
- 
   const handleTaskAction = (action, index, type, newText = '') => {
     switch (action) {
       case 'toggle':
@@ -69,8 +62,10 @@ const DayToDoScreen = ({ route, navigation }) => {
     />
   );
 
+  const styles = useStyles(colors); // Use dynamic styles
+
   return (
-    <View style={[styles.container, { backgroundColor }]}>
+    <View style={styles.container}>
       <Header
         incompleteCount={tasks.incomplete.length}
         completeCount={tasks.complete.length}
@@ -85,7 +80,7 @@ const DayToDoScreen = ({ route, navigation }) => {
         contentContainerStyle={styles.flatListContent}
       />
       <TouchableOpacity 
-        style={[styles.floatingButton, {backgroundColor: floatingButtonColor}, {borderColor: floatingButtonBorderColor}]} 
+        style={styles.floatingButton} 
         onPress={() => setShowModal(true)}
       >
         <Plus />
@@ -95,15 +90,19 @@ const DayToDoScreen = ({ route, navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
+// Use the styles hook for dynamic styling
+const useStyles = (colors) => StyleSheet.create = ({
   container: {
     flex: 1,
+    backgroundColor: colors.background
   },
   flatListContent: {
     flexGrow: 1,
     paddingBottom: 80,
   },
   floatingButton: {
+    backgroundColor: colors.floating,
+    borderColor: colors.floatingBorder,
     position: 'absolute',
     bottom: 20,
     right: 20,
