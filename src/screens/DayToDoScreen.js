@@ -15,6 +15,7 @@ const DayToDoScreen = ({ route, navigation }) => {
   const colors = useSelector((state) => state.theme.colors);
   const tasksByDate = useSelector((state) => state.tasks);
   const tasks = tasksByDate[selectedDate] || { incomplete: [], complete: [] };
+  const styles = useStyles(colors);
 
   useEffect(() => {
     navigation.setOptions({
@@ -32,40 +33,36 @@ const DayToDoScreen = ({ route, navigation }) => {
     dispatch(setTasksByDate({ selectedDate, tasks: tasks }));
   }, [dispatch, selectedDate, tasks]);
 
-  const handleTaskAction = (action, index, type, newText = '') => {
-    switch (action) {
-      case 'toggle':
-        dispatch(toggleTask({ selectedDate, index, type }));
-        break;
-      case 'update':
-        dispatch(updateTaskText({ selectedDate, index, section: type, text: newText }));
-        break;
-      case 'delete':
-        dispatch(deleteTask({ selectedDate, index, section: type }));
-        break;
-      case 'add':
-        dispatch(addTask({ selectedDate, newTask: newText }));
-        setShowModal(false);
-        break;
-      default:
-        break;
-    }
+  // Функції для дій з задачами
+  const toggleTaskStatus = (index, type) => {
+    dispatch(toggleTask({ selectedDate, index, type }));
+  };
+
+  const updateTask = (index, type, newText) => {
+    dispatch(updateTaskText({ selectedDate, index, section: type, text: newText }));
+  };
+
+  const deleteTaskItem = (index, type) => {
+    dispatch(deleteTask({ selectedDate, index, section: type }));
+  };
+
+  const addNewTask = (newTask) => {
+    dispatch(addTask({ selectedDate, newTask }));
+    setShowModal(false);
   };
 
   const renderTasks = ({ item, index }) => (
     <Tasks
       tasks={tasks}
-      toggleTask={(index, type) => handleTaskAction('toggle', index, type)}
-      deleteTask={(index, type) => handleTaskAction('delete', index, type)}
-      updateTaskText={(index, type, newText) => handleTaskAction('update', index, type, newText)}
+      toggleTask={(index, type) => toggleTaskStatus(index, type)}
+      deleteTask={(index, type) => deleteTaskItem(index, type)}
+      updateTaskText={(index, type, newText) => updateTask(index, type, newText)}
       isDarkMode={isDarkMode}
     />
   );
 
-  const styles = useStyles(colors); // Use dynamic styles
-
   return (
-    <View style={styles.container}>
+    <View style={[styles.container]}>
       <Header
         incompleteCount={tasks.incomplete.length}
         completeCount={tasks.complete.length}
@@ -85,7 +82,11 @@ const DayToDoScreen = ({ route, navigation }) => {
       >
         <Plus />
       </TouchableOpacity>
-      <TaskModal visible={showModal} onAddTask={(newTask) => handleTaskAction('add', null, null, newTask)} onClose={() => setShowModal(false)} />
+      <TaskModal 
+        visible={showModal} 
+        onAddTask={addNewTask} 
+        onClose={() => setShowModal(false)} 
+      />
     </View>
   );
 };
