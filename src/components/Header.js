@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 const Header = ({ incompleteCount, completeCount, navigation, selectedDate }) => {
   const [inputText, setInputText] = useState('');
   const { t } = useTranslation();
-  const colors = useSelector((state) => state.theme.colors);
+  const colors = useSelector((state) => state.theme.colors); // Використовуємо кольори з Redux
 
   const placeholderText = 'Enter date';
   const calendarButtonText = t('text.calendar');
@@ -19,11 +19,13 @@ const Header = ({ incompleteCount, completeCount, navigation, selectedDate }) =>
     }
   }, [selectedDate]);
 
+  const styles = useStyles(colors); // Викликаємо useStyles, щоб отримати стилі з кольорами
+
   return (
-    <View style={styles.header(colors)}>
+    <View style={styles.header}>
       <View style={styles.headerRow}>
         <TextInput
-          style={styles.title(colors)}
+          style={styles.title}
           value={inputText}
           onChangeText={setInputText}
           placeholder={placeholderText}
@@ -31,57 +33,58 @@ const Header = ({ incompleteCount, completeCount, navigation, selectedDate }) =>
           underlineColorAndroid="transparent"
         />
         <TouchableOpacity onPress={() => navigation.navigate('Calendar')}>
-          <Text style={styles.calendarButton(colors)}>{calendarButtonText}</Text>
+          <Text style={styles.calendarButton}>{calendarButtonText}</Text>
         </TouchableOpacity>
       </View>
-      <Text style={styles.subtitle(colors)}>
+      <Text style={styles.subtitle}>
         {incompleteCount} {incompleteLabel}, {completeCount} {completeLabel}
       </Text>
-      <View style={styles.line(colors)} />
+      <View style={styles.line} />
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  header: (colors) => ({
-    width: '100%',
-    padding: 0,
-    marginTop: 0,
-    backgroundColor: colors.headerBackground,
-  }),
-  headerRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 18,
-  },
-  title: (colors) => ({
-    fontSize: 32,
-    fontWeight: 'bold',
-    fontFamily: 'inter',
-    marginTop: 76,
-    color: colors.titleStyle,
-  }),
-  calendarButton: (colors) => ({
-    fontSize: 16,
-    color: colors.calendar,
-  }),
-  subtitle: (colors) => ({
-    fontSize: 14,
-    fontWeight: 'bold',
-    fontFamily: 'inter',
-    marginTop: 11,
-    marginLeft: 18,
-    color: colors.subtitleStyle,
-  }),
-  line: (colors) => ({
-    height: 2,
-    width: 343,
-    marginTop: 16,
-    marginLeft: 18,
-    borderRadius: 5,
-    backgroundColor: colors.lineStyle,
-  }),
-});
+const useStyles = (colors) =>
+  StyleSheet.create({
+    header: {
+      width: '100%',
+      padding: 0,
+      marginTop: 0,
+      backgroundColor: colors.headerBackground, // Колір фону з Redux
+    },
+    headerRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      paddingHorizontal: 18,
+    },
+    title: {
+      fontSize: 32,
+      fontWeight: 'bold',
+      fontFamily: 'inter',
+      marginTop: 76,
+      color: colors.titleStyle, // Колір тексту з Redux
+    },
+    calendarButton: {
+      fontSize: 16,
+      color: colors.calendar, // Колір кнопки календаря з Redux
+    },
+    subtitle: {
+      fontSize: 14,
+      fontWeight: 'bold',
+      fontFamily: 'inter',
+      marginTop: 11,
+      marginLeft: 18,
+      color: colors.subtitleStyle, // Колір підзаголовка з Redux
+    },
+    line: {
+      height: 2,
+      width: 343,
+      marginTop: 16,
+      marginLeft: 18,
+      borderRadius: 5,
+      backgroundColor: colors.lineStyle, // Колір лінії з Redux
+    },
+  });
 
 export default Header;

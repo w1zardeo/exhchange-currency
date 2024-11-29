@@ -27,6 +27,12 @@ const ThemeIcon = ({ isDarkMode, colors }) => {
   );
 };
 
+const CounterIcon = ({ type, colors }) => {
+  const iconName = type === 'decrement' ? 'remove-outline' : 'add-outline';
+  return <Icon name={iconName} size={20} color={colors.icon} />;
+};
+
+
 export default function SettingsScreen() {
   const { t } = useTranslation(); 
   const dispatch = useDispatch();
@@ -82,10 +88,10 @@ export default function SettingsScreen() {
               <Text style={styles.counterValue}>{decimalPlaces}</Text>
               <View style={styles.iconContainer}>
                 <TouchableOpacity onPress={decrementDigits} style={styles.iconButton}>
-                  <Icon name="remove-outline" size={20} color={colors.icon} />
+                <CounterIcon type="decrement" colors={colors} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={incrementDigits} style={styles.iconButton}>
-                  <Icon name="add-outline" size={20} color={colors.icon} />
+                <CounterIcon type="increment" colors={colors} />
                 </TouchableOpacity>
               </View>
             </View>

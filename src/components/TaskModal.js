@@ -1,10 +1,17 @@
 import React, { useState } from 'react';
-import { Modal, View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import {
+  Modal,
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+} from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useTranslation } from 'react-i18next';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { useSelector } from 'react-redux';
-
 
 const INITIAL_CATEGORY = 'Finance';
 const CATEGORY_OPTIONS = [
@@ -14,28 +21,13 @@ const CATEGORY_OPTIONS = [
   { labelKey: 'text.shoppingList', value: 'Shopping List' },
 ];
 
-const createDynamicStyles = (colors) => ({
-  placeholder: { color: colors.taskModalPlaceholder },
-});
-
-const CustomButton = ({ onPress, title, style }) => {
-  const colors = useSelector((state) => state.theme.colors);
-  return (
-    <TouchableOpacity
-      style={[styles.button(colors), style]}
-      onPress={onPress}
-    >
-      <Text style={[styles.buttonText(colors)]}>{title}</Text>
-    </TouchableOpacity>
-  );
-};
-
 const TaskModal = ({ visible, onAddTask, onClose }) => {
   const [task, setTask] = useState('');
   const [category, setCategory] = useState(INITIAL_CATEGORY);
   const [images, setImages] = useState([]);
   const { t } = useTranslation();
-  const colors = useSelector((state) => state.theme.colors);
+  const { colors } = useSelector((state) => state.theme);
+  const styles = useStyles(colors);
 
   const handleAdd = () => {
     if (task.trim()) {
@@ -64,25 +56,23 @@ const TaskModal = ({ visible, onAddTask, onClose }) => {
 
   return (
     <Modal visible={visible} transparent={true} animationType="slide">
-      <View style={[styles.modalBackdrop(colors)]}>
-        <View style={[styles.modal(colors)]}>
-          <Text style={[styles.modalTitle(colors)]}>
-            {t('text.addNewTask')}
-          </Text>
+      <View style={styles.modalBackdrop}>
+        <View style={styles.modal}>
+          <Text style={styles.modalTitle}>{t('text.addNewTask')}</Text>
 
           <TextInput
-            style={[styles.input(colors)]}
+            style={styles.input}
             value={task}
             onChangeText={setTask}
             placeholder={t('text.enterTask')}
-            placeholderTextColor={colors.taskModalPlaceholder}
+            placeholderTextColor={colors.placeholder}
           />
 
           <View style={styles.imagePreviewContainer}>{renderImages()}</View>
 
           <Picker
             selectedValue={category}
-            style={[styles.picker(colors)]}
+            style={styles.picker}
             onValueChange={(itemValue) => setCategory(itemValue)}
           >
             {CATEGORY_OPTIONS.map((option) => (
@@ -94,68 +84,63 @@ const TaskModal = ({ visible, onAddTask, onClose }) => {
             ))}
           </Picker>
 
-          <CustomButton
-            onPress={pickImage}
-            title={`📎 ${t('text.addImages')}`}
-            style={styles.paperclipButton(colors)}
-          />
+          <TouchableOpacity style={styles.button} onPress={pickImage}>
+            <Text style={styles.buttonText}>📎 {t('text.addImages')}</Text>
+          </TouchableOpacity>
 
-          <CustomButton onPress={handleAdd} title={t('text.addTaskUpper')} />
-          <CustomButton onPress={onClose} title={t('text.close')} />
+          <TouchableOpacity style={styles.button} onPress={handleAdd}>
+            <Text style={styles.buttonText}>{t('text.addTaskUpper')}</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.button} onPress={onClose}>
+            <Text style={styles.buttonText}>{t('text.close')}</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </Modal>
   );
 };
 
-const styles = StyleSheet.create({
-    modalBackdrop: (colors) => ({
+const useStyles = (colors) =>
+  StyleSheet.create({
+    modalBackdrop: {
       backgroundColor: colors.modalBackdrop,
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-    }),
-    modal:  (colors) => ({
+    },
+    modal: {
       width: 300,
       padding: 20,
-      borderRadius: 8,
-      alignItems: 'center',
-      backgroundColor: colors.modal, 
-    }),
-    modalTitle: (colors) => ({
+      borderRadius: 10,
+      backgroundColor: colors.sectionBackground,
+    },
+    modalTitle: {
       fontSize: 20,
       marginBottom: 10,
-      color: colors.modalTitle, 
-    }),
-    input:  (colors) => ({
+      color: colors.text,
+    },
+    input: {
       width: '100%',
       padding: 10,
       marginBottom: 10,
-      borderRadius: 4,
-      backgroundColor: colors.input, 
-      color: colors.modalTitle, 
-    }),
-    picker: (colors) => ({
+      borderRadius: 8,
+      backgroundColor: colors.inputBackground,
+      color: colors.text,
+    },
+    picker: {
       width: '100%',
       marginBottom: 10,
-      borderRadius: 4,
-      backgroundColor: colors.input, 
-      color: colors.modalTitle, 
-    }),
-    paperclipButton: (colors) => ({
-      marginTop: 10,
-      padding: 10,
-      borderRadius: 5,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: colors.picker, 
-    }),
+      borderRadius: 8,
+      backgroundColor: colors.inputBackground,
+      color: colors.text,
+    },
     imagePreviewContainer: {
       flexDirection: 'row',
       flexWrap: 'wrap',
       marginVertical: 10,
     },
-    imagePreview: (colors) => ({
+    imagePreview: {
       width: 80,
       height: 80,
       marginHorizontal: 5,
@@ -163,23 +148,20 @@ const styles = StyleSheet.create({
       borderRadius: 8,
       borderWidth: 1,
       borderColor: colors.imageBorder,
-    }),
-    button: (colors) => ({
+    },
+    button: {
       width: '100%',
       padding: 12,
-      borderWidth: 1,
-      borderRadius: 10,
+      marginBottom: 10,
+      borderRadius: 8,
       justifyContent: 'center',
       alignItems: 'center',
-      marginBottom: 10,
-      borderColor: colors.button, 
-      backgroundColor: colors.buttonBackground, 
-    }),
-    buttonText: (colors) => ({
+      backgroundColor: colors.buttonBackground,
+    },
+    buttonText: {
       fontSize: 16,
-      color: colors.button, 
-    })
+      color: colors.buttonText,
+    },
   });
-
 
 export default TaskModal;
