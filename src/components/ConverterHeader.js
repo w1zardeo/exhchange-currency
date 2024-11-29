@@ -82,7 +82,7 @@ const ConverterHeader = ({ searchQuery, setSearchQuery, toggleBottomSheet, onEdi
   );
 };
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create = ({
   headerContainer: {
     padding: 10,
   },

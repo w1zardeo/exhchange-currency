@@ -11,7 +11,7 @@ const CurrencyConverterApp = () => {
   const colors = useSelector((state) => state.theme.colors);
   return (
     <Provider store={store}>
-      <SafeAreaView style={[styles.container, {backgroundColor: colors.black}]}>
+      <SafeAreaView style={[styles.container(colors)]}>
         <CurrencyList />
         <BottomSheet />
       </SafeAreaView>
@@ -19,10 +19,11 @@ const CurrencyConverterApp = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
+const styles = StyleSheet.create = ({
+  container: (colors) => ({
+    backgroundColor: colors.black,
     flex: 1
-  },
+  }),
 });
 
 export default CurrencyConverterApp;

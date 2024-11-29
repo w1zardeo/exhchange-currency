@@ -25,29 +25,36 @@ const EditMode = ({ onDrag }) => {
   const colors = useSelector((state) => state.theme.colors); 
   return (
   <TouchableOpacity style={styles.editIcon} onLongPress={onDrag}>
-    <Icon name="menu" size={18} color={colors.iconMenu} />
+    <Icon name="menu" size={18} color={styles.iconMenu} />
   </TouchableOpacity>
 )};
 
-const CurrencyInfo = ({ symbol, convertedAmount, rate, currency, decimalPlaces, onInputChange, colors }) => (
-  <View style={styles.rateInfo}>
-    <View style={styles.inputContainer}>
-      <Text style={[styles.symbol, {color: colors.text}]}>{symbol}</Text>
-      <TextInput
-        style={[styles.rate, {color:colors.text}]}
-        keyboardType="numeric"
-        value={convertedAmount}
-        onChangeText={onInputChange}
-        numberOfLines={1}
-        maxLength={10}
-        scrollEnabled={true}
-      />
+const CurrencyInfo = ({ symbol, convertedAmount, rate, currency, decimalPlaces, onInputChange, colors }) => {
+  const formattedRate = rate.toFixed(decimalPlaces);
+  const rateText = `1 UAH = ${formattedRate} ${currency}`;
+
+  const renderSymbol = <Text style={[styles.symbol(colors)]}>{symbol}</Text>;
+  const renderRateText = <Text style={[styles.rateText(colors)]}>{rateText}</Text>;
+
+  return (
+    <View style={styles.rateInfo}>
+      <View style={styles.inputContainer}>
+        {renderSymbol}
+        <TextInput
+          style={[styles.rate(colors)]}
+          keyboardType="numeric"
+          value={convertedAmount}
+          onChangeText={onInputChange}
+          numberOfLines={1}
+          maxLength={10}
+          scrollEnabled={true}
+        />
+      </View>
+      {renderRateText}
     </View>
-    <Text style={[styles.rateText, {color: colors.rate}]}>
-      {`1 UAH = ${rate.toFixed(decimalPlaces)} ${currency}`}
-    </Text>
-  </View>
-);
+  );
+};
+
 
 const CurrencyItem = ({ item, baseAmount, onAmountChange, isEditing, onDrag }) => {
   const { t } = useTranslation();
@@ -76,11 +83,11 @@ const CurrencyItem = ({ item, baseAmount, onAmountChange, isEditing, onDrag }) =
   };
 
   return (
-    <View style={[styles.itemContainer, {borderBottomColor: colors.line}]}>
+    <View style={[styles.itemContainer(colors)]}>
       <Image source={{ uri: item.flag }} style={styles.flag} />
       <View style={styles.currencyInfo}>
-        <Text style={[styles.currency, styles.textStyle, {color: colors.text}]}>{item.currency}</Text>
-        <Text style={[styles.label, styles.labelStyle, {color: colors.label}]}>{item.label}</Text>
+        <Text style={[styles.currency(colors)]}>{item.currency}</Text>
+        <Text style={[styles.label(colors)]}>{item.label}</Text>
       </View>
       {isEditing ? (
         <EditMode onDrag={onDrag} />
@@ -142,7 +149,7 @@ const CurrencyList = () => {
   );
 
   return (
-    <View style={[styles.container, {backgroundColor: colors.background}]}>
+    <View style={[styles.container(colors)]}>
       <ConverterHeader
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
@@ -152,10 +159,10 @@ const CurrencyList = () => {
       />
       {loading ? (
         <View style={styles.loaderContainer}>
-          <ActivityIndicator size="large" color={colors.ativityIndicator} />
+          <ActivityIndicator size="large" color={styles.ativityIndicator} />
         </View>
       ) : filteredFavoriteCurrencies.length === 0 ? (
-          <Text style={[styles.emptyText, {color: colors.empty}]}>{t('text.emptyText')}</Text> 
+          <Text style={styles.emptyText(colors)}>{t('text.emptyText')}</Text> 
       ) : (
         <FlatList
           data={filteredFavoriteCurrencies}
@@ -179,19 +186,26 @@ const CurrencyList = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
+const styles = StyleSheet.create =({
+  container: (colors) => ({
     flex: 1,
-    backgroundColor: 'black',
+    backgroundColor: colors.background,
     paddingBottom: 50,
-  },
+  }),
+  activityIndicator: (colors) => ({
+    color: colors.ativityIndicator
+  }),
   listContainer: {
     paddingBottom: 130,
   },
-  symbol: {
+  iconMenu: (colors) => ({
+    color: colors.iconMenu
+  }),
+  symbol: (colors) => ({
     fontSize: 18,
     marginLeft: 10,
-  },
+    color: colors.text,
+  }),
   loaderContainer: {
     position: 'absolute',
     top: '50%',
@@ -199,14 +213,15 @@ const styles = StyleSheet.create({
     transform: [{ translateX: -25 }, { translateY: -25 }],
     zIndex: 1,
   },
-  itemContainer: {
+  itemContainer: (colors) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 10,
     borderBottomWidth: 0.2,
+    borderBottomColor: colors.line,
     marginLeft: 15,
-  },
+  }),
   flag: {
     width: 24,
     height: 24,
@@ -218,13 +233,15 @@ const styles = StyleSheet.create({
     flex: 1,
     marginRight: 12,
   },
-  currency: {
+  currency: (colors) => ({
     fontSize: 18,
     fontWeight: 'bold',
-  },
-  label: {
+    color: colors.text,
+  }),
+  label: (colors) => ({
     fontSize: 12,
-  },
+    color: colors.label,
+  }),
   rateInfo: {
     alignItems: 'flex-end',
   },
@@ -234,27 +251,30 @@ const styles = StyleSheet.create({
     maxWidth: 150,
     overflow: 'hidden',
   },
-  rate: {
+  rate: (colors) => ({
     fontSize: 18,
     fontWeight: 'bold',
     marginRight: 10,
     overflow: 'hidden',
     textAlign: 'right',
     paddingLeft: 5,
-  },
-  rateText: {
+    color: colors.text,
+  }),
+  rateText: (colors) => ({
     fontSize: 13,
     marginRight: 10,
     marginBottom: 10,
-  },
+    color: colors.rate,
+  }),
   editIcon: {
     padding: 10,
   },
-  emptyText: {
+  emptyText: (colors) => ({
     fontSize: 16,
     textAlign: 'center',
     marginTop: 20,
-  }
+    color: colors.empty,
+  }),
 });
 
 export default CurrencyList;
