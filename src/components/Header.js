@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { useTranslation } from 'react-i18next'; 
+import { View, TextInput, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
-const Header = ({ incompleteCount, completeCount, navigation, selectedDate, isDarkMode }) => {
+const Header = ({ incompleteCount, completeCount, navigation, selectedDate }) => {
   const [inputText, setInputText] = useState('');
-  const { t } = useTranslation(); 
-  const colors = useSelector((state) => state.theme.colors); 
+  const { t } = useTranslation();
+  const colors = useSelector((state) => state.theme.colors);
+
+  const placeholderText = 'Enter date';
+  const calendarButtonText = t('text.calendar');
+  const incompleteLabel = t('text.incompleteLower');
+  const completeLabel = t('text.completedLower');
 
   useEffect(() => {
     if (selectedDate) {
@@ -15,64 +20,68 @@ const Header = ({ incompleteCount, completeCount, navigation, selectedDate, isDa
   }, [selectedDate]);
 
   return (
-    <View style={styles.header}>
+    <View style={styles.header(colors)}>
       <View style={styles.headerRow}>
         <TextInput
-          style={[styles.title, {color: colors.titleStyle}]}
+          style={styles.title(colors)}
           value={inputText}
           onChangeText={setInputText}
-          placeholder="Enter date"
-          placeholderTextColor="#DADADA"
+          placeholder={placeholderText}
+          placeholderTextColor={colors.headerPlaceholder}
           underlineColorAndroid="transparent"
         />
         <TouchableOpacity onPress={() => navigation.navigate('Calendar')}>
-          <Text style={styles.calendarButton}>{t('text.calendar')}</Text>
+          <Text style={styles.calendarButton(colors)}>{calendarButtonText}</Text>
         </TouchableOpacity>
       </View>
-      <Text style={[styles.subtitle, {color: colors.subtitleStyle}]}>{incompleteCount} {t('text.incompleteLower')}, {completeCount} {t('text.completedLower')}</Text>
-      <View style={[styles.line, {backgroundColor: colors.lineStyle}]}/>
+      <Text style={styles.subtitle(colors)}>
+        {incompleteCount} {incompleteLabel}, {completeCount} {completeLabel}
+      </Text>
+      <View style={styles.line(colors)} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  header: {
+  header: (colors) => ({
     width: '100%',
     padding: 0,
     marginTop: 0,
-  },
+    backgroundColor: colors.headerBackground,
+  }),
   headerRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 18,
   },
-  title: {
+  title: (colors) => ({
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#DADADA',
     fontFamily: 'inter',
     marginTop: 76,
-  },
-  calendarButton: {
-    color: '#007BFF',
+    color: colors.titleStyle,
+  }),
+  calendarButton: (colors) => ({
     fontSize: 16,
-  },
-  subtitle: {
+    color: colors.calendar,
+  }),
+  subtitle: (colors) => ({
     fontSize: 14,
     fontWeight: 'bold',
     fontFamily: 'inter',
     marginTop: 11,
     marginLeft: 18,
-  },
-  line: {
+    color: colors.subtitleStyle,
+  }),
+  line: (colors) => ({
     height: 2,
     width: 343,
-    backgroundColor: '#575767',
     marginTop: 16,
     marginLeft: 18,
     borderRadius: 5,
-  },
+    backgroundColor: colors.lineStyle,
+  }),
 });
 
 export default Header;

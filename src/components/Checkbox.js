@@ -3,16 +3,20 @@ import { TouchableOpacity, Text, View, StyleSheet } from 'react-native';
 import { Checkmark } from './Checkmark';
 import { useSelector } from 'react-redux';
 
-const Checkbox = ({ checked, onChange, label, isDarkMode }) => {
-  const colors = useSelector(state => state.theme.colors);
-  (
-  <TouchableOpacity onPress={onChange} style={styles.checkboxContainer}>
-    <View style={[styles.checkbox, { backgroundColor: colors.checkbox }, { borderColor: colors.borderColor }]}>
-      {checked && <Checkmark isDarkMode={isDarkMode} />}
-    </View>
-    <Text style={styles.label}>{label}</Text>
-  </TouchableOpacity>
-)};
+const Checkbox = ({ checked, onChange, label }) => {
+  const colors = useSelector((state) => state.theme.colors);
+
+  return (
+    <TouchableOpacity onPress={onChange} style={styles.checkboxContainer}>
+      <View
+        style={[styles.checkbox(colors)]}
+      >
+        {checked && <Checkmark />}
+      </View>
+      <Text style={[styles.label(colors)]}>{label}</Text>
+    </TouchableOpacity>
+  );
+};
 
 const styles = StyleSheet.create({
   checkboxContainer: {
@@ -20,24 +24,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 0,
   },
-  checkbox: {
+  checkbox: (colors) => ({
     width: 24,
     height: 24,
     borderWidth: 2,
-    borderColor: '#0E0E11',
     borderRadius: 6,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 10,
-    backgroundColor: '#2B2D37',
     marginLeft: 18,
-    marginTop: 3
-  },
-  label: {
-    color: 'white',
+    marginBottom: 2,
+    backgroundColor: colors.checkbox,
+    borderColor: colors.borderColor,
+  }),
+  label: (colors) => ({
     marginTop: 18,
-    marginLeft: 0
-  },
+    marginLeft: 0,
+    color: colors.labelColor,
+  }),
 });
 
 export default Checkbox;

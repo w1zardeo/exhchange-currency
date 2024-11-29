@@ -1,17 +1,41 @@
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, StyleSheet } from 'react-native';
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import CalendarScreen from '../screens/CalendarScreen';
 import ExchangeCurrencyScreen from '../screens/ExchangeCurrencyScreen';
 import SettingsScreen from '../screens/SettingsScreen';
-import DayToDoScreen from '../screens/DayToDoScreen'; 
+import DayToDoScreen from '../screens/DayToDoScreen';
 import { Provider } from 'react-redux';
 import { store } from '../redux/store';
-
+import { useSelector } from 'react-redux';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
+
+const ICONS = {
+  Calendar: {
+    focused: require('../assets/icon/calendar-blue.png'),
+    default: require('../assets/icon/calendar-white.png'),
+  },
+  ExchangeCurrency: {
+    focused: require('../assets/icon/exchange-blue.png'),
+    default: require('../assets/icon/exchange-white.png'),
+  },
+  Settings: {
+    focused: require('../assets/icon/settings-blue.png'),
+    default: require('../assets/icon/settings-white.png'),
+  },
+};
+
+const TabBarIcon = ({ focused, icon }) => {
+  return (
+    <Image
+      style={styles.icon}
+      source={focused ? icon.focused : icon.default}
+    />
+  );
+};
 
 const CalendarStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -21,75 +45,63 @@ const CalendarStack = () => (
 );
 
 const BottomNavigation = () => {
+  const colors = useSelector((state) => state.theme.colors);
+
   return (
     <Provider store={store}>
-    <Tab.Navigator
-      screenOptions={{
-        headerShown: false,
-        tabBarShowLabel: false,
-        tabBarStyle: {
-          backgroundColor: 'black', 
-          position: 'absolute', 
-          bottom: 0, 
-          left: 0,
-          right: 0,
-          elevation: 0, 
-          shadowOpacity: 0, 
-        },
-      }}
-    >
-      <Tab.Screen
-        name="Calendar"
-        component={CalendarStack}
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <Image
-              style={{ height: 24, width: 24 }}
-              source={
-                focused
-                  ? require('../assets/icon/calendar-blue.png') 
-                  : require('../assets/icon/calendar-white.png')
-              }
-            />
-          ),
+      <Tab.Navigator
+        screenOptions={{
+          headerShown: false,
+          tabBarShowLabel: false,
+          tabBarStyle: [styles.tabBarStyle(colors)],
         }}
-      />
-      <Tab.Screen
-        name="ExchangeCurrencyScreen"
-        component={ExchangeCurrencyScreen}
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <Image
-              style={{ height: 24, width: 24 }}
-              source={
-                focused
-                  ? require('../assets/icon/exchange-blue.png') 
-                  : require('../assets/icon/exchange-white.png')
-              }
-            />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="SettingsScreen"
-        component={SettingsScreen}
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <Image
-              style={{ height: 24, width: 24 }}
-              source={
-                focused
-                  ? require('../assets/icon/settings-blue.png') 
-                  : require('../assets/icon/settings-white.png') 
-              }
-            />
-          ),
-        }}
-      />
-      
-    </Tab.Navigator>
+      >
+        <Tab.Screen
+          name="Calendar"
+          component={CalendarStack}
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <TabBarIcon focused={focused} icon={ICONS.Calendar} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="ExchangeCurrencyScreen"
+          component={ExchangeCurrencyScreen}
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <TabBarIcon focused={focused} icon={ICONS.ExchangeCurrency} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="SettingsScreen"
+          component={SettingsScreen}
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <TabBarIcon focused={focused} icon={ICONS.Settings} />
+            ),
+          }}
+        />
+      </Tab.Navigator>
     </Provider>
   );
 };
+
+const styles = StyleSheet.create = ({
+  tabBarStyle: (colors) => ({
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    elevation: 0,
+    shadowOpacity: 0,
+    backgroundColor: colors.black
+  }),
+  icon: {
+    height: 24,
+    width: 24,
+  },
+});
 
 export default BottomNavigation;

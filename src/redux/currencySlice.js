@@ -53,7 +53,11 @@ const currencySlice = createSlice({
     error: null,
   },
   reducers: {
+    setCurrencies(state, action) {
+      state.currencies = action.payload;
+    },
     toggleFavorite: (state, action) => {
+      const id = action.payload;  
       const currency = state.currencies.find((c) => c.id === action.payload);
       if (currency) {
         currency.isFavorite = !currency.isFavorite;
@@ -81,18 +85,6 @@ const currencySlice = createSlice({
       });
   },
 });
-
-export const saveFavoritesToAsyncStorage = () => async (dispatch, getState) => {
-  const favorites = getState().currencies.currencies
-    .filter((currency) => currency.isFavorite)
-    .map((currency) => currency.id);
-
-  try {
-    await AsyncStorage.setItem('favoriteCurrencies', JSON.stringify(favorites));
-  } catch (error) {
-    console.error('Error saving favorite currencies:', error);
-  }
-};
 
 export const { toggleFavorite, updateCurrenciesOrder } = currencySlice.actions;
 

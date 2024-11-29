@@ -19,9 +19,9 @@ const taskSlice = createSlice({
     toggleTask: (state, action) => {
       const { selectedDate, index, type } = action.payload;
       const tasks = state[selectedDate];
-      
+  
       if (!tasks) return;
-
+  
       if (type === 'incomplete') {
         const completedTask = tasks.incomplete.splice(index, 1)[0];
         tasks.complete.push({ ...completedTask, completed: true });
@@ -33,7 +33,7 @@ const taskSlice = createSlice({
     updateTaskText: (state, action) => {
       const { selectedDate, index, section, text } = action.payload;
       const tasks = state[selectedDate];
-      
+  
       if (tasks && tasks[section] && tasks[section][index]) {
         tasks[section][index].text = text;
       } else {
@@ -43,7 +43,7 @@ const taskSlice = createSlice({
     setTaskImages: (state, action) => {
       const { selectedDate, taskIndex, section, images } = action.payload;
       const tasks = state[selectedDate];
-      
+  
       if (tasks) {
         tasks[section][taskIndex].images = images;
       }
@@ -51,7 +51,7 @@ const taskSlice = createSlice({
     removeImageFromTask: (state, action) => {
       const { selectedDate, index, section, imageIndex } = action.payload;
       const tasks = state[selectedDate];
-    
+  
       if (tasks && tasks[section] && tasks[section][index]) {
         const task = tasks[section][index];
         if (task.images && task.images.length > imageIndex) {
@@ -59,16 +59,16 @@ const taskSlice = createSlice({
         }
       }
     },
-    deleteTaskText: (state, action) => {
+    deleteTask: (state, action) => {
       const { selectedDate, index, section } = action.payload;
       const tasks = state[selectedDate];
       if (tasks && tasks[section] && tasks[section][index]) {
-        tasks[section].splice(index, 1); 
+        tasks[section].splice(index, 1);
       }
     },
-  }
-});
+  },
+})
 
-export const { setTasksByDate, addTask, toggleTask, updateTaskText, setTaskImages, removeImageFromTask, deleteTaskText } = taskSlice.actions;
+export const { setTasksByDate, addTask, toggleTask, updateTaskText, setTaskImages, removeImageFromTask, deleteTask } = taskSlice.actions;
 
 export default taskSlice.reducer;
