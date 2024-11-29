@@ -18,7 +18,7 @@ const Checkbox = ({ checked, onChange, label }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create = ({
   checkboxContainer: {
     flexDirection: 'row',
     alignItems: 'center',
