@@ -3,7 +3,6 @@ import {
   View,
   Text,
   TouchableOpacity,
-  StyleSheet,
   Switch,
   Image
 } from 'react-native';
@@ -14,23 +13,29 @@ import { setDecimalPlaces } from '../redux/settingsSlice';
 import { useTranslation } from 'react-i18next'; 
 import i18n  from '../util/i18n';
 
-// Мови та прапори
 const languages = [
   { code: 'ua', flag: require('../flags/ua-flag.png') },
   { code: 'en', flag: require('../flags/gb-flag.png') },
   { code: 'es', flag: require('../flags/spanish-flag.png') }
 ];
 
+const ThemeIcon = ({ isDarkMode, colors }) => {
+  return isDarkMode ? (
+    <Icon name="moon-outline" size={20} color={colors.iconMoon} />
+  ) : (
+    <Icon name="sunny-outline" size={20} color={colors.iconSun} />
+  );
+};
+
 export default function SettingsScreen() {
   const { t } = useTranslation(); 
   const dispatch = useDispatch();
   
-  // Використовуємо стани з Redux
-  const colors = useSelector((state) => state.theme.colors); 
-  const isDarkMode = useSelector((state) => state.theme.isDarkMode); 
+  const { isDarkMode, colors } = useSelector((state) => state.theme);
   const decimalPlaces = useSelector((state) => state.settings.decimalPlaces);
 
-  // Функції обробки
+  const styles = useStyles(colors);
+
   const handleToggleTheme = () => {
     dispatch(toggleTheme());
   };
@@ -50,15 +55,14 @@ export default function SettingsScreen() {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <Text style={[styles.header, { color: colors.text }]}>{t('settings.title')}</Text>
+    <View style={styles.container}>
+      <Text style={styles.header}>{t('settings.title')}</Text>
 
       <View style={styles.optionsContainer}>
-        <View style={[styles.combinedSection, { backgroundColor: colors.sectionBackground }]}>
+        <View style={styles.combinedSection}>
 
-          {/* Toggle theme section */}
           <View style={styles.option}>
-            <Text style={[styles.optionText, { color: colors.text }]}>{t('settings.toggleTheme')}</Text>
+            <Text style={styles.optionText}>{t('settings.toggleTheme')}</Text>
             <View style={styles.switchContainer}>
               <Switch
                 value={isDarkMode}
@@ -66,21 +70,16 @@ export default function SettingsScreen() {
                 thumbColor={colors.switchThumb}
                 trackColor={{ false: colors.switchTrack, true: colors.switchTrack }}
               />
-              {isDarkMode ? (
-                <Icon name="moon-outline" size={20} color={colors.iconMoon} />
-              ) : (
-                <Icon name="sunny-outline" size={20} color={colors.iconSun} />
-              )}
+              <ThemeIcon isDarkMode={isDarkMode} colors={colors} />
             </View>
           </View>
 
-          <View style={[styles.divider, { backgroundColor: colors.devider }]} />
+          <View style={styles.divider} />
 
-          {/* Number of decimal places section */}
           <View style={styles.option}>
-            <Text style={[styles.optionText, { color: colors.text }]}>{t('settings.numberOfFractionDigits')}</Text>
+            <Text style={styles.optionText}>{t('settings.numberOfFractionDigits')}</Text>
             <View style={styles.counterGroup}>
-              <Text style={[styles.counterValue, { color: colors.text }]}>{decimalPlaces}</Text>
+              <Text style={styles.counterValue}>{decimalPlaces}</Text>
               <View style={styles.iconContainer}>
                 <TouchableOpacity onPress={decrementDigits} style={styles.iconButton}>
                   <Icon name="remove-outline" size={20} color={colors.icon} />
@@ -92,11 +91,10 @@ export default function SettingsScreen() {
             </View>
           </View>
 
-          <View style={[styles.divider, { backgroundColor: colors.devider }]} />
+          <View style={styles.divider} />
 
-          {/* Language selection section */}
           <View style={styles.option}>
-            <Text style={[styles.optionText, { color: colors.text }]}>{t('settings.selectLanguage')}</Text>
+            <Text style={styles.optionText}>{t('settings.selectLanguage')}</Text>
             <View style={styles.languageContainer}>
               {languages.map((language) => (
                 <TouchableOpacity
@@ -116,14 +114,16 @@ export default function SettingsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = (colors) => StyleSheet.create = ({
   container: {
+    backgroundColor: colors.background,
     flex: 1,
   },
   header: {
     fontSize: 32,
     fontWeight: 'bold',
     padding: 20,
+    color: colors.text,
   },
   optionsContainer: {
     flex: 1,
@@ -132,10 +132,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginHorizontal: 20,
     paddingVertical: 1,
+    backgroundColor: colors.sectionBackground,
   },
   divider: {
     height: 0.1,
     marginLeft: 20,
+    backgroundColor: colors.devider,
   },
   option: {
     flexDirection: 'row',
@@ -147,6 +149,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     paddingTop: 5,
     paddingLeft: 7,
+    color: colors.text,
   },
   switchContainer: {
     flexDirection: 'row',
@@ -159,6 +162,7 @@ const styles = StyleSheet.create({
   counterValue: {
     fontSize: 18,
     paddingRight: 10,
+    color: colors.text,
   },
   iconContainer: {
     flexDirection: 'row',

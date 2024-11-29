@@ -79,7 +79,7 @@ const DarkTheme = {
     buttonBackground: 'transparent',
     section: '#DADADA',
     smallGroup: '#575767',
-    red: 'red',
+    green: 'green',
     modalOverlay: 'rgba(0,0,0,0.8)',
     black: 'black',
     floating: '#3F4EA0',

@@ -29,4 +29,3 @@ const imagesSlice = createSlice({
 export const { setTaskImages, removeImageFromTask } = imagesSlice.actions;
 export default imagesSlice.reducer;
 
-
