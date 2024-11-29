@@ -17,11 +17,6 @@ const DayToDoScreen = ({ route, navigation }) => {
   const tasksByDate = useSelector((state) => state.tasks);
   const tasks = tasksByDate[selectedDate] || { incomplete: [], complete: [] };
 
-
-  const backgroundColor = colors.background;
-  const floatingButtonColor = colors.floating;
-  const floatingButtonBorderColor = colors.floatingBorder;
-
   useEffect(() => {
     navigation.setOptions({
       tabBarStyle: { display: 'none' },
@@ -70,7 +65,7 @@ const DayToDoScreen = ({ route, navigation }) => {
   );
 
   return (
-    <View style={[styles.container, { backgroundColor }]}>
+    <View style={[styles.container(colors)]}>
       <Header
         incompleteCount={tasks.incomplete.length}
         completeCount={tasks.complete.length}
@@ -85,7 +80,7 @@ const DayToDoScreen = ({ route, navigation }) => {
         contentContainerStyle={styles.flatListContent}
       />
       <TouchableOpacity 
-        style={[styles.floatingButton, {backgroundColor: floatingButtonColor}, {borderColor: floatingButtonBorderColor}]} 
+        style={styles.floatingButton(colors)} 
         onPress={() => setShowModal(true)}
       >
         <Plus />
@@ -96,14 +91,17 @@ const DayToDoScreen = ({ route, navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
+  container: (colors) => ({
     flex: 1,
-  },
+    backgroundColor: colors.background
+  }),
   flatListContent: {
     flexGrow: 1,
     paddingBottom: 80,
   },
-  floatingButton: {
+  floatingButton: (colors) => ({
+    backgroundColor: colors.floating,
+    borderColor: colors.floatingBorder,
     position: 'absolute',
     bottom: 20,
     right: 20,
@@ -113,7 +111,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center'
-  },
+  }),
 });
 
 export default DayToDoScreen;
