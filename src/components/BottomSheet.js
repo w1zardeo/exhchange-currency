@@ -83,6 +83,10 @@ const BottomSheet = ({ sheetOpen, setSheetOpen }) => {
   const dispatch = useDispatch();
   const colors = useSelector((state) => state.theme.colors);
 
+  const handleToggleFavorite = (id) => {
+    dispatch(toggleFavorite(id)); // Додаємо або видаляємо валюту з улюблених
+  };
+
   const openSheet = () => {
     runAnimation(sheetAnimation, 1);
     runAnimation(coverOpacityAnimation, 1);

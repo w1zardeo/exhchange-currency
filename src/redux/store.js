@@ -19,7 +19,7 @@ const rootReducer = combineReducers({
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage, 
-  whitelist: ['theme', 'tasks', 'images'], 
+  whitelist: ['theme', 'tasks', 'images', 'currency'], 
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
