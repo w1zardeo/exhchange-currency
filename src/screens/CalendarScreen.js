@@ -129,7 +129,14 @@ const CalendarScreen = ({ navigation }) => {
     dispatch(toggleTheme());
   };
 
-  const iconName = isDarkMode ? 'moon-outline' : 'sunny-outline';
+  const ThemeIcon = ({ isDarkMode, colors }) => {
+    return isDarkMode ? (
+      <Icon name="moon-outline" size={20} color={colors.iconMoon} />
+    ) : (
+      <Icon name="sunny-outline" size={20} color={colors.iconSun} />
+    );
+  };
+  
   const iconColor = isDarkMode ? colors.iconMoon : colors.iconSun;
 
   return (
@@ -141,7 +148,7 @@ const CalendarScreen = ({ navigation }) => {
           thumbColor={colors.switchThumb}
           trackColor={{ false: colors.switchTrack, true: colors.switchTrack }}
         />
-        <Icon name={iconName} size={20} color={iconColor} />
+        <ThemeIcon isDarkMode={isDarkMode} colors={colors} />
       </View>
       <FlatList
         data={Object.keys(daysInMonth)}
