@@ -179,12 +179,13 @@ const styles = StyleSheet.create = ({
     counterGroup: {
       flexDirection: 'row',
       alignItems: 'center',
-      justifyContent: 'center', // додаємо вирівнювання по центру
+      // justifyContent: 'center', // додаємо вирівнювання по центру
     },
     counterValue: (colors) => ({
       fontSize: 18,
       color: colors.text,
-      width: 40, // встановлюємо ширину для вирівнювання
+      paddingLeft: 10,
+      // width: 40, // встановлюємо ширину для вирівнювання
       textAlign: 'center', // додаємо вирівнювання тексту по центру
     }),
     iconContainer: {
@@ -195,6 +196,7 @@ const styles = StyleSheet.create = ({
     iconButton: {
       paddingVertical: 5,
       paddingHorizontal: 8,
+      paddingRight: 10
     },
     languageContainer: {
       flexDirection: 'row',
