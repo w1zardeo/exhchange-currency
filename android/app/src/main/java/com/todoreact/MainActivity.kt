@@ -8,11 +8,6 @@ class MainActivity : ReactActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // your code here
-
-        Button btnPickImage;
-        ImageView ImageView;
-
-        ActivityResultLaunch<Intent> resultLauncher;
     }
 
     override fun getMainComponentName(): String? {
