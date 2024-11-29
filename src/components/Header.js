@@ -13,14 +13,6 @@ const Header = ({ incompleteCount, completeCount, navigation, selectedDate }) =>
   const incompleteLabel = t('text.incompleteLower');
   const completeLabel = t('text.completedLower');
 
-  const dynamicStyles = {
-    titleStyle: { color: colors.titleStyle },
-    placeholderColor: colors.headerPlaceholder,
-    subtitleColor: { color: colors.subtitleStyle },
-    lineColor: { backgroundColor: colors.lineStyle },
-    calendar: { color: colors.calendar },
-  };
-
   useEffect(() => {
     if (selectedDate) {
       setInputText(selectedDate);
@@ -28,76 +20,68 @@ const Header = ({ incompleteCount, completeCount, navigation, selectedDate }) =>
   }, [selectedDate]);
 
   return (
-    <View style={{ width: '100%', padding: 0, marginTop: 0 }}>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 18 }}>
+    <View style={styles.header(colors)}>
+      <View style={styles.headerRow}>
         <TextInput
-          style={[
-            { fontSize: 32, fontWeight: 'bold', fontFamily: 'inter', marginTop: 76 },
-            dynamicStyles.titleStyle,
-          ]}
+          style={styles.title(colors)}
           value={inputText}
           onChangeText={setInputText}
           placeholder={placeholderText}
-          placeholderTextColor={dynamicStyles.placeholderColor}
+          placeholderTextColor={colors.headerPlaceholder}
           underlineColorAndroid="transparent"
         />
         <TouchableOpacity onPress={() => navigation.navigate('Calendar')}>
-          <Text style={[{ fontSize: 16 }, dynamicStyles.calendar]}>{calendarButtonText}</Text>
+          <Text style={styles.calendarButton(colors)}>{calendarButtonText}</Text>
         </TouchableOpacity>
       </View>
-      <Text
-        style={[
-          { fontSize: 14, fontWeight: 'bold', fontFamily: 'inter', marginTop: 11, marginLeft: 18 },
-          dynamicStyles.subtitleColor,
-        ]}
-      >
+      <Text style={styles.subtitle(colors)}>
         {incompleteCount} {incompleteLabel}, {completeCount} {completeLabel}
       </Text>
-      <View
-        style={[
-          { height: 2, width: 343, marginTop: 16, marginLeft: 18, borderRadius: 5 },
-          dynamicStyles.lineColor,
-        ]}
-      />
+      <View style={styles.line(colors)} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  header: {
+  header: (colors) => ({
     width: '100%',
     padding: 0,
     marginTop: 0,
-  },
+    backgroundColor: colors.headerBackground,
+  }),
   headerRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 18,
   },
-  title: {
+  title: (colors) => ({
     fontSize: 32,
     fontWeight: 'bold',
     fontFamily: 'inter',
     marginTop: 76,
-  },
-  calendarButton: {
+    color: colors.titleStyle,
+  }),
+  calendarButton: (colors) => ({
     fontSize: 16,
-  },
-  subtitle: {
+    color: colors.calendar,
+  }),
+  subtitle: (colors) => ({
     fontSize: 14,
     fontWeight: 'bold',
     fontFamily: 'inter',
     marginTop: 11,
     marginLeft: 18,
-  },
-  line: {
+    color: colors.subtitleStyle,
+  }),
+  line: (colors) => ({
     height: 2,
     width: 343,
     marginTop: 16,
     marginLeft: 18,
     borderRadius: 5,
-  },
+    backgroundColor: colors.lineStyle,
+  }),
 });
 
 export default Header;

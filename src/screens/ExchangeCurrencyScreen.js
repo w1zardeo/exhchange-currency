@@ -1,17 +1,18 @@
 import React from 'react';
-import { View, StyleSheet, SafeAreaView } from 'react-native';
+import { View, SafeAreaView, StyleSheet } from 'react-native';
 import { Provider } from 'react-redux';
-import { store } from '../redux/store'; 
-import ConverterHeader from '../components/ConverterHeader'; 
-import CurrencyList from '../components/CurrencyList'; 
-import BottomSheet from '../components/BottomSheet'; 
+import { store } from '../redux/store';
+import CurrencyList from '../components/CurrencyList';
+import BottomSheet from '../components/BottomSheet';
 import { useSelector } from 'react-redux';
 
 const CurrencyConverterApp = () => {
   const colors = useSelector((state) => state.theme.colors);
+  const styles = useStyles(colors);
+
   return (
     <Provider store={store}>
-      <SafeAreaView style={[styles.container, {backgroundColor: colors.black}]}>
+      <SafeAreaView style={styles.container}>
         <CurrencyList />
         <BottomSheet />
       </SafeAreaView>
@@ -19,9 +20,10 @@ const CurrencyConverterApp = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const useStyles = (colors) => StyleSheet.create = ({
   container: {
-    flex: 1
+    backgroundColor: colors.black,
+    flex: 1,
   },
 });
 

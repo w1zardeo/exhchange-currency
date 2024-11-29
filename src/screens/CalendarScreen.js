@@ -1,18 +1,18 @@
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, Switch, FlatList } from 'react-native';
+import { View, Text, Switch, FlatList, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useDispatch, useSelector } from 'react-redux';
-import { setTasksByDate } from '../redux/TasksSlice'; 
-import { toggleTheme } from '../redux/ThemeSlice'; 
-import { useTranslation } from 'react-i18next'; 
+import { setTasksByDate } from '../redux/TasksSlice';
+import { toggleTheme } from '../redux/ThemeSlice';
+import { useTranslation } from 'react-i18next';
 
 const CalendarScreen = ({ navigation }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const tasksByDate = useSelector(state => state.tasks);
-  const isDarkMode = useSelector(state => state.theme.isDarkMode);
-  const colors = useSelector((state) => state.theme.colors); 
-  const currentYear = new Date().getFullYear(); 
+  const { isDarkMode, colors } = useSelector((state) => state.theme);
+  const currentYear = new Date().getFullYear();
+  const styles = useStyles(colors); // use the styles
 
   const daysInMonth = {
     [t('monthDay.jan')]: 31,
@@ -45,7 +45,7 @@ const CalendarScreen = ({ navigation }) => {
       day: 'numeric',
       year: 'numeric',
     });
-  
+
     const initialTasks = { incomplete: [], complete: [] };
     dispatch(setTasksByDate({ selectedDate: today, tasks: initialTasks }));
   }, [dispatch]);
@@ -64,9 +64,9 @@ const CalendarScreen = ({ navigation }) => {
   };
 
   const getCircleStyle = (hasIncompleteTasks, hasCompleteTasks) => {
-    if (hasIncompleteTasks) return { backgroundColor: colors.taskIncomplete };
-    if (hasCompleteTasks) return { backgroundColor: colors.taskComplete };
-    return { backgroundColor: colors.transparent };
+    if (hasIncompleteTasks) return styles.taskIncomplete;
+    if (hasCompleteTasks) return styles.taskComplete;
+    return styles.transparent;
   };
 
   const isToday = (month, day) => {
@@ -94,7 +94,6 @@ const CalendarScreen = ({ navigation }) => {
             }
             style={[
               styles.dayText,
-              { color: colors.text },
               isWeekend ? colors.weekend : colors.text,
               isToday(month, day) && { color: colors.today },
             ]}
@@ -104,7 +103,7 @@ const CalendarScreen = ({ navigation }) => {
         </View>
         {isToday(month, day) && (
           <View style={styles.todayContainer}>
-            <Text style={[styles.todayText, { color: colors.today }]}>{t('text.today')}</Text>
+            <Text style={[styles.todayText]}>{t('text.today')}</Text>
           </View>
         )}
       </View>
@@ -113,13 +112,13 @@ const CalendarScreen = ({ navigation }) => {
 
   const renderMonth = month => (
     <View key={month} style={styles.monthContainer}>
-      <Text style={[styles.monthText, { color: colors.text }]}>
+      <Text style={styles.monthText}>
         {currentYear} {month}
       </Text>
       <View style={styles.daysGrid}>
         {daysOfWeek.map(dayOfWeek => (
           <View key={dayOfWeek} style={styles.weekDayContainer}>
-            <Text style={[styles.weekDayText, { color: colors.weekDay }]}>{dayOfWeek}</Text>
+            <Text style={styles.weekDayText}>{dayOfWeek}</Text>
           </View>
         ))}
         {generateMonthDays(month).map(day => renderDay(month, day))}
@@ -131,8 +130,11 @@ const CalendarScreen = ({ navigation }) => {
     dispatch(toggleTheme());
   };
 
+  const iconName = isDarkMode ? 'moon-outline' : 'sunny-outline';
+  const iconColor = isDarkMode ? colors.iconMoon : colors.iconSun;
+
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <View style={styles.container}>
       <View style={styles.switchContainer}>
         <Switch
           value={isDarkMode}
@@ -140,27 +142,25 @@ const CalendarScreen = ({ navigation }) => {
           thumbColor={colors.switchThumb}
           trackColor={{ false: colors.switchTrack, true: colors.switchTrack }}
         />
-        {isDarkMode ? (
-          <Icon name="moon-outline" size={20} color={colors.iconMoon} />
-        ) : (
-          <Icon name="sunny-outline" size={20} color={colors.iconSun} />
-        )}
+        <Icon name={iconName} size={20} color={iconColor} />
       </View>
       <FlatList
         data={Object.keys(daysInMonth)}
         renderItem={({ item }) => renderMonth(item)}
         keyExtractor={(item) => item}
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.flatListContent}
       />
     </View>
   );
 };
 
-const styles = StyleSheet.create({
+const useStyles = (colors) => StyleSheet.create = ({
   container: {
     flex: 1,
     padding: 10,
     paddingTop: 30,
+    backgroundColor: colors.background,
   },
   switchContainer: {
     flexDirection: 'row',
@@ -178,6 +178,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     textAlign: 'start',
     marginLeft: 8,
+    color: colors.text,
   },
   weekDayContainer: {
     width: '14%',
@@ -186,6 +187,7 @@ const styles = StyleSheet.create({
   },
   weekDayText: {
     textAlign: 'center',
+    color: colors.weekDay,
   },
   daysGrid: {
     flexDirection: 'row',
@@ -209,6 +211,7 @@ const styles = StyleSheet.create({
   },
   dayText: {
     textAlign: 'center',
+    color: colors.text,
   },
   todayContainer: {
     position: 'absolute',
@@ -216,6 +219,29 @@ const styles = StyleSheet.create({
   },
   todayText: {
     fontSize: 11,
+    color: colors.today,
+  },
+  taskIncomplete: {
+    backgroundColor: colors.taskIncomplete,
+  },
+  taskComplete: {
+    backgroundColor: colors.taskComplete,
+  },
+  transparent: {
+    backgroundColor: colors.transparent,
+  },
+  floatingButton: {
+    backgroundColor: colors.floating,
+    borderColor: colors.floatingBorder,
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    width: 60,
+    height: 60,
+    borderWidth: 2,
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

@@ -28,17 +28,12 @@ const SearchBar = ({ searchQuery, setSearchQuery, isSearching, setIsSearching })
   return (
     <View style={[styles.searchRow]}>
       <View
-        style={[
-          styles.searchContainer,
-          { backgroundColor: colors.searchContainerBottom },
-          isSearching && styles.searchActive,
-        ]}
-      >
+        style={[styles.searchContainer(colors), isSearching && styles.searchActive]}>
         <Icon name="search" size={18} color={colors.placeholder} style={styles.searchIcon} />
         <TextInput
           placeholder={t('text.search')}
           placeholderTextColor={colors.placeholder}
-          style={[styles.searchInput, { color: colors.searchInput }]}
+          style={[styles.searchInput(colors)]}
           value={searchQuery}
           onChangeText={setSearchQuery}
           onFocus={() => setIsSearching(true)}
@@ -46,7 +41,7 @@ const SearchBar = ({ searchQuery, setSearchQuery, isSearching, setIsSearching })
       </View>
       {isSearching && (
         <TouchableOpacity onPress={handleCancel} style={styles.cancelButton}>
-          <Text style={[styles.cancelText, { color: colors.cancelText }]}>{t('text.cancel')}</Text>
+          <Text style={styles.cancelText(colors)}>{t('text.cancel')}</Text>
         </TouchableOpacity>
       )}
     </View>
@@ -56,11 +51,11 @@ const SearchBar = ({ searchQuery, setSearchQuery, isSearching, setIsSearching })
 const CurrencyItemInBottomSheet = React.memo(({ item, toggleFavorite }) => {
   const colors = useSelector((state) => state.theme.colors);
   return (
-    <View style={[styles.itemContainer, { borderBottomColor: colors.borderBottom }]}>
+    <View style={styles.itemContainer(colors)}>
       <Image source={{ uri: item.flag }} style={styles.flag} />
       <View style={styles.currencyInfo}>
-        <Text style={[styles.currency, { color: colors.currency }]}>{item.currency}</Text>
-        <Text style={[styles.label, { color: colors.label }]}>{item.label}</Text>
+        <Text style={styles.currency(colors)}>{item.currency}</Text>
+        <Text style={styles.label(colors)}>{item.label}</Text>
       </View>
       <Pressable onPress={toggleFavorite} style={styles.starContainer}>
         <AntDesign
@@ -109,26 +104,18 @@ const BottomSheet = ({ sheetOpen, setSheetOpen }) => {
     <View style={styles.BottomSheet}>
       <Pressable onPress={() => setSheetOpen(false)} style={{ pointerEvents: sheetOpen ? 'auto' : 'none' }}>
         <Animated.View
-          style={[
-            styles.BottomSheetShadowCover,
-            { backgroundColor: colors.bottomSheet },
-            { opacity: coverOpacityAnimation },
-          ]}
+          style={[styles.BottomSheetShadowCover, { backgroundColor: colors.bottomSheet }, { opacity: coverOpacityAnimation }]}
         />
       </Pressable>
       <Animated.View
-        style={[
-          styles.BottomSheetMainContainer,
-          { backgroundColor: colors.bottomSheetMain },
-          {
-            bottom: sheetAnimation.interpolate({
-              inputRange: [0, 1],
-              outputRange: ['-95%', '0%'],
-            }),
-          },
-        ]}
+        style={[styles.BottomSheetMainContainer, { backgroundColor: colors.bottomSheetMain }, {
+          bottom: sheetAnimation.interpolate({
+            inputRange: [0, 1],
+            outputRange: ['-95%', '0%'],
+          }),
+        }]}
       >
-        <Text style={[styles.addCurrencies, { color: colors.addCurrencies }]}>{t('text.addCurrencies')}</Text>
+        <Text style={styles.addCurrencies(colors)}>{t('text.addCurrencies')}</Text>
         <SearchBar
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
@@ -147,7 +134,7 @@ const BottomSheet = ({ sheetOpen, setSheetOpen }) => {
           contentContainerStyle={styles.listContainer}
           ListFooterComponent={() =>
             filteredCurrencies.length === 0 && (
-              <Text style={[styles.noResults, { color: colors.noResults }]}>{t('text.noResults')}</Text>
+              <Text style={styles.noResults(colors)}>{t('text.noResults')}</Text>
             )
           }
         />
@@ -188,27 +175,35 @@ const styles = StyleSheet.create({
     marginTop: 10,
     width: '90%',
   },
-  searchContainer: {
+  addCurrencies: (colors) => ({
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: colors.addCurrencies
+  }),
+  searchContainer: (colors) => ({
     flexDirection: 'row',
     alignItems: 'center',
     borderRadius: 9,
     paddingHorizontal: 6,
     height: 35,
     flex: 1,
-  },
-  searchInput: {
+    backgroundColor: colors.searchContainerBottom,
+  }),
+  searchInput: (colors) => ({
     flex: 1,
     fontSize: 14,
     paddingVertical: 4,
-  },
+    color: colors.searchInput,
+  }),
   cancelButton: {
     flex: 0.25,
   },
-  cancelText: {
+  cancelText: (colors) => ({
     marginLeft: 10,
     fontSize: 12,
-  },
-  itemContainer: {
+    color: colors.cancelText,
+  }),
+  itemContainer: (colors) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -217,7 +212,8 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingRight: 20,
     paddingLeft: 20,
-  },
+    borderBottomColor: colors.borderBottom,
+  }),
   flag: {
     width: 24,
     height: 24,
@@ -228,13 +224,15 @@ const styles = StyleSheet.create({
     flex: 1,
     marginRight: 12,
   },
-  currency: {
+  currency: (colors) => ({
     fontSize: 18,
     fontWeight: 'bold',
-  },
-  label: {
+    color: colors.currency,
+  }),
+  label: (colors) => ({
     fontSize: 12,
-  },
+    color: colors.label,
+  }),
   listContainer: {
     paddingBottom: 50,
   },
@@ -244,11 +242,12 @@ const styles = StyleSheet.create({
   searchActive: {
     flex: 0.99,
   },
-  noResults: {
+  noResults: (colors) => ({
     fontSize: 16,
     textAlign: 'center',
     marginTop: 20,
-  },
+    color: colors.noResults,
+  }),
 });
 
 export default BottomSheet;
