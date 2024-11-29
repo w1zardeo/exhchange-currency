@@ -136,76 +136,79 @@ export default function SettingsScreen() {
 
 
 const styles = StyleSheet.create = ({
-  container: (colors) => ({
-    backgroundColor: colors.background,
-    flex: 1,
-  }),
-  header: (colors) => ({
-    fontSize: 32,
-    fontWeight: 'bold',
-    padding: 20,
-    color: colors.text,
-  }),
-  optionsContainer: {
-    flex: 1,
-  },
-  combinedSection: (colors) => ({
-    borderRadius: 10,
-    marginHorizontal: 20,
-    paddingVertical: 1,
-    backgroundColor: colors.sectionBackground,
-  }),
-  divider: (colors) => ({
-    height: 0.1,
-    marginLeft: 20,
-    backgroundColor: colors.devider,
-  }),
-  option: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 15,
-    paddingHorizontal: 15,
-  },
-  optionText: (colors) => ({
-    fontSize: 16,
-    paddingTop: 5,
-    paddingLeft: 7,
-    color: colors.text,
-  }),
-  switchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  counterGroup: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  counterValue: (colors) => ({
-    fontSize: 18,
-    paddingRight: 10,
-    color: colors.text,
-  }),
-  iconContainer: {
-    flexDirection: 'row',
-    borderRadius: 8,
-  },
-  iconButton: {
-    paddingVertical: 5,
-    paddingHorizontal: 8,
-  },
-  languageContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 5,
-  },
-  languageButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 10,
-  },
-  languageFlag: {
-    width: 30,
-    height: 20,
-  },
-});
+    container: (colors) => ({
+      backgroundColor: colors.background,
+      flex: 1,
+    }),
+    header: (colors) => ({
+      fontSize: 32,
+      fontWeight: 'bold',
+      padding: 20,
+      color: colors.text,
+    }),
+    optionsContainer: {
+      flex: 1,
+    },
+    combinedSection: (colors) => ({
+      borderRadius: 10,
+      marginHorizontal: 20,
+      paddingVertical: 1,
+      backgroundColor: colors.sectionBackground,
+    }),
+    divider: (colors) => ({
+      height: 0.1,
+      marginLeft: 20,
+      backgroundColor: colors.devider,
+    }),
+    option: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      paddingVertical: 15,
+      paddingHorizontal: 15,
+    },
+    optionText: (colors) => ({
+      fontSize: 16,
+      paddingTop: 5,
+      paddingLeft: 7,
+      color: colors.text,
+    }),
+    switchContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    counterGroup: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center', // додаємо вирівнювання по центру
+    },
+    counterValue: (colors) => ({
+      fontSize: 18,
+      color: colors.text,
+      width: 40, // встановлюємо ширину для вирівнювання
+      textAlign: 'center', // додаємо вирівнювання тексту по центру
+    }),
+    iconContainer: {
+      flexDirection: 'row',
+      borderRadius: 8,
+      marginLeft: 10, // додаємо відступ між кнопками
+    },
+    iconButton: {
+      paddingVertical: 5,
+      paddingHorizontal: 8,
+    },
+    languageContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: 5,
+    },
+    languageButton: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      padding: 10,
+    },
+    languageFlag: {
+      width: 30,
+      height: 20,
+    },
+  });
