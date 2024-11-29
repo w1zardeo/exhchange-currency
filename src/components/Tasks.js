@@ -14,7 +14,7 @@ import Checkbox from './Checkbox';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
-// Константи
+
 const CONSTANTS = {
   categories: {
     Finance: '💰',
@@ -147,7 +147,7 @@ const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) =>
   );
 };
 
-// Стилі
+
 const styles = StyleSheet.create({
   tasks: {
     flex: 1,

@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { useSelector } from 'react-redux';
 
-// Константи для початкових значень
+
 const INITIAL_CATEGORY = 'Finance';
 const CATEGORY_OPTIONS = [
   { labelKey: 'text.finance', value: 'Finance' },
@@ -14,7 +14,6 @@ const CATEGORY_OPTIONS = [
   { labelKey: 'text.shoppingList', value: 'Shopping List' },
 ];
 
-// Константи стилів, які залежать від теми
 const createDynamicStyles = (colors) => ({
   modalBackdrop: { backgroundColor: colors.modalBackdrop },
   modal: { backgroundColor: colors.modal },

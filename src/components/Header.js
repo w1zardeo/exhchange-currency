@@ -8,7 +8,6 @@ const Header = ({ incompleteCount, completeCount, navigation, selectedDate }) =>
   const { t } = useTranslation();
   const colors = useSelector((state) => state.theme.colors);
 
-  // Константи стилів і текстів
   const placeholderText = 'Enter date';
   const calendarButtonText = t('text.calendar');
   const incompleteLabel = t('text.incompleteLower');

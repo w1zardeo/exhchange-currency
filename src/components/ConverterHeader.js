@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toggleTheme } from '../redux/ThemeSlice';
 import { useTranslation } from 'react-i18next';
 
-// Константи
 const ICON_SIZE = 18;
 const ADD_ICON_SIZE = 24;
 const SEARCH_PLACEHOLDER_KEY = 'text.search';

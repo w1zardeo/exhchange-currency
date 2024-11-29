@@ -12,12 +12,12 @@ const DayToDoScreen = ({ route, navigation }) => {
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
   
-  // Використовуємо селектори для кольорів та задач
+ 
   const colors = useSelector((state) => state.theme.colors);
   const tasksByDate = useSelector((state) => state.tasks);
   const tasks = tasksByDate[selectedDate] || { incomplete: [], complete: [] };
 
-  // Константи для стилів
+
   const backgroundColor = colors.background;
   const floatingButtonColor = colors.floating;
   const floatingButtonBorderColor = colors.floatingBorder;
@@ -38,7 +38,7 @@ const DayToDoScreen = ({ route, navigation }) => {
     dispatch(setTasksByDate({ selectedDate, tasks: tasks }));
   }, [dispatch, selectedDate, tasks]);
 
-  // Абстрагована функція для роботи з задачами
+ 
   const handleTaskAction = (action, index, type, newText = '') => {
     switch (action) {
       case 'toggle':

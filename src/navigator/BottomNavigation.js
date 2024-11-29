@@ -13,7 +13,7 @@ import { useSelector } from 'react-redux';
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
-// Константи для іконок
+
 const ICONS = {
   Calendar: {
     focused: require('../assets/icon/calendar-blue.png'),
@@ -29,7 +29,7 @@ const ICONS = {
   },
 };
 
-// Функція для створення іконок
+
 const TabBarIcon = ({ focused, icon }) => {
   return (
     <Image
