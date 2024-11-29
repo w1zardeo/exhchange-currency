@@ -80,7 +80,7 @@ const DarkTheme = {
     section: '#DADADA',
     smallGroup: '#575767',
     red: 'red',
-    modalOverlay: 'rgba(0,0,0,0.8)',
+    modalOverl: 'rgba(0,0,0,0.8)',
     black: 'black',
     floating: '#3F4EA0',
     floatingBorder: '#515CC6',

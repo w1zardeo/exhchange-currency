@@ -14,7 +14,7 @@ import { setDecimalPlaces } from '../redux/settingsSlice';
 import { useTranslation } from 'react-i18next'; 
 import i18n  from '../util/i18n';
 
-// Мови та прапори
+
 const languages = [
   { code: 'ua', flag: require('../flags/ua-flag.png') },
   { code: 'en', flag: require('../flags/gb-flag.png') },
@@ -25,12 +25,12 @@ export default function SettingsScreen() {
   const { t } = useTranslation(); 
   const dispatch = useDispatch();
   
-  // Використовуємо стани з Redux
+ 
   const colors = useSelector((state) => state.theme.colors); 
   const isDarkMode = useSelector((state) => state.theme.isDarkMode); 
   const decimalPlaces = useSelector((state) => state.settings.decimalPlaces);
 
-  // Функції обробки
+
   const handleToggleTheme = () => {
     dispatch(toggleTheme());
   };
@@ -49,8 +49,12 @@ export default function SettingsScreen() {
     i18n.changeLanguage(lang);
   };
 
+  const themeIcon = isDarkMode
+  ? { name: 'moon-outline',color: colors.iconMoon }
+  : { name: 'sunny-outline', color: colors.iconSun };
+
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <View style={[styles.container(colors)]}>
       <Text style={[styles.header, { color: colors.text }]}>{t('settings.title')}</Text>
 
       <View style={styles.optionsContainer}>
@@ -66,21 +70,17 @@ export default function SettingsScreen() {
                 thumbColor={colors.switchThumb}
                 trackColor={{ false: colors.switchTrack, true: colors.switchTrack }}
               />
-              {isDarkMode ? (
-                <Icon name="moon-outline" size={20} color={colors.iconMoon} />
-              ) : (
-                <Icon name="sunny-outline" size={20} color={colors.iconSun} />
-              )}
+              <Icon name={themeIcon.name} size={20} color={themeIcon.color} />
             </View>
           </View>
 
-          <View style={[styles.divider, { backgroundColor: colors.devider }]} />
+          <View style={[styles.divider(colors)]} />
 
           {/* Number of decimal places section */}
           <View style={styles.option}>
-            <Text style={[styles.optionText, { color: colors.text }]}>{t('settings.numberOfFractionDigits')}</Text>
+            <Text style={[styles.optionText(colors)]}>{t('settings.numberOfFractionDigits')}</Text>
             <View style={styles.counterGroup}>
-              <Text style={[styles.counterValue, { color: colors.text }]}>{decimalPlaces}</Text>
+              <Text style={[styles.counterValue(colors)]}>{decimalPlaces}</Text>
               <View style={styles.iconContainer}>
                 <TouchableOpacity onPress={decrementDigits} style={styles.iconButton}>
                   <Icon name="remove-outline" size={20} color={colors.icon} />
@@ -92,11 +92,11 @@ export default function SettingsScreen() {
             </View>
           </View>
 
-          <View style={[styles.divider, { backgroundColor: colors.devider }]} />
+          <View style={[styles.divider(colors)]} />
 
           {/* Language selection section */}
           <View style={styles.option}>
-            <Text style={[styles.optionText, { color: colors.text }]}>{t('settings.selectLanguage')}</Text>
+            <Text style={[styles.optionText(colors)]}>{t('settings.selectLanguage')}</Text>
             <View style={styles.languageContainer}>
               {languages.map((language) => (
                 <TouchableOpacity
@@ -116,10 +116,11 @@ export default function SettingsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
+const styles = StyleSheet.create = ({
+  container: (colors) => ({
     flex: 1,
-  },
+    backgroundColor: colors.background
+  }),
   header: {
     fontSize: 32,
     fontWeight: 'bold',
@@ -133,21 +134,23 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     paddingVertical: 1,
   },
-  divider: {
+  divider: (colors) => ({
     height: 0.1,
     marginLeft: 20,
-  },
+    backgroundColor: colors.devider
+  }),
   option: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingVertical: 15,
     paddingHorizontal: 15,
   },
-  optionText: {
+  optionText: (colors) =>({
+    color: colors.text,
     fontSize: 16,
     paddingTop: 5,
     paddingLeft: 7,
-  },
+  }),
   switchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -156,10 +159,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  counterValue: {
+  counterValue: (colors) => ({
     fontSize: 18,
     paddingRight: 10,
-  },
+    color: colors.text
+  }),
   iconContainer: {
     flexDirection: 'row',
     borderRadius: 8,

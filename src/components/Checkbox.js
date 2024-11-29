@@ -3,20 +3,17 @@ import { TouchableOpacity, Text, View, StyleSheet } from 'react-native';
 import { Checkmark } from './Checkmark';
 import { useSelector } from 'react-redux';
 
-const Checkbox = ({ checked, onChange, label, isDarkMode }) => {
+const Checkbox = ({ checked, onChange, label }) => {
   const colors = useSelector((state) => state.theme.colors);
 
   return (
     <TouchableOpacity onPress={onChange} style={styles.checkboxContainer}>
       <View
-        style={[
-          styles.checkbox,
-          { backgroundColor: colors.checkbox, borderColor: colors.borderColor },
-        ]}
+        style={[styles.checkbox(colors)]}
       >
-        {checked && <Checkmark isDarkMode={isDarkMode} />}
+        {checked && <Checkmark />}
       </View>
-      <Text style={[styles.label, { color: colors.labelColor }]}>{label}</Text>
+      <Text style={[styles.label(colors)]}>{label}</Text>
     </TouchableOpacity>
   );
 };
@@ -27,7 +24,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 0,
   },
-  checkbox: {
+  checkbox: (colors) => ({
     width: 24,
     height: 24,
     borderWidth: 2,
@@ -37,11 +34,14 @@ const styles = StyleSheet.create({
     marginRight: 10,
     marginLeft: 18,
     marginBottom: 2,
-  },
-  label: {
+    backgroundColor: colors.checkbox,
+    borderColor: colors.borderColor,
+  }),
+  label: (colors) => ({
     marginTop: 18,
     marginLeft: 0,
-  },
+    color: colors.labelColor,
+  }),
 });
 
 export default Checkbox;

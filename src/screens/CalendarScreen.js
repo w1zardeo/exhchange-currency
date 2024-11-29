@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { useDispatch, useSelector } from 'react-redux';
 import { setTasksByDate } from '../redux/TasksSlice'; 
 import { toggleTheme } from '../redux/ThemeSlice'; 
-import { useTranslation } from 'react-i18next'; 
+import { useTranslation } from 'react-i18next';
 
 const CalendarScreen = ({ navigation }) => {
   const { t } = useTranslation();
@@ -83,7 +83,7 @@ const CalendarScreen = ({ navigation }) => {
     const hasCompleteTasks = tasks.complete.length > 0;
 
     return (
-      <View key={day} style={styles.dayContainer}>
+      <View key={day} style={styles.dayContainer(colors)}>
         <View style={[styles.circleStyle, getCircleStyle(hasIncompleteTasks, hasCompleteTasks)]}>
           <Text
             onPress={() =>
@@ -93,9 +93,8 @@ const CalendarScreen = ({ navigation }) => {
               })
             }
             style={[
-              styles.dayText,
-              { color: colors.text },
-              isWeekend ? colors.weekend : colors.text,
+              styles.dayText(colors),
+              isWeekend ? { color: colors.weekend } : { color: colors.text },
               isToday(month, day) && { color: colors.today },
             ]}
           >
@@ -112,14 +111,14 @@ const CalendarScreen = ({ navigation }) => {
   };
 
   const renderMonth = month => (
-    <View key={month} style={styles.monthContainer}>
-      <Text style={[styles.monthText, { color: colors.text }]}>
+    <View key={month} style={styles.monthContainer(colors)}>
+      <Text style={[styles.monthText(colors)]}>
         {currentYear} {month}
       </Text>
       <View style={styles.daysGrid}>
         {daysOfWeek.map(dayOfWeek => (
           <View key={dayOfWeek} style={styles.weekDayContainer}>
-            <Text style={[styles.weekDayText, { color: colors.weekDay }]}>{dayOfWeek}</Text>
+            <Text style={[styles.weekDayText(colors)]}>{dayOfWeek}</Text>
           </View>
         ))}
         {generateMonthDays(month).map(day => renderDay(month, day))}
@@ -131,8 +130,12 @@ const CalendarScreen = ({ navigation }) => {
     dispatch(toggleTheme());
   };
 
+  const themeIcon = isDarkMode
+    ? { name: 'moon-outline', color: colors.iconMoon }
+    : { name: 'sunny-outline', color: colors.iconSun };
+
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <View style={[styles.container(colors)]}>
       <View style={styles.switchContainer}>
         <Switch
           value={isDarkMode}
@@ -140,11 +143,7 @@ const CalendarScreen = ({ navigation }) => {
           thumbColor={colors.switchThumb}
           trackColor={{ false: colors.switchTrack, true: colors.switchTrack }}
         />
-        {isDarkMode ? (
-          <Icon name="moon-outline" size={20} color={colors.iconMoon} />
-        ) : (
-          <Icon name="sunny-outline" size={20} color={colors.iconSun} />
-        )}
+        <Icon name={themeIcon.name} size={20} color={themeIcon.color} />
       </View>
       <FlatList
         data={Object.keys(daysInMonth)}
@@ -156,50 +155,54 @@ const CalendarScreen = ({ navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
+const styles = StyleSheet.create = ({
+  container: (colors) => ({
     flex: 1,
     padding: 10,
     paddingTop: 30,
-  },
+    backgroundColor: colors.background,
+  }),
   switchContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'center',
     marginBottom: 10,
   },
-  monthContainer: {
+  monthContainer: (colors) => ({
     marginBottom: 20,
     borderRadius: 10,
     padding: 10,
-  },
-  monthText: {
+    backgroundColor: colors.cardBackground,
+  }),
+  monthText: (colors) => ({
     fontSize: 18,
     marginBottom: 5,
     textAlign: 'start',
     marginLeft: 8,
-  },
+    color: colors.text,
+  }),
   weekDayContainer: {
     width: '14%',
     alignItems: 'center',
     marginBottom: 5,
   },
-  weekDayText: {
+  weekDayText: (colors) => ({
     textAlign: 'center',
-  },
+    color: colors.weekDay,
+  }),
   daysGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     alignItems: 'flex-start',
   },
-  dayContainer: {
+  dayContainer: (colors) => ({
     width: '14%',
     aspectRatio: 1,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 10,
     padding: 1,
-  },
+  }),
   circleStyle: {
     width: 28,
     height: 28,
@@ -207,9 +210,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  dayText: {
+  dayText: (colors) => ({
     textAlign: 'center',
-  },
+    color: colors.text,
+  }),
   todayContainer: {
     position: 'absolute',
     top: 30,

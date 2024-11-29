@@ -76,11 +76,11 @@ const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) =>
             <TextInput
               value={item.text}
               onChangeText={(text) => handleTextChange(text, index, section)}
-              style={[styles.taskText, { color: colors.text }]}
+              style={[styles.taskText(colors)]}
               numberOfLines={1}
               maxLength={100}
             />
-            <Text style={[styles.categoryText, { color: colors.smallGroup }]}>
+            <Text style={[styles.categoryText(colors)]}>
               {getCategoryEmoji(item.category)} {item.category}
             </Text>
           </View>
@@ -102,7 +102,7 @@ const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) =>
               style={styles.deleteIcon}
               onPress={() => handleImageDelete(index, section, imageIndex)}
             >
-              <Text style={[styles.deleteText, { color: colors.red }]}>❌</Text>
+              <Text style={[styles.deleteText(colors)]}>❌</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -113,9 +113,9 @@ const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) =>
 
   const renderTaskSection = (section, titleKey, placeholderKey) => (
     <View key={section}>
-      <Text style={[styles.sectionTitle, { color: colors.text }]}>{t(titleKey)}</Text>
+      <Text style={[styles.sectionTitle(colors)]}>{t(titleKey)}</Text>
       {tasks[section].length === 0 && (
-        <Text style={[styles.smallGap, { color: colors.smallGroup }]}>{t(placeholderKey)}</Text>
+        <Text style={[styles.smallGap(colors)]}>{t(placeholderKey)}</Text>
       )}
       <FlatList
         data={tasks[section]}
@@ -138,7 +138,7 @@ const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) =>
         onRequestClose={handleModalClose}
       >
         <TouchableWithoutFeedback onPress={handleModalClose}>
-          <View style={[styles.modalOverlay, { backgroundColor: colors.modalOverlay }]}>
+          <View style={[styles.modalOverlay(colors)]}>
             <Image source={{ uri: selectedImage }} style={styles.modalImage} />
           </View>
         </TouchableWithoutFeedback>
@@ -148,7 +148,7 @@ const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) =>
 };
 
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create = ({
   tasks: {
     flex: 1,
     width: '100%',
@@ -160,10 +160,11 @@ const styles = StyleSheet.create({
     marginTop: 16,
     marginLeft: 18,
   },
-  smallGap: {
+  smallGap: (colors) => ({
     fontSize: 14,
     marginLeft: 18,
-  },
+    color: colors.smallGroup,
+  }),
   flatList: {
     padding: 0,
   },
@@ -175,15 +176,17 @@ const styles = StyleSheet.create({
   textContainer: {
     flex: 1,
   },
-  taskText: {
+  taskText:  (colors) => ({
     fontSize: 18,
     fontWeight: 'bold',
-  },
-  categoryText: {
+    color: colors.text,
+  }),
+  categoryText: (colors) => ({
     fontSize: 14,
     fontWeight: 'bold',
     marginTop: 2,
-  },
+    color: colors.smallGroup,
+  }),
   imageWrapper: {
     position: 'relative',
     marginLeft: 10,
@@ -201,16 +204,28 @@ const styles = StyleSheet.create({
     right: 0,
     padding: 5,
   },
-  modalOverlay: {
+  modalOverlay: (colors) => ({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
+    backgroundColor: colors.modalOverl
+  }),
   modalImage: {
     width: '90%',
     height: '90%',
     resizeMode: 'contain',
   },
+  deleteText: (colors) => ({
+    fontSize: 14,
+    color: colors.red,
+  }),
+  sectionTitle: (colors) => ({
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginTop: 16,
+    marginLeft: 18,
+    color: colors.text,
+  }),
 });
 
 export default Tasks;
