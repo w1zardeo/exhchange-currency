@@ -136,8 +136,6 @@ const CalendarScreen = ({ navigation }) => {
       <Icon name="sunny-outline" size={20} color={colors.iconSun} />
     );
   };
-  
-  const iconColor = isDarkMode ? colors.iconMoon : colors.iconSun;
 
   return (
     <View style={[styles.container(colors)]}>
