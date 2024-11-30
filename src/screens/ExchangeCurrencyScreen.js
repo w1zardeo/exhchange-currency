@@ -19,10 +19,10 @@ const CurrencyConverterApp = () => {
   );
 };
 
-const styles = StyleSheet.create = ({
+const styles = StyleSheet.create({
   container: (colors) => ({
-    backgroundColor: colors.black,
-    flex: 1
+    flex: 1,
+    backgroundColor: colors.black
   }),
 });
 
