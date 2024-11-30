@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 const Header = ({ incompleteCount, completeCount, navigation, selectedDate }) => {
   const [inputText, setInputText] = useState('');
   const { t } = useTranslation();
-  const colors = useSelector((state) => state.theme.colors); // Використовуємо кольори з Redux
+  const colors = useSelector((state) => state.theme.colors);
 
   const calendarButtonText = t('text.calendar');
   const incompleteLabel = t('text.incompleteLower');
@@ -18,7 +18,7 @@ const Header = ({ incompleteCount, completeCount, navigation, selectedDate }) =>
     }
   }, [selectedDate]);
 
-  const styles = useStyles(colors); // Викликаємо useStyles, щоб отримати стилі з кольорами
+  const styles = useStyles(colors); 
 
   return (
     <View style={styles.header}>
@@ -48,7 +48,7 @@ const useStyles = (colors) =>
       width: '100%',
       padding: 0,
       marginTop: 0,
-      backgroundColor: colors.headerBackground, // Колір фону з Redux
+      backgroundColor: colors.headerBackground, 
     },
     headerRow: {
       flexDirection: 'row',
@@ -61,11 +61,11 @@ const useStyles = (colors) =>
       fontWeight: 'bold',
       fontFamily: 'inter',
       marginTop: 76,
-      color: colors.titleStyle, // Колір тексту з Redux
+      color: colors.titleStyle, x
     },
     calendarButton: {
       fontSize: 16,
-      color: colors.calendar, // Колір кнопки календаря з Redux
+      color: colors.calendar, 
     },
     subtitle: {
       fontSize: 14,
@@ -73,7 +73,7 @@ const useStyles = (colors) =>
       fontFamily: 'inter',
       marginTop: 11,
       marginLeft: 18,
-      color: colors.subtitleStyle, // Колір підзаголовка з Redux
+      color: colors.subtitleStyle, 
     },
     line: {
       height: 2,
@@ -81,7 +81,7 @@ const useStyles = (colors) =>
       marginTop: 16,
       marginLeft: 18,
       borderRadius: 5,
-      backgroundColor: colors.lineStyle, // Колір лінії з Redux
+      backgroundColor: colors.lineStyle,
     },
   });
 

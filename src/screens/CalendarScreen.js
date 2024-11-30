@@ -12,7 +12,7 @@ const CalendarScreen = ({ navigation }) => {
   const tasksByDate = useSelector(state => state.tasks);
   const { isDarkMode, colors } = useSelector((state) => state.theme);
   const currentYear = new Date().getFullYear();
-  const styles = useStyles(colors); // use the styles
+  const styles = useStyles(colors); 
 
   const daysInMonth = {
     [t('monthDay.jan')]: 31,

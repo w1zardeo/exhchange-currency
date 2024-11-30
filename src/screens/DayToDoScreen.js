@@ -33,7 +33,7 @@ const DayToDoScreen = ({ route, navigation }) => {
     dispatch(setTasksByDate({ selectedDate, tasks: tasks }));
   }, [dispatch, selectedDate, tasks]);
 
-  // Функції для дій з задачами
+
   const toggleTaskStatus = (index, type) => {
     dispatch(toggleTask({ selectedDate, index, type }));
   };
@@ -91,7 +91,7 @@ const DayToDoScreen = ({ route, navigation }) => {
   );
 };
 
-// Use the styles hook for dynamic styling
+
 const useStyles = (colors) => 
   StyleSheet.create = ({
   container: {
