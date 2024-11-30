@@ -20,14 +20,6 @@ const languages = [
   { code: 'es', flag: require('../flags/spanish-flag.png') }
 ];
 
-const ThemeIcon = ({ isDarkMode, colors }) => {
-  return isDarkMode ? (
-    <Icon name="moon-outline" size={20} color={colors.iconMoon} />
-  ) : (
-    <Icon name="sunny-outline" size={20} color={colors.iconSun} />
-  );
-};
-
 const CounterButton = ({ onPress, iconName, color, style }) => (
   <TouchableOpacity onPress={onPress} style={style}>
     <Icon name={iconName} size={20} color={color} />
@@ -78,7 +70,7 @@ export default function SettingsScreen() {
                 thumbColor={colors.switchThumb}
                 trackColor={{ false: colors.switchTrack, true: colors.switchTrack }}
               />
-              <ThemeIcon isDarkMode={isDarkMode} colors={colors} />
+              <Icon name={isDarkMode? "sunny-outline" : "sunny-outline"} size={20} color={colors[isDarkMode ? "iconMoon" : "iconSun"]} />
             </View>
           </View>
 
