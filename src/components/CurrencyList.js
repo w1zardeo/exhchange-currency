@@ -7,12 +7,12 @@ import {
   Image,
   TouchableOpacity,
   ActivityIndicator,
+  StyleSheet
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleFavorite, updateCurrenciesOrder, fetchCurrencies } from '../redux/currencySlice';
 import { useTranslation } from 'react-i18next';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import useStyles from './useStyles'; // імпортуємо хук useStyles
 
 const EditMode = ({ onDrag }) => {
   const styles = useStyles();
@@ -166,13 +166,8 @@ const CurrencyList = () => {
   );
 };
 
-import { useSelector } from 'react-redux';
-import { StyleSheet } from 'react-native';
-
 const useStyles = () => {
-  const colors = useSelector((state) => state.theme.colors);
-
-  return StyleSheet.create({
+ StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: colors.background,

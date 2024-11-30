@@ -20,7 +20,8 @@ const CurrencyConverterApp = () => {
   );
 };
 
-const useStyles = (colors) => StyleSheet.create = ({
+const useStyles = (colors) => 
+  StyleSheet.create = ({
   container: {
     backgroundColor: colors.black,
     flex: 1,

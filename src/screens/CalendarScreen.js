@@ -130,16 +130,8 @@ const CalendarScreen = ({ navigation }) => {
     dispatch(toggleTheme());
   };
 
-  const ThemeIcon = ({ isDarkMode, colors }) => {
-    return isDarkMode ? (
-      <Icon name="moon-outline" size={20} color={colors.iconMoon} />
-    ) : (
-      <Icon name="sunny-outline" size={20} color={colors.iconSun} />
-    );
-  };
 
  
-  const iconColor = isDarkMode ? colors.iconMoon : colors.iconSun;
 
   return (
     <View style={styles.container}>
@@ -150,7 +142,7 @@ const CalendarScreen = ({ navigation }) => {
           thumbColor={colors.switchThumb}
           trackColor={{ false: colors.switchTrack, true: colors.switchTrack }}
         />
-       <ThemeIcon isDarkMode={isDarkMode} colors={colors} />
+       <Icon name={isDarkMode? "sunny-outline" : "sunny-outline"} size={20} color={colors[isDarkMode ? "iconMoon" : "iconSun"]} />
       </View>
       <FlatList
         data={Object.keys(daysInMonth)}
@@ -163,7 +155,8 @@ const CalendarScreen = ({ navigation }) => {
   );
 };
 
-const useStyles = (colors) => StyleSheet.create = ({
+const useStyles = (colors) => 
+  StyleSheet.create = ({
   container: {
     flex: 1,
     padding: 10,

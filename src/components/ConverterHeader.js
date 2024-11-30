@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
@@ -73,13 +73,8 @@ const ConverterHeader = ({ searchQuery, setSearchQuery, toggleBottomSheet, onEdi
   );
 };
 
-import { useSelector } from 'react-redux';
-import { StyleSheet } from 'react-native';
-
 const useStyles = () => {
-  const colors = useSelector((state) => state.theme.colors);
-
-  return StyleSheet.create({
+ StyleSheet.create({
     headerContainer: {
       padding: 10,
       backgroundColor: colors.background,

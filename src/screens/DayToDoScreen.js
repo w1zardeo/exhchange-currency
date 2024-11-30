@@ -92,7 +92,8 @@ const DayToDoScreen = ({ route, navigation }) => {
 };
 
 // Use the styles hook for dynamic styling
-const useStyles = (colors) => StyleSheet.create = ({
+const useStyles = (colors) => 
+  StyleSheet.create = ({
   container: {
     flex: 1,
     backgroundColor: colors.background

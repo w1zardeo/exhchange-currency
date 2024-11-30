@@ -1,7 +1,6 @@
 import React from 'react';
-import { TouchableOpacity, Text, View } from 'react-native';
+import { TouchableOpacity, Text, View, StyleSheet } from 'react-native';
 import { Checkmark } from './Checkmark'; // ваш компонент для галочки
-import useStyles from './useStyles'; // Імпортуємо хук
 
 const Checkbox = ({ checked, onChange, label }) => {
   const styles = useStyles(); // Використовуємо стилі з хука
@@ -16,13 +15,9 @@ const Checkbox = ({ checked, onChange, label }) => {
   );
 };
 
-import { useSelector } from 'react-redux';
-import { StyleSheet } from 'react-native';
 
-const useStyles = () => {
-  const colors = useSelector((state) => state.theme.colors);
-
-  return StyleSheet.create({
+const useStyles = (colors) =>
+  StyleSheet.create({
     checkboxContainer: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -47,6 +42,7 @@ const useStyles = () => {
       color: colors.labelColor,
     },
   });
-};
+
+
 
 export default Checkbox;

@@ -1,11 +1,10 @@
-import { Pressable, FlatList, Animated, Text, View, TouchableOpacity } from 'react-native';
+import { Pressable, FlatList, Animated, Text, View, TouchableOpacity, StyleSheet } from 'react-native';
 import React, { useState, useRef, useEffect } from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleFavorite } from '../redux/currencySlice';
 import { useTranslation } from 'react-i18next';
-import useStyles from './useStyles'; // Імпортуємо кастомний хук
 
 const DURATION = 300;
 
@@ -146,114 +145,108 @@ const BottomSheet = ({ sheetOpen, setSheetOpen }) => {
   );
 };
 
-import { useSelector } from 'react-redux';
-import { StyleSheet } from 'react-native';
-
-const useStyles = () => {
-  const colors = useSelector((state) => state.theme.colors);
-
-  return StyleSheet.create({
-    BottomSheet: {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      height: '100%',
-      width: '100%',
-    },
-    BottomSheetShadowCover: {
-      height: '100%',
-      width: '100%',
-    },
-    BottomSheetMainContainer: {
-      position: 'absolute',
-      width: '100%',
-      height: '95%',
-      bottom: 0,
-      borderTopLeftRadius: 10,
-      borderTopRightRadius: 10,
-      paddingTop: 12,
-      alignItems: 'center',
-    },
-    addCurrencies: {
-      fontSize: 16,
-      fontWeight: 'bold',
-      color: colors.addCurrencies,
-    },
-    searchRow: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginTop: 10,
-      width: '90%',
-    },
-    searchContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      borderRadius: 9,
-      paddingHorizontal: 6,
-      height: 35,
-      flex: 1,
-      backgroundColor: colors.searchContainerBottom,
-    },
-    searchInput: {
-      flex: 1,
-      fontSize: 14,
-      paddingVertical: 4,
-      color: colors.searchInput,
-    },
-    cancelButton: {
-      flex: 0.25,
-    },
-    cancelText: {
-      marginLeft: 10,
-      fontSize: 12,
-      color: colors.cancelText,
-    },
-    itemContainer: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      paddingVertical: 10,
-      borderBottomWidth: 0.2,
-      width: '100%',
-      paddingRight: 20,
-      paddingLeft: 20,
-      borderBottomColor: colors.borderBottom,
-    },
-    flag: {
-      width: 24,
-      height: 24,
-      marginRight: 12,
-      borderRadius: 13,
-    },
-    currencyInfo: {
-      flex: 1,
-      marginRight: 12,
-    },
-    currency: {
-      fontSize: 18,
-      fontWeight: 'bold',
-      color: colors.currency,
-    },
-    label: {
-      fontSize: 12,
-      color: colors.label,
-    },
-    listContainer: {
-      paddingBottom: 50,
-    },
-    starContainer: {
-      marginLeft: 10,
-    },
-    searchActive: {
-      flex: 0.99,
-    },
-    noResults: {
-      fontSize: 16,
-      textAlign: 'center',
-      marginTop: 20,
-      color: colors.noResults,
-    },
-  });
-};
+const useStyles = () => 
+  StyleSheet.create({
+  BottomSheet: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    height: '100%',
+    width: '100%',
+  },
+  BottomSheetShadowCover: {
+    height: '100%',
+    width: '100%',
+  },
+  BottomSheetMainContainer: {
+    position: 'absolute',
+    width: '100%',
+    height: '95%',
+    bottom: 0,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    paddingTop: 12,
+    alignItems: 'center',
+  },
+  addCurrencies: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: colors.addCurrencies,
+  },
+  searchRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 10,
+    width: '90%',
+  },
+  searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 9,
+    paddingHorizontal: 6,
+    height: 35,
+    flex: 1,
+    backgroundColor: colors.searchContainerBottom,
+  },
+  searchInput: {
+    flex: 1,
+    fontSize: 14,
+    paddingVertical: 4,
+    color: colors.searchInput,
+  },
+  cancelButton: {
+    flex: 0.25,
+  },
+  cancelText: {
+    marginLeft: 10,
+    fontSize: 12,
+    color: colors.cancelText,
+  },
+  itemContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 10,
+    borderBottomWidth: 0.2,
+    width: '100%',
+    paddingRight: 20,
+    paddingLeft: 20,
+    borderBottomColor: colors.borderBottom,
+  },
+  flag: {
+    width: 24,
+    height: 24,
+    marginRight: 12,
+    borderRadius: 13,
+  },
+  currencyInfo: {
+    flex: 1,
+    marginRight: 12,
+  },
+  currency: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: colors.currency,
+  },
+  label: {
+    fontSize: 12,
+    color: colors.label,
+  },
+  listContainer: {
+    paddingBottom: 50,
+  },
+  starContainer: {
+    marginLeft: 10,
+  },
+  searchActive: {
+    flex: 0.99,
+  },
+  noResults: {
+    fontSize: 16,
+    textAlign: 'center',
+    marginTop: 20,
+    color: colors.noResults,
+  },
+});
 
 export default BottomSheet;

@@ -92,7 +92,8 @@ export default function BottomNavigation() {
   );
 }
 
-const useStyles = (colors) => StyleSheet.create({
+const useStyles = (colors) => 
+  StyleSheet.create({
   tabBar: {
     position: 'absolute',
     bottom: 0,
