@@ -8,7 +8,6 @@ const Header = ({ incompleteCount, completeCount, navigation, selectedDate }) =>
   const { t } = useTranslation();
   const colors = useSelector((state) => state.theme.colors); // Використовуємо кольори з Redux
 
-  const placeholderText = 'Enter date';
   const calendarButtonText = t('text.calendar');
   const incompleteLabel = t('text.incompleteLower');
   const completeLabel = t('text.completedLower');
@@ -28,7 +27,6 @@ const Header = ({ incompleteCount, completeCount, navigation, selectedDate }) =>
           style={styles.title}
           value={inputText}
           onChangeText={setInputText}
-          placeholder={placeholderText}
           placeholderTextColor={colors.headerPlaceholder}
           underlineColorAndroid="transparent"
         />
