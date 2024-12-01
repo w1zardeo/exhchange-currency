@@ -70,7 +70,7 @@ const ConverterHeader = ({ searchQuery, setSearchQuery, toggleBottomSheet, onEdi
 const useStyles = () => {
   const {colors} = useSelector((state) => state.theme);
 
- return StyleSheet.create = ({
+ return StyleSheet.create ({
     headerContainer: {
       padding: 10,
       backgroundColor: colors.background,

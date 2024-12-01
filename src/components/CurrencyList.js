@@ -170,7 +170,7 @@ const CurrencyList = () => {
 
 const useStyles = () => {
   const {colors} = useSelector((state) => state.theme);
- return StyleSheet.create = ({
+ return StyleSheet.create ({
     container: {
       flex: 1,
       backgroundColor: colors.background,

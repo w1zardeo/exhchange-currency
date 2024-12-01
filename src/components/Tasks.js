@@ -142,7 +142,7 @@ const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) =>
 
 const useStyles = () => {
   const {colors} = useSelector((state) => state.theme);
-  return StyleSheet.create = ({ 
+  return StyleSheet.create({ 
   tasks: {
     flex: 1,
     width: '100%',

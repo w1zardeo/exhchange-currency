@@ -40,7 +40,7 @@ const Header = ({ incompleteCount, completeCount, navigation, selectedDate }) =>
 
 const useStyles = () => {
   const {colors} = useSelector((state) => state.theme);
-  return StyleSheet.create = ({
+  return StyleSheet.create ({
     header: {
       width: '100%',
       padding: 0,

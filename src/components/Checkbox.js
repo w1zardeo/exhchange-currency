@@ -19,7 +19,7 @@ const Checkbox = ({ checked, onChange, label }) => {
 
 const useStyles = () => {
   const {colors} = useSelector((state) => state.theme);
-   return StyleSheet.create = ({
+   return StyleSheet.create ({
     checkboxContainer: {
       flexDirection: 'row',
       alignItems: 'center',

@@ -108,7 +108,7 @@ const TaskModal = ({ visible, onAddTask, onClose }) => {
 
 const useStyles = () =>  {
   const {colors} = useSelector((state) => state.theme);
-  return StyleSheet.create = ({
+  return StyleSheet.create ({
     modalBackdrop: {
       backgroundColor: colors.modalBackdrop,
       flex: 1,
