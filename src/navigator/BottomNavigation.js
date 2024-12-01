@@ -1,17 +1,46 @@
-import { View, Text, Image } from 'react-native';
 import React from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import CalendarScreen from '../screens/CalendarScreen';
 import ExchangeCurrencyScreen from '../screens/ExchangeCurrencyScreen';
 import SettingsScreen from '../screens/SettingsScreen';
-import DayToDoScreen from '../screens/DayToDoScreen'; 
-import { Provider } from 'react-redux';
-import { store } from '../redux/store';
-
+import DayToDoScreen from '../screens/DayToDoScreen';
+import { useSelector } from 'react-redux';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
+
+const ICONS = {
+  Calendar: {
+    focused: require('../assets/icon/calendar-blue.png'),
+    default: require('../assets/icon/calendar-white.png'),
+  },
+  ExchangeCurrency: {
+    focused: require('../assets/icon/exchange-blue.png'),
+    default: require('../assets/icon/exchange-white.png'),
+  },
+  Settings: {
+    focused: require('../assets/icon/settings-blue.png'),
+    default: require('../assets/icon/settings-white.png'),
+  },
+};
+
+const TabBarIcon = ({ focused, icon, colors }) => {
+  const styles = useStyles();
+  return (
+    <Image
+      style={[styles.icon, { tintColor: focused ? colors.iconActive : colors.iconInactive }]}
+      source={focused ? icon.focused : icon.default}
+    />
+  );
+};
+
+const CustomTabBarButton = ({ onPress, children }) => (
+  <TouchableOpacity style={styles.customButton} onPress={onPress}>
+    {children}
+  </TouchableOpacity>
+);
 
 const CalendarStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -20,22 +49,17 @@ const CalendarStack = () => (
   </Stack.Navigator>
 );
 
-const BottomNavigation = () => {
+export default function BottomNavigation() {
+  const { colors } = useSelector((state) => state.theme);
+
+  const styles = useStyles(colors);
+
   return (
-    <Provider store={store}>
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
-        tabBarStyle: {
-          backgroundColor: 'black', 
-          position: 'absolute', 
-          bottom: 0, 
-          left: 0,
-          right: 0,
-          elevation: 0, 
-          shadowOpacity: 0, 
-        },
+        tabBarStyle: styles.tabBar,
       }}
     >
       <Tab.Screen
@@ -43,14 +67,7 @@ const BottomNavigation = () => {
         component={CalendarStack}
         options={{
           tabBarIcon: ({ focused }) => (
-            <Image
-              style={{ height: 24, width: 24 }}
-              source={
-                focused
-                  ? require('../assets/icon/calendar-blue.png') 
-                  : require('../assets/icon/calendar-white.png')
-              }
-            />
+            <TabBarIcon focused={focused} icon={ICONS.Calendar} colors={colors} />
           ),
         }}
       />
@@ -59,14 +76,7 @@ const BottomNavigation = () => {
         component={ExchangeCurrencyScreen}
         options={{
           tabBarIcon: ({ focused }) => (
-            <Image
-              style={{ height: 24, width: 24 }}
-              source={
-                focused
-                  ? require('../assets/icon/exchange-blue.png') 
-                  : require('../assets/icon/exchange-white.png')
-              }
-            />
+            <TabBarIcon focused={focused} icon={ICONS.ExchangeCurrency} colors={colors} />
           ),
         }}
       />
@@ -75,21 +85,39 @@ const BottomNavigation = () => {
         component={SettingsScreen}
         options={{
           tabBarIcon: ({ focused }) => (
-            <Image
-              style={{ height: 24, width: 24 }}
-              source={
-                focused
-                  ? require('../assets/icon/settings-blue.png') 
-                  : require('../assets/icon/settings-white.png') 
-              }
-            />
+            <TabBarIcon focused={focused} icon={ICONS.Settings} colors={colors} />
           ),
         }}
       />
-      
     </Tab.Navigator>
-    </Provider>
   );
-};
+}
 
-export default BottomNavigation;
+const useStyles = () => {
+  const colors = useSelector((state) => state.theme.colors);
+  return StyleSheet.create = ({
+  tabBar: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    elevation: 0,
+    backgroundColor: colors.black,
+    height: 70,
+  },
+  icon: {
+    width: 24,
+    height: 24,
+  },
+  customButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 50,
+    height: 60,
+    width: 60,
+    backgroundColor: colors.customButtonBackground,
+    position: 'absolute',
+    top: -20,
+  },
+});
+}

@@ -1,111 +1,136 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { useDispatch, useSelector } from 'react-redux';
-import { toggleTheme } from '../redux/ThemeSlice'; 
-import { useTranslation } from 'react-i18next'; 
+import { useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 
-const ConverterHeader = ({ searchQuery, setSearchQuery, toggleBottomSheet, onEditToggle, isEditing }) => {
-  const { t } = useTranslation(); 
-  const dispatch = useDispatch();
-  const [isSearching, setIsSearching] = useState(false);
-  
-  const colors = useSelector((state) => state.theme.colors); 
+const ICON_SIZE = 18;
+const ADD_ICON_SIZE = 24;
+const SEARCH_PLACEHOLDER_KEY = 'text.search';
+const CANCEL_TEXT_KEY = 'text.cancel';
+const HEADER_TEXT_KEY = 'text.header';
+const EDIT_TEXT_KEY = 'text.edit';
+const DONE_TEXT_KEY = 'text.done';
+
+const SearchBar = ({ searchQuery, setSearchQuery, isSearching, setIsSearching }) => {
+  const { t } = useTranslation();
+  const styles = useStyles();
 
   const handleCancel = () => {
-    setSearchQuery(''); 
-    setIsSearching(false); 
+    setSearchQuery('');
+    setIsSearching(false);
   };
 
   return (
-    <View style={[styles.headerContainer, {backgroundColor: colors.background}]}>
-      <View style={styles.topRow}>
-        <TouchableOpacity onPress={onEditToggle}>
-          <Text style={styles.editText}>{isEditing ? t('text.done') : t('text.edit')}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={toggleBottomSheet}>
-          <Icon name="add" size={24} color="#13518f" />
-        </TouchableOpacity>
+    <View style={styles.searchRow}>
+      <View style={[styles.searchContainer, isSearching && styles.searchActive]}>
+        <Icon name="search" size={ICON_SIZE} style={styles.searchIcon} />
+        <TextInput
+          placeholder={t(SEARCH_PLACEHOLDER_KEY)}
+          placeholderTextColor={styles.searchInput.color} 
+          style={styles.searchInput}
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+          onFocus={() => setIsSearching(true)}
+        />
       </View>
-      <Text style={[styles.title, { color: colors.text }]}>{t('text.header')}</Text>
-      <View style={styles.searchRow}>
-        <View style={[styles.searchContainer, isSearching && styles.searchActive, {backgroundColor: colors.searchContainer}]}>
-          <Icon name="search" size={18} color="#888" style={styles.searchIcon} />
-          <TextInput
-            placeholder={t('text.search')}
-            placeholderTextColor="#888"
-            style={styles.searchInput}
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-            onFocus={() => setIsSearching(true)} 
-          />
-        </View>
-        {isSearching && (
-          <TouchableOpacity onPress={handleCancel}>
-            <Text style={styles.cancelText}>{t('text.cancel')}</Text>
-          </TouchableOpacity>
-        )}
-      </View>
+      {isSearching && (
+        <TouchableOpacity onPress={handleCancel}>
+          <Text style={styles.cancelText}>{t(CANCEL_TEXT_KEY)}</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  headerContainer: {
-    backgroundColor: 'black',
-    padding: 10,
-  },
-  topRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  editText: {
-    color: '#13518f',
-    fontSize: 16,
-  },
-  title: {
-    fontSize: 27,
-    fontWeight: 'bold',
-    color: 'white',
-    marginTop: 5,
-  },
-  searchRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 10,
-  },
-  searchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderRadius: 8,
-    paddingHorizontal: 6,
-    height: 35,
-    flex: 1,
-  },
-  searchActive: {
-    flex: 0.99, 
-  },
-  searchIcon: {
-    marginRight: 0,
-  },
-  searchInput: {
-    flex: 1,
-    color: 'white',
-    fontSize: 14,
-    paddingVertical: 4,
-  },
-  cancelText: {
-    color: '#007AFF',
-    marginLeft: 10,
-    fontSize: 16,
-  },
-});
+const ConverterHeader = ({ searchQuery, setSearchQuery, toggleBottomSheet, onEditToggle, isEditing }) => {
+  const { t } = useTranslation();
+  const [isSearching, setIsSearching] = useState(false);
+
+  const styles = useStyles(); 
+
+  return (
+    <View style={styles.headerContainer}>
+      <View style={styles.topRow}>
+        <TouchableOpacity onPress={onEditToggle}>
+          <Text style={styles.textBase}>
+            {isEditing ? t(DONE_TEXT_KEY) : t(EDIT_TEXT_KEY)}
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={toggleBottomSheet}>
+          <Icon name="add" size={ADD_ICON_SIZE} style={styles.addIcon} />
+        </TouchableOpacity>
+      </View>
+      <Text style={styles.title}>{t(HEADER_TEXT_KEY)}</Text>
+      <SearchBar
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        isSearching={isSearching}
+        setIsSearching={setIsSearching}
+      />
+    </View>
+  );
+};
+
+const useStyles = () => {
+  const colors = useSelector((state) => state.theme.colors);
+
+ return StyleSheet.create = ({
+    headerContainer: {
+      padding: 10,
+      backgroundColor: colors.background,
+    },
+    topRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
+    searchRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginTop: 10,
+    },
+    searchContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      borderRadius: 8,
+      paddingHorizontal: 6,
+      height: 35,
+      flex: 1,
+      backgroundColor: colors.searchContainer,
+    },
+    searchActive: {
+      flex: 0.99,
+    },
+    searchIcon: {
+      marginRight: 0,
+      color: colors.placeholder,
+    },
+    searchInput: {
+      flex: 1,
+      fontSize: 14,
+      paddingVertical: 4,
+      color: colors.searchInput,
+    },
+    textBase: {
+      fontSize: 16,
+      color: colors.edit,
+    },
+    addIcon: {
+      color: colors.addIcon,
+    },
+    title: {
+      fontSize: 27,
+      fontWeight: 'bold',
+      marginTop: 5,
+      color: colors.text,
+    },
+    cancelText: {
+      marginLeft: 10,
+      color: colors.cancelText,
+    },
+  });
+};
 
 export default ConverterHeader;
