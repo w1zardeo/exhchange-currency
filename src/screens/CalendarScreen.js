@@ -151,7 +151,7 @@ const CalendarScreen = ({ navigation }) => {
   );
 };
 
-const styles = StyleSheet.create =  ({
+const styles = StyleSheet.create = ({
   container: (colors) => ({
     flex: 1,
     padding: 10,
