@@ -70,7 +70,7 @@ export default function SettingsScreen() {
                 thumbColor={colors.switchThumb}
                 trackColor={{ false: colors.switchTrack, true: colors.switchTrack }}
               />
-              <Icon name={isDarkMode? "sunny-outline" : "sunny-outline"} size={20} color={colors[isDarkMode ? "iconMoon" : "iconSun"]} />
+              <Icon name={isDarkMode? "moon-outline" : "sunny-outline"} size={20} color={colors[isDarkMode ? "iconMoon" : "iconSun"]} />
             </View>
           </View>
 
