@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const fetchCurrencies = createAsyncThunk(
   'currencies/fetchCurrencies', 
@@ -8,9 +7,6 @@ export const fetchCurrencies = createAsyncThunk(
       const response = await fetch(`https://api.exchangerate-api.com/v4/latest/UAH`);
       const data = await response.json();
       const rates = data.rates;
-
-      const favoriteCurrencies = await AsyncStorage.getItem('favoriteCurrencies');
-      const favorites = favoriteCurrencies ? JSON.parse(favoriteCurrencies) : [];
 
       const currenciesArray = await Promise.all(
         Object.keys(rates).map(async (currency) => {
@@ -28,7 +24,6 @@ export const fetchCurrencies = createAsyncThunk(
               label: fullCurrencyName,
               symbol: symbol,
               rate: rates[currency],
-              isFavorite: favorites.includes(currency),
             };
           } catch (error) {
             console.error(`Error fetching data for currency: ${currency}`, error);
@@ -47,18 +42,26 @@ export const fetchCurrencies = createAsyncThunk(
 const currencySlice = createSlice({
   name: 'currencies',
   initialState: {
-    currencies: [], 
+    currencies: [],
+    favoriteCurrencies: [],
     loading: false,
-    status: 'idle', 
+    status: 'idle',
     error: null,
   },
   reducers: {
-    setCurrencies(state, action) {
-      state.currencies = action.payload;
-    },
     toggleFavorite: (state, action) => {
-      const id = action.payload;  
-      const currency = state.currencies.find((c) => c.id === action.payload);
+      const currencyId = action.payload;
+      const isFavorite = state.favoriteCurrencies.includes(currencyId);
+
+      if (isFavorite) {
+        state.favoriteCurrencies = state.favoriteCurrencies.filter(
+          (id) => id !== currencyId
+        );
+      } else {
+        state.favoriteCurrencies.push(currencyId);
+      }
+
+      const currency = state.currencies.find((c) => c.id === currencyId);
       if (currency) {
         currency.isFavorite = !currency.isFavorite;
       }
@@ -76,7 +79,13 @@ const currencySlice = createSlice({
       .addCase(fetchCurrencies.fulfilled, (state, action) => {
         state.loading = false;
         state.status = 'succeeded';
-        state.currencies = action.payload || [];
+
+        const fetchedCurrencies = action.payload || [];
+        fetchedCurrencies.forEach((currency) => {
+          currency.isFavorite = state.favoriteCurrencies.includes(currency.id);
+        });
+
+        state.currencies = fetchedCurrencies;
       })
       .addCase(fetchCurrencies.rejected, (state, action) => {
         state.loading = false;
