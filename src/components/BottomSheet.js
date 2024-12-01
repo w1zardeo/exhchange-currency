@@ -1,8 +1,8 @@
-import { Pressable, FlatList, Animated, Text, View, TouchableOpacity, StyleSheet, TextInput, Image } from 'react-native';
 import React, { useState, useRef, useEffect } from 'react';
-import Icon from 'react-native-vector-icons/Ionicons';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import { useDispatch, useSelector } from 'react-redux';
+import { View, FlatList, Text, Pressable, Animated, StyleSheet } from 'react-native';
+import SearchBar from './SearchBar';
+import CurrencyItemInBottomSheet from './CurrencyItemInBottomSheet';
+import { useSelector, useDispatch } from 'react-redux';
 import { toggleFavorite } from '../redux/currencySlice';
 import { useTranslation } from 'react-i18next';
 
@@ -16,65 +16,13 @@ const runAnimation = (animation, toValue) => {
   }).start();
 };
 
-const SearchBar = ({ searchQuery, setSearchQuery, isSearching, setIsSearching }) => {
-  const styles = useStyles(); 
-  const { t } = useTranslation();
-
-  const handleCancel = () => {
-    setSearchQuery('');
-    setIsSearching(false);
-  };
-
-  return (
-    <View style={styles.searchRow}>
-      <View style={[styles.searchContainer, isSearching && styles.searchActive]}>
-        <Icon name="search" size={18} color={styles.searchInput.color} style={styles.searchIcon} />
-        <TextInput
-          placeholder={t('text.search')}
-          placeholderTextColor={styles.searchInput.color}
-          style={styles.searchInput}
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-          onFocus={() => setIsSearching(true)}
-        />
-      </View>
-      {isSearching && (
-        <TouchableOpacity onPress={handleCancel} style={styles.cancelButton}>
-          <Text style={styles.cancelText}>{t('text.cancel')}</Text>
-        </TouchableOpacity>
-      )}
-    </View>
-  );
-};
-
-const CurrencyItemInBottomSheet = React.memo(({ item, toggleFavorite }) => {
-  const {colors} = useSelector((state) => state.theme);
-  const styles = useStyles(); 
-  return (
-    <View style={styles.itemContainer}>
-      <Image source={{ uri: item.flag }} style={styles.flag} />
-      <View style={styles.currencyInfo}>
-        <Text style={styles.currency}>{item.currency}</Text>
-        <Text style={styles.label}>{item.label}</Text>
-      </View>
-      <Pressable onPress={toggleFavorite} style={styles.starContainer}>
-        <AntDesign
-          name={item.isFavorite ? 'star' : 'staro'}
-          size={20}
-          color={item.isFavorite ? colors.favorite : colors.unfavorite}
-        />
-      </Pressable>
-    </View>
-  );
-});
-
 const BottomSheet = ({ sheetOpen, setSheetOpen }) => {
-  const styles = useStyles(); 
-  const {currencies} = useSelector((state) => state.currency);
+  const { currencies } = useSelector((state) => state.currency);
+  const styles = useStyles();
   const [searchQuery, setSearchQuery] = useState('');
+  const [isSearching, setIsSearching] = useState(false);
   const sheetAnimation = useRef(new Animated.Value(0)).current;
   const coverOpacityAnimation = useRef(new Animated.Value(0)).current;
-  const [isSearching, setIsSearching] = useState(false);
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
@@ -147,9 +95,9 @@ const BottomSheet = ({ sheetOpen, setSheetOpen }) => {
 };
 
 const useStyles = () => {
-  const {colors} = useSelector((state) => state.theme);
+  const { colors } = useSelector((state) => state.theme);
 
-  return StyleSheet.create = ({
+  return StyleSheet.create({
     BottomSheet: {
       position: 'absolute',
       top: 0,
@@ -177,73 +125,8 @@ const useStyles = () => {
       fontWeight: 'bold',
       color: colors.addCurrencies,
     },
-    searchRow: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginTop: 10,
-      width: '90%',
-    },
-    searchContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      borderRadius: 9,
-      paddingHorizontal: 6,
-      height: 35,
-      flex: 1,
-      backgroundColor: colors.searchContainerBottom,
-    },
-    searchInput: {
-      flex: 1,
-      fontSize: 14,
-      paddingVertical: 4,
-      color: colors.searchInput,
-    },
-    cancelButton: {
-      flex: 0.25,
-    },
-    cancelText: {
-      marginLeft: 10,
-      fontSize: 12,
-      color: colors.cancelText,
-    },
-    itemContainer: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      paddingVertical: 10,
-      borderBottomWidth: 0.2,
-      width: '100%',
-      paddingRight: 20,
-      paddingLeft: 20,
-      borderBottomColor: colors.borderBottom,
-    },
-    flag: {
-      width: 24,
-      height: 24,
-      marginRight: 12,
-      borderRadius: 13,
-    },
-    currencyInfo: {
-      flex: 1,
-      marginRight: 12,
-    },
-    currency: {
-      fontSize: 18,
-      fontWeight: 'bold',
-      color: colors.currency,
-    },
-    label: {
-      fontSize: 12,
-      color: colors.label,
-    },
     listContainer: {
       paddingBottom: 50,
-    },
-    starContainer: {
-      marginLeft: 10,
-    },
-    searchActive: {
-      flex: 0.99,
     },
     noResults: {
       fontSize: 16,
@@ -253,6 +136,5 @@ const useStyles = () => {
     },
   });
 };
-
 
 export default BottomSheet;
