@@ -94,7 +94,7 @@ export default function BottomNavigation() {
 }
 
 const useStyles = () => {
-  const colors = useSelector((state) => state.theme.colors);
+  const {colors} = useSelector((state) => state.theme);
   return StyleSheet.create = ({
   tabBar: {
     position: 'absolute',

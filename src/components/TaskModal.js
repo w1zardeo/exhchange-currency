@@ -33,7 +33,7 @@ const TaskModal = ({ visible, onAddTask, onClose }) => {
   const [images, setImages] = useState([]);
   const { t } = useTranslation();
   const styles = useStyles();
-  const colors = useSelector((state) => state.theme.colors);
+  const {colors} = useSelector((state) => state.theme);
 
   const handleAdd = () => {
     if (task.trim()) {
@@ -107,7 +107,7 @@ const TaskModal = ({ visible, onAddTask, onClose }) => {
 };
 
 const useStyles = () =>  {
-  const colors = useSelector((state) => state.theme.colors);
+  const {colors} = useSelector((state) => state.theme);
   return StyleSheet.create = ({
     modalBackdrop: {
       backgroundColor: colors.modalBackdrop,
@@ -120,27 +120,27 @@ const useStyles = () =>  {
       padding: 20,
       borderRadius: 8,
       alignItems: 'center',
-      backgroundColor: colors.modal, // Додано кольорову динаміку
+      backgroundColor: colors.modal, 
     },
     modalTitle:{
       fontSize: 20,
       marginBottom: 10,
-      color: colors.modalTitle, // Додано кольорову динаміку
+      color: colors.modalTitle, 
     },
     input: {
       width: '100%',
       padding: 10,
       marginBottom: 10,
       borderRadius: 4,
-      backgroundColor: colors.input, // Додано кольорову динаміку
-      color: colors.modalTitle, // Додано кольорову динаміку
+      backgroundColor: colors.input, 
+      color: colors.modalTitle,
     },
     picker:{
       width: '100%',
       marginBottom: 10,
       borderRadius: 4,
-      backgroundColor: colors.input, // Додано кольорову динаміку
-      color: colors.modalTitle, // Додано кольорову динаміку
+      backgroundColor: colors.input, 
+      color: colors.modalTitle, 
     },
     paperclipButton: {
       marginTop: 10,
@@ -148,7 +148,7 @@ const useStyles = () =>  {
       borderRadius: 5,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: colors.picker, // Додано кольорову динаміку
+      backgroundColor: colors.picker, 
     },
     imagePreviewContainer: {
       flexDirection: 'row',
@@ -162,7 +162,7 @@ const useStyles = () =>  {
       marginBottom: 5,
       borderRadius: 8,
       borderWidth: 1,
-      borderColor: colors.imageBorder, // Додано кольорову динаміку
+      borderColor: colors.imageBorder, 
     },
     button: {
       width: '100%',
@@ -172,12 +172,12 @@ const useStyles = () =>  {
       justifyContent: 'center',
       alignItems: 'center',
       marginBottom: 10,
-      borderColor: colors.button, // Додано кольорову динаміку
-      backgroundColor: colors.buttonBackground, // Додано кольорову динаміку
+      borderColor: colors.button,
+      backgroundColor: colors.buttonBackground, 
     },
     buttonText: {
       fontSize: 16,
-      color: colors.button, // Додано кольорову динаміку
+      color: colors.button,
     }
   });
 }

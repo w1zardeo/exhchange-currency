@@ -6,11 +6,7 @@ import { useSelector } from 'react-redux';
 const Header = ({ incompleteCount, completeCount, navigation, selectedDate }) => {
   const [inputText, setInputText] = useState('');
   const { t } = useTranslation();
-  const colors = useSelector((state) => state.theme.colors);
-
-  const calendarButtonText = t('text.calendar');
-  const incompleteLabel = t('text.incompleteLower');
-  const completeLabel = t('text.completedLower');
+  const {colors} = useSelector((state) => state.theme);
 
   useEffect(() => {
     if (selectedDate) {
@@ -31,11 +27,11 @@ const Header = ({ incompleteCount, completeCount, navigation, selectedDate }) =>
           underlineColorAndroid="transparent"
         />
         <TouchableOpacity onPress={() => navigation.navigate('Calendar')}>
-          <Text style={styles.calendarButton}>{calendarButtonText}</Text>
+          <Text style={styles.calendarButton}>{t('text.calendar')}</Text>
         </TouchableOpacity>
       </View>
       <Text style={styles.subtitle}>
-        {incompleteCount} {incompleteLabel}, {completeCount} {completeLabel}
+        {incompleteCount} {t('text.incompleteLower')}, {completeCount} {t('text.completedLower')}
       </Text>
       <View style={styles.line} />
     </View>
@@ -43,7 +39,7 @@ const Header = ({ incompleteCount, completeCount, navigation, selectedDate }) =>
 };
 
 const useStyles = () => {
-  const colors = useSelector((state) => state.theme.colors);
+  const {colors} = useSelector((state) => state.theme);
   return StyleSheet.create = ({
     header: {
       width: '100%',

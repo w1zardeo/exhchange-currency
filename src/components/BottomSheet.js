@@ -48,7 +48,7 @@ const SearchBar = ({ searchQuery, setSearchQuery, isSearching, setIsSearching })
 };
 
 const CurrencyItemInBottomSheet = React.memo(({ item, toggleFavorite }) => {
-  const colors = useSelector((state) => state.theme.colors);
+  const {colors} = useSelector((state) => state.theme);
   const styles = useStyles(); 
   return (
     <View style={styles.itemContainer}>
@@ -70,7 +70,7 @@ const CurrencyItemInBottomSheet = React.memo(({ item, toggleFavorite }) => {
 
 const BottomSheet = ({ sheetOpen, setSheetOpen }) => {
   const styles = useStyles(); 
-  const currencies = useSelector((state) => state.currency.currencies);
+  const {currencies} = useSelector((state) => state.currency);
   const [searchQuery, setSearchQuery] = useState('');
   const sheetAnimation = useRef(new Animated.Value(0)).current;
   const coverOpacityAnimation = useRef(new Animated.Value(0)).current;
@@ -147,7 +147,7 @@ const BottomSheet = ({ sheetOpen, setSheetOpen }) => {
 };
 
 const useStyles = () => {
-  const colors = useSelector((state) => state.theme.colors);
+  const {colors} = useSelector((state) => state.theme);
 
   return StyleSheet.create = ({
     BottomSheet: {

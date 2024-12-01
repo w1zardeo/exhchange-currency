@@ -51,7 +51,7 @@ const CurrencyInfo = ({ symbol, convertedAmount, rate, currency, decimalPlaces, 
 
 const CurrencyItem = ({ item, baseAmount, onAmountChange, isEditing, onDrag }) => {
   const styles = useStyles();
-  const decimalPlaces = useSelector((state) => state.settings.decimalPlaces);
+  const {decimalPlaces} = useSelector((state) => state.settings);
 
   const convertedAmount = (baseAmount * item.rate)
     .toFixed(decimalPlaces)
@@ -169,7 +169,7 @@ const CurrencyList = () => {
 };
 
 const useStyles = () => {
-  const colors = useSelector((state) => state.theme.colors);
+  const {colors} = useSelector((state) => state.theme);
  return StyleSheet.create = ({
     container: {
       flex: 1,

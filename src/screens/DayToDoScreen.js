@@ -12,7 +12,7 @@ const DayToDoScreen = ({ route, navigation }) => {
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
 
-  const colors = useSelector((state) => state.theme.colors);
+  const {colors} = useSelector((state) => state.theme);
   const tasksByDate = useSelector((state) => state.tasks);
   const tasks = tasksByDate[selectedDate] || { incomplete: [], complete: [] };
   const styles = useStyles(colors);
@@ -93,7 +93,7 @@ const DayToDoScreen = ({ route, navigation }) => {
 
 
 const useStyles = () => {
-  const colors = useSelector((state) => state.theme.colors);
+  const {colors} = useSelector((state) => state.theme);
   return StyleSheet.create = ({
   container: {
     flex: 1,

@@ -13,13 +13,13 @@ import { toggleTheme } from '../redux/ThemeSlice';
 import { setDecimalPlaces } from '../redux/settingsSlice';
 import { useTranslation } from 'react-i18next'; 
 import i18n  from '../util/i18n';
+import { FLAGS } from '../constants/flags';
 
 const languages = [
-  { code: 'ua', flag: require('../flags/ua-flag.png') },
-  { code: 'en', flag: require('../flags/gb-flag.png') },
-  { code: 'es', flag: require('../flags/spanish-flag.png') }
+  { code: 'ua', flag: FLAGS.ua },
+  { code: 'en', flag: FLAGS.en },
+  { code: 'es', flag: FLAGS.es },
 ];
-
 
 const CounterIcon = ({ type, colors }) => {
   const iconName = type === 'decrement' ? 'remove-outline' : 'add-outline';
@@ -32,7 +32,7 @@ export default function SettingsScreen() {
   const dispatch = useDispatch();
   
   const { isDarkMode, colors } = useSelector((state) => state.theme);
-  const decimalPlaces = useSelector((state) => state.settings.decimalPlaces);
+  const {decimalPlaces} = useSelector((state) => state.settings);
 
   const styles = useStyles(colors);
 
@@ -115,7 +115,7 @@ export default function SettingsScreen() {
 }
 
 const useStyles = () => {
-  const colors = useSelector((state) => state.theme.colors);
+  const {colors} = useSelector((state) => state.theme);
   return StyleSheet.create = ({
   container: {
     backgroundColor: colors.background,

@@ -7,7 +7,7 @@ import BottomSheet from '../components/BottomSheet';
 import { useSelector } from 'react-redux';
 
 const CurrencyConverterApp = () => {
-  const colors = useSelector((state) => state.theme.colors);
+  const {colors} = useSelector((state) => state.theme);
   const styles = useStyles(colors);
 
   return (
@@ -21,7 +21,7 @@ const CurrencyConverterApp = () => {
 };
 
 const useStyles = () => {
-  const colors = useSelector((state) => state.theme.colors);
+  const {colors} = useSelector((state) => state.theme);
   return StyleSheet.create = ({
   container: {
     backgroundColor: colors.black,

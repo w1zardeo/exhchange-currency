@@ -23,14 +23,6 @@ const CONSTANTS = {
     'Shopping List': '🛒',
     default: '',
   },
-  placeholders: {
-    incomplete: 'text.addTask',
-    complete: 'text.markTask',
-  },
-  titles: {
-    incomplete: 'text.incompleteUpper',
-    complete: 'text.completedUpper',
-  },
 };
 
 const getCategoryEmoji = (category) => CONSTANTS.categories[category] || CONSTANTS.categories.default;
@@ -39,7 +31,6 @@ const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) =>
   const { t } = useTranslation();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
-  const colors = useSelector((state) => state.theme.colors);
   const styles = useStyles();
 
   const handleTextChange = (text, index, section) => {
@@ -129,8 +120,8 @@ const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) =>
 
   return (
     <View style={styles.tasks}>
-      {renderTaskSection('incomplete', CONSTANTS.titles.incomplete, CONSTANTS.placeholders.incomplete)}
-      {renderTaskSection('complete', CONSTANTS.titles.complete, CONSTANTS.placeholders.complete)}
+      {renderTaskSection('incomplete', t('text.incompleteUpper'), t('text.addTask'))}
+      {renderTaskSection('complete', t('text.completedUpper'), t('text.markTask'))}
 
       <Modal
         visible={isModalVisible}
@@ -150,7 +141,7 @@ const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) =>
 
 
 const useStyles = () => {
-  const colors = useSelector((state) => state.theme.colors);
+  const {colors} = useSelector((state) => state.theme);
   return StyleSheet.create = ({ 
   tasks: {
     flex: 1,

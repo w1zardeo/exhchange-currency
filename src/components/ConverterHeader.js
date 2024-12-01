@@ -7,12 +7,6 @@ import { useSelector } from 'react-redux';
 
 const ICON_SIZE = 18;
 const ADD_ICON_SIZE = 24;
-const SEARCH_PLACEHOLDER_KEY = 'text.search';
-const CANCEL_TEXT_KEY = 'text.cancel';
-const HEADER_TEXT_KEY = 'text.header';
-const EDIT_TEXT_KEY = 'text.edit';
-const DONE_TEXT_KEY = 'text.done';
-
 const SearchBar = ({ searchQuery, setSearchQuery, isSearching, setIsSearching }) => {
   const { t } = useTranslation();
   const styles = useStyles();
@@ -27,7 +21,7 @@ const SearchBar = ({ searchQuery, setSearchQuery, isSearching, setIsSearching })
       <View style={[styles.searchContainer, isSearching && styles.searchActive]}>
         <Icon name="search" size={ICON_SIZE} style={styles.searchIcon} />
         <TextInput
-          placeholder={t(SEARCH_PLACEHOLDER_KEY)}
+          placeholder={t('text.search')}
           placeholderTextColor={styles.searchInput.color} 
           style={styles.searchInput}
           value={searchQuery}
@@ -37,7 +31,7 @@ const SearchBar = ({ searchQuery, setSearchQuery, isSearching, setIsSearching })
       </View>
       {isSearching && (
         <TouchableOpacity onPress={handleCancel}>
-          <Text style={styles.cancelText}>{t(CANCEL_TEXT_KEY)}</Text>
+          <Text style={styles.cancelText}>{t('text.cancel')}</Text>
         </TouchableOpacity>
       )}
     </View>
@@ -55,14 +49,14 @@ const ConverterHeader = ({ searchQuery, setSearchQuery, toggleBottomSheet, onEdi
       <View style={styles.topRow}>
         <TouchableOpacity onPress={onEditToggle}>
           <Text style={styles.textBase}>
-            {isEditing ? t(DONE_TEXT_KEY) : t(EDIT_TEXT_KEY)}
+            {isEditing ? t('text.done') : t('text.edit')}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={toggleBottomSheet}>
           <Icon name="add" size={ADD_ICON_SIZE} style={styles.addIcon} />
         </TouchableOpacity>
       </View>
-      <Text style={styles.title}>{t(HEADER_TEXT_KEY)}</Text>
+      <Text style={styles.title}>{t('text.header')}</Text>
       <SearchBar
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
@@ -74,7 +68,7 @@ const ConverterHeader = ({ searchQuery, setSearchQuery, toggleBottomSheet, onEdi
 };
 
 const useStyles = () => {
-  const colors = useSelector((state) => state.theme.colors);
+  const {colors} = useSelector((state) => state.theme);
 
  return StyleSheet.create = ({
     headerContainer: {

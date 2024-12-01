@@ -156,7 +156,7 @@ const CalendarScreen = ({ navigation }) => {
 };
 
 const useStyles = () => {
-  const colors = useSelector((state) => state.theme.colors);
+  const {colors} = useSelector((state) => state.theme);
   return StyleSheet.create = ({
   container: {
     flex: 1,
