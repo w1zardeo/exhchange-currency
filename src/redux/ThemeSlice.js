@@ -5,7 +5,7 @@ import DefaultTheme from '../theme/DefaultTheme';
 const initialState = {
   isDarkMode: true,
   colors: DarkTheme, 
-  taskColors: {  // Кольори для завдань
+  taskColors: { 
     incomplete: 'red',
     complete: 'green',
     default: 'transparent',

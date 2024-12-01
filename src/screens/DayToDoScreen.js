@@ -107,7 +107,7 @@ const useStyles = () => {
     backgroundColor: colors.floating,
     borderColor: colors.floatingBorder,
     position: 'absolute',
-    bottom: 20,
+    bottom: 80,
     right: 20,
     width: 60,
     height: 60,
