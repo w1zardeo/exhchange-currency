@@ -3,58 +3,55 @@ import {
   View,
   Text,
   FlatList,
-  StyleSheet,
   TextInput,
   Image,
   TouchableOpacity,
   ActivityIndicator,
+  StyleSheet
 } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { toggleFavorite, updateCurrenciesOrder, fetchCurrencies } from '../redux/currencySlice';
+import { useTranslation } from 'react-i18next';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import ConverterHeader from './ConverterHeader';
 import BottomSheet from './BottomSheet';
-import { useDispatch, useSelector } from 'react-redux'; 
-import {
-  toggleFavorite,
-  updateCurrenciesOrder,
-  fetchCurrencies,
-} from '../redux/currencySlice'; 
-import { useTranslation } from 'react-i18next'; 
 
-import Icon from 'react-native-vector-icons/MaterialIcons';
+const EditMode = ({ onDrag }) => {
+  const styles = useStyles();
+  return (
+    <TouchableOpacity style={styles.editIcon} onLongPress={onDrag}>
+      <Icon name="menu" size={18} color={styles.iconMenu.color} />
+    </TouchableOpacity>
+  );
+};
 
-const EditMode = ({ onDrag }) => (
-  <TouchableOpacity style={styles.editIcon} onLongPress={onDrag}>
-    <Icon name="menu" size={18} color="#efefef" />
-  </TouchableOpacity>
-);
+const CurrencyInfo = ({ symbol, convertedAmount, rate, currency, decimalPlaces, onInputChange }) => {
+  const styles = useStyles();
+  const formattedRate = rate.toFixed(decimalPlaces);
+  const rateText = `1 UAH = ${formattedRate} ${currency}`;
 
-const ViewMode = ({symbol,convertedAmount,onInputChange,rate,currency,decimalPlaces}) => {
-  const colors = useSelector((state) => state.theme.colors); 
-
-  return(
-  <View style={styles.rateInfo}>
-    <View style={styles.inputContainer}>
-      <Text style={[styles.symbol, {color: colors.text}]}>{symbol}</Text>
-      <TextInput
-        style={[styles.rate, {color:colors.text}]}
-        keyboardType="numeric"
-        value={convertedAmount}
-        onChangeText={onInputChange}
-        numberOfLines={1}
-        maxLength={10}
-        scrollEnabled={true}
-      />
+  return (
+    <View style={styles.rateInfo}>
+      <View style={styles.inputContainer}>
+        <Text style={styles.symbol}>{symbol}</Text>
+        <TextInput
+          style={styles.rate}
+          keyboardType="numeric"
+          value={convertedAmount}
+          onChangeText={onInputChange}
+          numberOfLines={1}
+          maxLength={10}
+          scrollEnabled={true}
+        />
+      </View>
+      <Text style={styles.rateText}>{rateText}</Text>
     </View>
-    <Text style={[styles.rateText, {color: colors.rate}]}>
-      {`1 UAH = ${rate.toFixed(decimalPlaces)} ${currency}`}
-    </Text>
-  </View>
-)};
+  );
+};
 
 const CurrencyItem = ({ item, baseAmount, onAmountChange, isEditing, onDrag }) => {
-  const { t } = useTranslation();
-  const dispatch = useDispatch();
-  const decimalPlaces = useSelector((state) => state.settings.decimalPlaces);
-  const colors = useSelector((state) => state.theme.colors); 
+  const styles = useStyles();
+  const {decimalPlaces} = useSelector((state) => state.settings);
 
   const convertedAmount = (baseAmount * item.rate)
     .toFixed(decimalPlaces)
@@ -76,28 +73,23 @@ const CurrencyItem = ({ item, baseAmount, onAmountChange, isEditing, onDrag }) =
     }
   };
 
-  const handleFavoriteToggle = () => {
-    dispatch(toggleFavorite(item.id));
-  };
-
   return (
-    <View style={[styles.itemContainer, {borderBottomColor: colors.line}]}>
+    <View style={styles.itemContainer}>
       <Image source={{ uri: item.flag }} style={styles.flag} />
       <View style={styles.currencyInfo}>
-        <Text style={[styles.currency, styles.textStyle, {color: colors.text}]}>{item.currency}</Text>
-        <Text style={[styles.label, styles.labelStyle, {color: colors.label}]}>{item.label}</Text>
+        <Text style={styles.currency}>{item.currency}</Text>
+        <Text style={styles.label}>{item.label}</Text>
       </View>
       {isEditing ? (
         <EditMode onDrag={onDrag} />
       ) : (
-        <ViewMode
+        <CurrencyInfo
           symbol={item.symbol}
           convertedAmount={convertedAmount}
           onInputChange={handleInputChange}
           rate={item.rate}
           currency={item.currency}
           decimalPlaces={decimalPlaces}
-          styles={styles}
         />
       )}
     </View>
@@ -110,11 +102,10 @@ const CurrencyList = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [sheetOpen, setSheetOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const colors = useSelector((state) => state.theme.colors); 
 
   const dispatch = useDispatch();
   const { currencies = [], loading, status } = useSelector((state) => state.currency);
-  const isDarkMode = useSelector((state) => state.theme.isDarkMode);
+  const styles = useStyles();
 
   useEffect(() => {
     if (!Array.isArray(currencies) || currencies.length === 0) {
@@ -134,12 +125,6 @@ const CurrencyList = () => {
     dispatch(toggleFavorite(currencyId));
   };
 
-  const handleDragEnd = ({ data }) => {
-    if (!isEditing) {
-      dispatch(updateCurrenciesOrder(data));
-    }
-  };
-
   const favoriteCurrencies = currencies.filter((currency) => currency.isFavorite);
 
   const filteredFavoriteCurrencies = favoriteCurrencies.filter((currency) =>
@@ -147,7 +132,7 @@ const CurrencyList = () => {
   );
 
   return (
-    <View style={[styles.container, {backgroundColor: colors.background}]}>
+    <View style={styles.container}>
       <ConverterHeader
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
@@ -157,12 +142,10 @@ const CurrencyList = () => {
       />
       {loading ? (
         <View style={styles.loaderContainer}>
-          <ActivityIndicator size="large" color="#00ff00" />
+          <ActivityIndicator size="large" color={styles.activityIndicator.color} />
         </View>
       ) : filteredFavoriteCurrencies.length === 0 ? (
-        <View style={styles.emptyContainer}>
-          <Text style={styles.emptyText}>{t('text.emptyText')}</Text>
-        </View>
+        <Text style={styles.emptyText}>{t('text.emptyText')}</Text>
       ) : (
         <FlatList
           data={filteredFavoriteCurrencies}
@@ -177,7 +160,6 @@ const CurrencyList = () => {
             />
           )}
           keyExtractor={(item) => item.id}
-          onDragEnd={handleDragEnd}
           contentContainerStyle={styles.listContainer}
         />
       )}
@@ -186,94 +168,98 @@ const CurrencyList = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'black',
-    paddingBottom: 50,
-  },
-  listContainer: {
-    paddingBottom: 130,
-  },
-  symbol: {
-    fontSize: 18,
-    color: '#efefef',
-    marginLeft: 10,
-  },
-  loaderContainer: {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: [{ translateX: -25 }, { translateY: -25 }],
-    zIndex: 1,
-  },
-  itemContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 10,
-    borderBottomWidth: 0.2,
-    marginLeft: 15,
-  },
-  flag: {
-    width: 24,
-    height: 24,
-    marginRight: 12,
-    marginLeft: 10,
-    borderRadius: 13,
-  },
-  currencyInfo: {
-    flex: 1,
-    marginRight: 12,
-  },
-  currency: {
-    color: '#efefef',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  label: {
-    fontSize: 12,
-    color: '#666',
-  },
-  rateInfo: {
-    alignItems: 'flex-end',
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    maxWidth: 150,
-    overflow: 'hidden',
-  },
-  symbol: {
-    fontSize: 18,
-    color: '#efefef',
-    marginLeft: 10,
-  },
-  rate: {
-    color: '#efefef',
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginRight: 10,
-    overflow: 'hidden',
-    textAlign: 'right',
-    paddingLeft: 5,
-  },
-  rateText: {
-    fontSize: 13,
-    marginRight: 10,
-    marginTop: -10,
-  },
-  editIcon: {
-    padding: 10,
-  },
-  emptyText: {
-    color: 'white',
-    fontSize: 16,
-    textAlign: 'center',
-    marginTop: 20,
-  }
-});
+const useStyles = () => {
+  const {colors} = useSelector((state) => state.theme);
+ return StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.background,
+      paddingBottom: 50,
+    },
+    activityIndicator: {
+      color: colors.activityIndicator,
+    },
+    listContainer: {
+      paddingBottom: 130,
+    },
+    iconMenu: {
+      color: colors.iconMenu,
+    },
+    symbol: {
+      fontSize: 18,
+      marginLeft: 10,
+      color: colors.text,
+    },
+    loaderContainer: {
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      transform: [{ translateX: -25 }, { translateY: -25 }],
+      zIndex: 1,
+    },
+    itemContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      paddingVertical: 10,
+      borderBottomWidth: 0.2,
+      borderBottomColor: colors.line,
+      marginLeft: 15,
+    },
+    flag: {
+      width: 24,
+      height: 24,
+      marginRight: 12,
+      marginLeft: 10,
+      borderRadius: 13,
+    },
+    currencyInfo: {
+      flex: 1,
+      marginRight: 12,
+    },
+    currency: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      color: colors.text,
+    },
+    label: {
+      fontSize: 12,
+      color: colors.label,
+    },
+    rateInfo: {
+      alignItems: 'flex-end',
+    },
+    inputContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      maxWidth: 150,
+      overflow: 'hidden',
+    },
+    rate: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      marginRight: 10,
+      overflow: 'hidden',
+      textAlign: 'right',
+      paddingLeft: 5,
+      color: colors.text,
+    },
+    rateText: {
+      fontSize: 13,
+      marginRight: 10,
+      marginBottom: 10,
+      color: colors.rate,
+    },
+    editIcon: {
+      padding: 10,
+    },
+    emptyText: {
+      fontSize: 16,
+      textAlign: 'center',
+      marginTop: 20,
+      color: colors.empty,
+    },
+  });
+};
 
 export default CurrencyList;
-
-
