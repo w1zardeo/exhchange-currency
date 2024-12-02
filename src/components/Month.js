@@ -1,31 +1,41 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import { useSelector } from 'react-redux';
-import DayCircle from './DayCircle';
+import { daysOfWeek } from '../constants/daysOfWeek'; 
 
-const Month = ({ month, daysInMonth, tasksByDate, currentYear, renderDay, styles, colors, navigation }) => {
-  const daysOfWeek = [
-    'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun',
-  ];
+const Month = ({ 
+  month, 
+  daysInMonth, 
+  renderDay, 
+  styles, 
+  colors 
+}) => {
 
-  const generateMonthDays = month => {
-    const days = Array.from({ length: daysInMonth[month] }, (_, i) => i + 1);
-    return days;
+  
+  const generateMonthDays = (monthName) => {
+    const totalDays = daysInMonth[monthName];
+    return Array.from({ length: totalDays }, (_, i) => i + 1);
   };
 
   return (
-    <View key={month} style={styles.monthContainer}>
+    <View style={styles.monthContainer}>
+     
       <Text style={styles.monthText}>
-        {currentYear} {month}
+        {month}
       </Text>
+
+    
       <View style={styles.daysGrid}>
-        {daysOfWeek.map(dayOfWeek => (
-          <View key={dayOfWeek} style={styles.weekDayContainer}>
-            <Text style={styles.weekDayText}>{dayOfWeek}</Text>
+        {daysOfWeek.map((day) => (
+          <View key={day} style={styles.weekDayContainer}>
+            <Text style={styles.weekDayText}>{day}</Text>
           </View>
         ))}
-        {generateMonthDays(month).map(day =>
-          renderDay(month, day, tasksByDate, currentYear, styles, colors, navigation)
+      </View>
+
+     
+      <View style={styles.daysGrid}>
+        {generateMonthDays(month).map((day) =>
+          renderDay(month, day) 
         )}
       </View>
     </View>

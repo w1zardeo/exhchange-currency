@@ -3,4 +3,3 @@ export const FLAGS = {
     en: require('../flags/gb-flag.png'),
     es: require('../flags/spanish-flag.png'),
   };
-  

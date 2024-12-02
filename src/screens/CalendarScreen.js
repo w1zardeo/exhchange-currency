@@ -6,12 +6,12 @@ import { toggleTheme } from '../redux/ThemeSlice';
 import { useTranslation } from 'react-i18next';
 import CalendarHeader from '../components/CalendarHeader';
 import Month from '../components/Month';
-import DayCircle from '../components/DayCircle';
+import RenderDay from '../components/Day';
 
 const CalendarScreen = ({ navigation }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const tasksByDate = useSelector(state => state.tasks);
+  const tasksByDate = useSelector((state) => state.tasks);
   const { isDarkMode, colors } = useSelector((state) => state.theme);
   const currentYear = new Date().getFullYear();
   const styles = useStyles(colors);
@@ -45,19 +45,16 @@ const CalendarScreen = ({ navigation }) => {
   const renderDay = (month, day) => {
     const date = new Date(Date.UTC(currentYear, Object.keys(daysInMonth).indexOf(month), day));
     const isToday = date.getDate() === new Date().getDate() && date.getMonth() === new Date().getMonth();
-    const tasks = tasksByDate[`${month} ${day}, ${currentYear}`] || { incomplete: [], complete: [] };
-    const hasIncompleteTasks = tasks.incomplete.length > 0;
-    const hasCompleteTasks = tasks.complete.length > 0;
 
     return (
-      <DayCircle
+      <RenderDay
         key={day}
         day={day}
         month={month}
+        year={currentYear}
+        tasksByDate={tasksByDate}
         isToday={isToday}
-        hasIncompleteTasks={hasIncompleteTasks}
-        hasCompleteTasks={hasCompleteTasks}
-        onPress={() => navigation.navigate('DayToDoScreen', { selectedDate: `${month} ${day}, ${currentYear}`, isDarkMode })}
+        navigation={navigation}
         styles={styles}
         colors={colors}
       />
@@ -99,7 +96,7 @@ const CalendarScreen = ({ navigation }) => {
 };
 
 const useStyles = () => {
-  const {colors} = useSelector((state) => state.theme);
+  const { colors } = useSelector((state) => state.theme);
   return StyleSheet.create({
     container: {
       flex: 1,

@@ -1,17 +1,17 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-
 const EXCHANGE_RATE_API_URL = 'https://api.exchangerate-api.com/v4/latest/UAH';
 const COUNTRIES_API_URL = 'https://restcountries.com/v3.1/currency';
 
-
-const STATUS_IDLE = 'idle';
-const STATUS_LOADING = 'loading';
-const STATUS_SUCCEEDED = 'succeeded';
-const STATUS_FAILED = 'failed';
-
-
 const DEFAULT_FLAG_URL = 'https://via.placeholder.com/24';
+
+
+export const STATUS = {
+  IDLE: 'idle',
+  LOADING: 'loading',
+  SUCCEEDED: 'succeeded',
+  FAILED: 'failed',
+};
 
 export const fetchCurrencies = createAsyncThunk(
   'currencies/fetchCurrencies', 
@@ -58,7 +58,7 @@ const currencySlice = createSlice({
     currencies: [],
     favoriteCurrencies: [],
     loading: false,
-    status: STATUS_IDLE,
+    status: STATUS.IDLE, 
     error: null,
   },
   reducers: {
@@ -87,11 +87,11 @@ const currencySlice = createSlice({
     builder
       .addCase(fetchCurrencies.pending, (state) => {
         state.loading = true;
-        state.status = STATUS_LOADING;
+        state.status = STATUS.LOADING; 
       })
       .addCase(fetchCurrencies.fulfilled, (state, action) => {
         state.loading = false;
-        state.status = STATUS_SUCCEEDED;
+        state.status = STATUS.SUCCEEDED; 
 
         const fetchedCurrencies = action.payload || [];
         fetchedCurrencies.forEach((currency) => {
@@ -102,7 +102,7 @@ const currencySlice = createSlice({
       })
       .addCase(fetchCurrencies.rejected, (state, action) => {
         state.loading = false;
-        state.status = STATUS_FAILED;
+        state.status = STATUS.FAILED; 
         state.error = action.payload;
       });
   },
