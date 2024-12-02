@@ -4,12 +4,7 @@ import DefaultTheme from '../theme/DefaultTheme';
 
 const initialState = {
   isDarkMode: true,
-  colors: DarkTheme, 
-  taskColors: { 
-    incomplete: 'red',
-    complete: 'green',
-    default: 'transparent',
-  },
+  colors: DarkTheme
 };
 
 const themeSlice = createSlice({

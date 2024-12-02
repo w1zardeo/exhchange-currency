@@ -1,19 +1,32 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
+// Константи для API URLs
+const EXCHANGE_RATE_API_URL = 'https://api.exchangerate-api.com/v4/latest/UAH';
+const COUNTRIES_API_URL = 'https://restcountries.com/v3.1/currency';
+
+// Константи для статусів завантаження
+const STATUS_IDLE = 'idle';
+const STATUS_LOADING = 'loading';
+const STATUS_SUCCEEDED = 'succeeded';
+const STATUS_FAILED = 'failed';
+
+// Константи для відсутніх значень
+const DEFAULT_FLAG_URL = 'https://via.placeholder.com/24';
+
 export const fetchCurrencies = createAsyncThunk(
   'currencies/fetchCurrencies', 
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch(`https://api.exchangerate-api.com/v4/latest/UAH`);
+      const response = await fetch(EXCHANGE_RATE_API_URL);
       const data = await response.json();
       const rates = data.rates;
 
       const currenciesArray = await Promise.all(
         Object.keys(rates).map(async (currency) => {
           try {
-            const countryResponse = await fetch(`https://restcountries.com/v3.1/currency/${currency}`);
+            const countryResponse = await fetch(`${COUNTRIES_API_URL}/${currency}`);
             const countryData = await countryResponse.json();
-            const flag = countryData[0]?.flags?.png || 'https://via.placeholder.com/24';
+            const flag = countryData[0]?.flags?.png || DEFAULT_FLAG_URL;
             const fullCurrencyName = countryData[0]?.currencies?.[currency]?.name || currency;
             const symbol = countryData[0]?.currencies?.[currency]?.symbol || '';
 
@@ -45,7 +58,7 @@ const currencySlice = createSlice({
     currencies: [],
     favoriteCurrencies: [],
     loading: false,
-    status: 'idle',
+    status: STATUS_IDLE,
     error: null,
   },
   reducers: {
@@ -74,11 +87,11 @@ const currencySlice = createSlice({
     builder
       .addCase(fetchCurrencies.pending, (state) => {
         state.loading = true;
-        state.status = 'loading';
+        state.status = STATUS_LOADING;
       })
       .addCase(fetchCurrencies.fulfilled, (state, action) => {
         state.loading = false;
-        state.status = 'succeeded';
+        state.status = STATUS_SUCCEEDED;
 
         const fetchedCurrencies = action.payload || [];
         fetchedCurrencies.forEach((currency) => {
@@ -89,7 +102,7 @@ const currencySlice = createSlice({
       })
       .addCase(fetchCurrencies.rejected, (state, action) => {
         state.loading = false;
-        state.status = 'failed';
+        state.status = STATUS_FAILED;
         state.error = action.payload;
       });
   },
