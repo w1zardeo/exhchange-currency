@@ -1,16 +1,16 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-// Константи для API URLs
+
 const EXCHANGE_RATE_API_URL = 'https://api.exchangerate-api.com/v4/latest/UAH';
 const COUNTRIES_API_URL = 'https://restcountries.com/v3.1/currency';
 
-// Константи для статусів завантаження
+
 const STATUS_IDLE = 'idle';
 const STATUS_LOADING = 'loading';
 const STATUS_SUCCEEDED = 'succeeded';
 const STATUS_FAILED = 'failed';
 
-// Константи для відсутніх значень
+
 const DEFAULT_FLAG_URL = 'https://via.placeholder.com/24';
 
 export const fetchCurrencies = createAsyncThunk(
