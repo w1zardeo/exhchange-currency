@@ -36,12 +36,6 @@ const TabBarIcon = ({ focused, icon, colors }) => {
   );
 };
 
-const CustomTabBarButton = ({ onPress, children }) => (
-  <TouchableOpacity style={styles.customButton} onPress={onPress}>
-    {children}
-  </TouchableOpacity>
-);
-
 const CalendarStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="CalendarScreen" component={CalendarScreen} />

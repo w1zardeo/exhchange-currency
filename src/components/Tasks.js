@@ -118,11 +118,17 @@ const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) =>
     </View>
   );
 
+  const sections = [
+    { key: 'incomplete', titleKey: 'text.incompleteUpper', placeholderKey: 'text.addTask' },
+    { key: 'complete', titleKey: 'text.completedUpper', placeholderKey: 'text.markTask' }
+  ];
+  
   return (
     <View style={styles.tasks}>
-      {renderTaskSection('incomplete', t('text.incompleteUpper'), t('text.addTask'))}
-      {renderTaskSection('complete', t('text.completedUpper'), t('text.markTask'))}
-
+      {sections.map((section) =>
+        renderTaskSection(section.key, t(section.titleKey), t(section.placeholderKey))
+      )}
+  
       <Modal
         visible={isModalVisible}
         transparent={true}

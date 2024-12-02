@@ -2,6 +2,9 @@ import React from 'react';
 import { View, TextInput, Text, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
 
+const getRateInfoText = (rate, currency) => `1 UAH = ${rate.toFixed(2)} ${currency}`;
+
+
 const CurrencyInfo = ({ symbol, convertedAmount, onInputChange, rate, currency }) => {
   const styles = useStyles();
   return (
@@ -15,9 +18,7 @@ const CurrencyInfo = ({ symbol, convertedAmount, onInputChange, rate, currency }
           onChangeText={onInputChange}
         />
       </View>
-      <Text style={styles.rateInfo}>
-        1 UAH = {rate.toFixed(2)} {currency}
-      </Text>
+      <Text style={styles.rateInfo}>{getRateInfoText(rate, currency)}</Text>
     </View>
   );
 };
