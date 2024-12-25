@@ -38,7 +38,11 @@ i18n
             close: 'Close',
             today: 'Today',
             cancel: 'Cancel',
-            emptyText: 'No favorite currencies available. Try adding some'
+            emptyText: 'No favorite currencies available. Try adding some',
+            blocked: 'Blocked',
+            blockedText: 'Blocked Tasks',
+            reviewed: 'Reviewed',
+            reviewedText: 'Reviewed tasks'
           },
           monthDay: {
             jan: 'January',
@@ -98,7 +102,11 @@ i18n
             today: 'Сьогодні',
             cancel: 'Скасувати',
             noResults: 'Немає результатів',
-            emptyText: 'Немає улюблених валют. Спробуйте додати ще'
+            emptyText: 'Немає улюблених валют. Спробуйте додати ще',
+            blocked: 'Заблоковані',
+            blockedText: 'Заблоковані завдання',
+            reviewed: 'Переглянуті',
+            reviewedText: 'Переглянуті завдання'
           },
           monthDay: {
             jan: 'Січень',
@@ -158,7 +166,11 @@ i18n
             today: 'Hoy',
             cancel: 'Cancelar',
             noResults: 'No hay resultados',
-            emptyText: 'No hay monedas favoritas disponibles. Intente agregar algunas'
+            emptyText: 'No hay monedas favoritas disponibles. Intente agregar algunas',
+            blocked: 'Obstruida',
+            blockedText: 'Tareas bloqueadas',
+            reviewed: 'Revisada',
+            reviewedText: 'Tareas revisadas'
           },
           monthDay: {
             jan: 'Enero',

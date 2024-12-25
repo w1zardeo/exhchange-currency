@@ -1,3 +1,100 @@
+// import React, { useEffect } from 'react';
+// import { View, FlatList, StyleSheet } from 'react-native';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { setTasksByDate } from '../redux/TasksSlice';
+// import { toggleTheme } from '../redux/ThemeSlice';
+// import { useTranslation } from 'react-i18next';
+// import CalendarHeader from '../components/CalendarHeader';
+// import Month from '../components/Month';
+// import RenderDay from '../components/Day';
+
+// const CalendarScreen = ({ navigation }) => {
+//   const { t } = useTranslation();
+//   const dispatch = useDispatch();
+//   const tasksByDate = useSelector((state) => state.tasks);
+//   const { isDarkMode, colors } = useSelector((state) => state.theme);
+//   const currentYear = new Date().getFullYear();
+//   const styles = useStyles(colors);
+
+//   const daysInMonth = {
+//     [t('monthDay.jan')]: 31,
+//     [t('monthDay.feb')]: 28,
+//     [t('monthDay.mar')]: 31,
+//     [t('monthDay.apr')]: 30,
+//     [t('monthDay.may')]: 31,
+//     [t('monthDay.jun')]: 30,
+//     [t('monthDay.jul')]: 31,
+//     [t('monthDay.aug')]: 31,
+//     [t('monthDay.sep')]: 30,
+//     [t('monthDay.oct')]: 31,
+//     [t('monthDay.nov')]: 30,
+//     [t('monthDay.dec')]: 31,
+//   };
+
+//   useEffect(() => {
+//     const today = new Date().toLocaleDateString('en-US', {
+//       month: 'long',
+//       day: 'numeric',
+//       year: 'numeric',
+//     });
+
+//     const initialTasks = { incomplete: [], complete: [] };
+//     dispatch(setTasksByDate({ selectedDate: today, tasks: initialTasks }));
+//   }, [dispatch]);
+
+//   const renderDay = (month, day) => {
+//     const date = new Date(Date.UTC(currentYear, Object.keys(daysInMonth).indexOf(month), day));
+//     const isToday = date.getDate() === new Date().getDate() && date.getMonth() === new Date().getMonth();
+
+//     return (
+//       <RenderDay
+//         key={day}
+//         day={day}
+//         month={month}
+//         year={currentYear}
+//         tasksByDate={tasksByDate}
+//         isToday={isToday}
+//         navigation={navigation}
+//         styles={styles}
+//         colors={colors}
+//       />
+//     );
+//   };
+
+//   const handleToggleTheme = () => {
+//     dispatch(toggleTheme());
+//   };
+
+//   return (
+//     <View style={styles.container}>
+//       <CalendarHeader
+//         isDarkMode={isDarkMode}
+//         handleToggleTheme={handleToggleTheme}
+//         colors={colors}
+//         styles={styles}
+//       />
+//       <FlatList
+//         data={Object.keys(daysInMonth)}
+//         renderItem={({ item }) => (
+//           <Month
+//             month={item}
+//             daysInMonth={daysInMonth}
+//             tasksByDate={tasksByDate}
+//             currentYear={currentYear}
+//             renderDay={renderDay}
+//             styles={styles}
+//             colors={colors}
+//             navigation={navigation}
+//           />
+//         )}
+//         keyExtractor={(item) => item}
+//         showsVerticalScrollIndicator={false}
+//         contentContainerStyle={styles.flatListContent}
+//       />
+//     </View>
+//   );
+// };
+
 import React, { useEffect } from 'react';
 import { View, FlatList, StyleSheet } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,19 +113,35 @@ const CalendarScreen = ({ navigation }) => {
   const currentYear = new Date().getFullYear();
   const styles = useStyles(colors);
 
+  // Локалізовані місяці
+  const monthNames = [
+    t('monthDay.jan'),
+    t('monthDay.feb'),
+    t('monthDay.mar'),
+    t('monthDay.apr'),
+    t('monthDay.may'),
+    t('monthDay.jun'),
+    t('monthDay.jul'),
+    t('monthDay.aug'),
+    t('monthDay.sep'),
+    t('monthDay.oct'),
+    t('monthDay.nov'),
+    t('monthDay.dec'),
+  ];
+
   const daysInMonth = {
-    [t('monthDay.jan')]: 31,
-    [t('monthDay.feb')]: 28,
-    [t('monthDay.mar')]: 31,
-    [t('monthDay.apr')]: 30,
-    [t('monthDay.may')]: 31,
-    [t('monthDay.jun')]: 30,
-    [t('monthDay.jul')]: 31,
-    [t('monthDay.aug')]: 31,
-    [t('monthDay.sep')]: 30,
-    [t('monthDay.oct')]: 31,
-    [t('monthDay.nov')]: 30,
-    [t('monthDay.dec')]: 31,
+    1: 31,
+    2: 28,
+    3: 31,
+    4: 30,
+    5: 31,
+    6: 30,
+    7: 31,
+    8: 31,
+    9: 30,
+    10: 31,
+    11: 30,
+    12: 31,
   };
 
   useEffect(() => {
@@ -43,7 +156,7 @@ const CalendarScreen = ({ navigation }) => {
   }, [dispatch]);
 
   const renderDay = (month, day) => {
-    const date = new Date(Date.UTC(currentYear, Object.keys(daysInMonth).indexOf(month), day));
+    const date = new Date(Date.UTC(currentYear, month - 1, day)); // Місяць передається числом
     const isToday = date.getDate() === new Date().getDate() && date.getMonth() === new Date().getMonth();
 
     return (
@@ -72,13 +185,15 @@ const CalendarScreen = ({ navigation }) => {
         handleToggleTheme={handleToggleTheme}
         colors={colors}
         styles={styles}
+        monthNames={monthNames} // Передаємо локалізовані місяці
       />
       <FlatList
         data={Object.keys(daysInMonth)}
         renderItem={({ item }) => (
           <Month
-            month={item}
+            month={parseInt(item)} // Місяць передається як число
             daysInMonth={daysInMonth}
+            monthNames={monthNames} // Передаємо локалізовані назви місяців
             tasksByDate={tasksByDate}
             currentYear={currentYear}
             renderDay={renderDay}

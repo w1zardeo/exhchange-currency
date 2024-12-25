@@ -1,38 +1,14 @@
-import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  FlatList,
-  StyleSheet,
-  TextInput,
-  Image,
-  TouchableOpacity,
-  Modal,
-  TouchableWithoutFeedback,
-} from 'react-native';
-import Checkbox from './Checkbox';
-import { useTranslation } from 'react-i18next';
+import React from 'react';
+import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { Dropdown } from 'react-native-element-dropdown';
 import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
-
-const CONSTANTS = {
-  categories: {
-    Finance: '💰',
-    Weeding: '💍',
-    Freelance: '💻',
-    'Shopping List': '🛒',
-    default: '',
-  },
-};
-
-const getCategoryEmoji = (category) => CONSTANTS.categories[category] || CONSTANTS.categories.default;
-
-const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) => {
+const Tasks = ({ tasks, onCategoryChange, updateTaskText, deleteTask }) => {
   const { t } = useTranslation();
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
   const styles = useStyles();
 
+  // Обробка зміни тексту завдання
   const handleTextChange = (text, index, section) => {
     if (text === '') {
       deleteTask(index, section);
@@ -41,192 +17,119 @@ const Tasks = ({ tasks, toggleTask, deleteTask, updateTaskText, isDarkMode }) =>
     }
   };
 
-  const handleImageDelete = (index, section, imageIndex) => {
-    const updatedTasks = [...tasks[section]];
-    updatedTasks[index].images.splice(imageIndex, 1);
-    updateTaskText(index, section, updatedTasks[index].text);
-  };
-
-  const handleImageClick = (imageUri) => {
-    setSelectedImage(imageUri);
-    setIsModalVisible(true);
-  };
-
-  const handleModalClose = () => {
-    setIsModalVisible(false);
-    setSelectedImage(null);
+  // Обробка зміни категорії завдання
+  const handleCategoryChange = (index, section, newCategory) => {
+    onCategoryChange(index, section, newCategory);
   };
 
   const renderTaskItem = ({ item, index }, section) => (
-    <View style={styles.taskContainer}>
-      <Checkbox
-        isDarkMode={isDarkMode}
-        checked={item.completed}
-        onChange={() => toggleTask(index, section)}
-        label={
-          <View style={styles.textContainer}>
-            <TextInput
-              value={item.text}
-              onChangeText={(text) => handleTextChange(text, index, section)}
-              style={[styles.taskText]}
-              numberOfLines={1}
-              maxLength={100}
-            />
-            <Text style={[styles.categoryText]}>
-              {getCategoryEmoji(item.category)} {item.category}
-            </Text>
-          </View>
-        }
+    <View style={styles.taskContainer} key={index}>
+      {/* Dropdown для зміни категорії */}
+      <Dropdown
+        style={styles.dropdown}
+        placeholderStyle={styles.dropdownPlaceholder}
+        selectedTextStyle={styles.dropdownSelectedText}
+        data={[
+          { label: t('text.incompleteUpper'), value: 'incomplete' },
+          { label: t('text.completedUpper'), value: 'complete' },
+          { label: t('text.blocked'), value: 'blocked' },
+          { label: t('text.reviewed'), value: 'reviewed' },
+        ]}
+        labelField="label"
+        valueField="value"
+        value={section}
+        onChange={(newCategory) => {
+          handleCategoryChange(index, section, newCategory.value);
+        }}
       />
-      <FlatList
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        data={item.images}
-        keyExtractor={(image, imageIndex) => imageIndex.toString()}
-        renderItem={({ item: image, index: imageIndex }) => (
-          <View key={imageIndex} style={styles.imageWrapper}>
-            <Image
-              source={{ uri: image }}
-              style={styles.imagePreview}
-              onTouchEnd={() => handleImageClick(image)}
-            />
-            <TouchableOpacity
-              style={styles.deleteIcon}
-              onPress={() => handleImageDelete(index, section, imageIndex)}
-            >
-              <Text style={[styles.deleteText]}>❌</Text>
-            </TouchableOpacity>
-          </View>
+
+      {/* Поле для введення тексту завдання */}
+      <TextInput
+        value={item.text}
+        onChangeText={(text) => handleTextChange(text, index, section)}
+        style={styles.taskText}
+      />
+    </View>
+  );
+
+  // Рендер секції завдань
+  const renderTaskSection = (section, titleKey, placeholderKey) => {
+    const sectionTasks = (tasks[section] || []).filter((task) => task !== null && task !== undefined);
+
+    return (
+      <View key={section}>
+        <Text style={styles.sectionTitle}>{t(titleKey)}</Text>
+        {sectionTasks.length === 0 && (
+          <Text style={styles.smallGap}>{t(placeholderKey)}</Text>
         )}
-        style={styles.imagePreviewContainer}
-      />
-    </View>
-  );
+        {sectionTasks.map((item, index) => renderTaskItem({ item, index }, section))}
+      </View>
+    );
+  };
 
-  const renderTaskSection = (section, titleKey, placeholderKey) => (
-    <View key={section}>
-      <Text style={styles.sectionTitle}>{t(titleKey)}</Text>
-      {tasks[section].length === 0 && (
-        <Text style={[styles.smallGap]}>{t(placeholderKey)}</Text>
-      )}
-      <FlatList
-        data={tasks[section]}
-        keyExtractor={(item, index) => `${section}-${index}`}
-        renderItem={(props) => renderTaskItem(props, section)}
-        contentContainerStyle={styles.flatList}
-      />
-    </View>
-  );
-
-  const sections = [
-    { key: 'incomplete', titleKey: 'text.incompleteUpper', placeholderKey: 'text.addTask' },
-    { key: 'complete', titleKey: 'text.completedUpper', placeholderKey: 'text.markTask' }
-  ];
-  
   return (
     <View style={styles.tasks}>
-      {sections.map((section) =>
-        renderTaskSection(section.key, t(section.titleKey), t(section.placeholderKey))
-      )}
-  
-      <Modal
-        visible={isModalVisible}
-        transparent={true}
-        animationType="fade"
-        onRequestClose={handleModalClose}
-      >
-        <TouchableWithoutFeedback onPress={handleModalClose}>
-          <View style={[styles.modalOverlay]}>
-            <Image source={{ uri: selectedImage }} style={styles.modalImage} />
-          </View>
-        </TouchableWithoutFeedback>
-      </Modal>
+      {[
+        { section: 'incomplete', titleKey: 'text.incompleteUpper', placeholderKey: 'text.addTask' },
+        { section: 'complete', titleKey: 'text.completedUpper', placeholderKey: 'text.markTask' },
+        { section: 'blocked', titleKey: 'text.blocked', placeholderKey: 'text.blockedText' },
+        { section: 'reviewed', titleKey: 'text.reviewed', placeholderKey: 'text.reviewedText' }
+      ].map(({ section, titleKey, placeholderKey }) => (
+        renderTaskSection(section, titleKey, placeholderKey)
+      ))}
     </View>
   );
 };
 
-
 const useStyles = () => {
-  const {colors} = useSelector((state) => state.theme);
-  return StyleSheet.create ({ 
-  tasks: {
-    flex: 1,
-    width: '100%',
-    padding: 0,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginTop: 16,
-    marginLeft: 18,
-  },
-  smallGap: {
-    fontSize: 14,
-    marginLeft: 18,
-    color: colors.smallGroup,
-  },
-  flatList: {
-    padding: 0,
-  },
-  taskContainer: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    marginBottom: 10,
-  },
-  textContainer: {
-    flex: 1,
-  },
-  taskText:  {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: colors.text,
-  },
-  categoryText: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    marginTop: 2,
-    color: colors.smallGroup,
-  },
-  imageWrapper: {
-    position: 'relative',
-    marginLeft: 10,
-  },
-  imagePreview: {
-    width: 80,
-    height: 80,
-    marginHorizontal: 5,
-    marginBottom: 5,
-    borderRadius: 8,
-  },
-  deleteIcon: {
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    padding: 5,
-  },
-  modalOverlay: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: colors.modalOverl
-  },
-  modalImage: {
-    width: '90%',
-    height: '90%',
-    resizeMode: 'contain',
-  },
-  deleteText: {
-    fontSize: 14,
-    color: colors.red,
-  },
-  sectionTitle:{
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginTop: 16,
-    marginLeft: 18,
-    color: colors.text,
-  },
-})
+  const { colors } = useSelector((state) => state.theme);
+  return StyleSheet.create({
+    tasks: {
+      flex: 1,
+      width: '100%',
+      padding: 0,
+    },
+    sectionTitle: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      marginTop: 16,
+      marginLeft: 18,
+      color: colors.text,
+    },
+    smallGap: {
+      fontSize: 14,
+      marginLeft: 18,
+      color: colors.smallGroup,
+    },
+    taskContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: 10,
+      paddingHorizontal: 16,
+    },
+    taskText: {
+      flex: 1,
+      fontSize: 16,
+      color: colors.text,
+      marginLeft: 10,
+    },
+    dropdown: {
+      width: 150,
+      borderWidth: 1,
+      borderColor: colors.border,
+      borderRadius: 8,
+      paddingHorizontal: 10,
+      backgroundColor: colors.background,
+    },
+    dropdownPlaceholder: {
+      fontSize: 14,
+      color: colors.placeholder,
+    },
+    dropdownSelectedText: {
+      fontSize: 14,
+      color: colors.text,
+    },
+  });
 };
 
 export default Tasks;
